@@ -1,3 +1,4 @@
+
 const fs = require('fs-extra');
 const { Sequelize } = require('sequelize');
 if (fs.existsSync('set.env'))
@@ -7,15 +8,15 @@ const databasePath = path.join(__dirname, './database.db');
 const DATABASE_URL = process.env.DATABASE_URL === undefined
     ? databasePath
     : process.env.DATABASE_URL;
-module.exports = { session: process.env.SESSION_ID || 'Byte',
+module.exports = { session: process.env.SESSION_ID || 'Byte;;;',
     PREFIXE: process.env.PREFIX || ".",
     OWNER_NAME: process.env.OWNER_NAME || "TALKDROVE",
     NUMERO_OWNER : process.env.OWNER_NUMBER || "923072380380",              
-    AUTO_READ_STATUS: process.env.AUTO_READ_STATUS || "oui",
+    AUTO_READ_STATUS: process.env.AUTO_READ_STATUS || "yes",
     AUTO_DOWNLOAD_STATUS: process.env.AUTO_DOWNLOAD_STATUS || 'non',
     BOT : process.env.BOT_NAME || 'BYTE-MD',
     OPENAI_API_KEY : process.env.OPENAI_API_KEY || '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',
-    URL : process.env.BOT_MENU_LINKS || '',
+    URL : process.env.BOT_MENU_LINKS || 'https://raw.githubusercontent.com/HyHamza/HyHamza/main/Images/BYTE-MD-LITE.jpeg',
     MODE: process.env.PUBLIC_MODE || "yes",
     PM_PERMIT: process.env.PM_PERMIT || 'no',
     HEROKU_APP_NAME : process.env.HEROKU_APP_NAME,
