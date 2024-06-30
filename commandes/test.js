@@ -4,7 +4,7 @@ const { Hamza } = require("../TalkDrove/Hamza");
 Hamza({ nomCom: "repo", reaction: "🐼", nomFichier: __filename }, async (dest, zk, commandeOptions) => {
 
 
-const githubRepo = 'https://github.com/BYTE-BOT-1/BYTE-MD_LITE';
+const githubRepo = 'https://api.github.com/repos/HyHamza/BYTE-MD_LITE';
 const img = 'https://raw.githubusercontent.com/HyHamza/HyHamza/main/Images/BYTE-MD-LITE.jpeg';
 
 
