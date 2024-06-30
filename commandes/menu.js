@@ -51,7 +51,7 @@ let infoMsg =  `
 `;
 
     for (const cat in coms) {
-        menuMsg += `*-‿‿o *${cat}* *o‿‿*`;
+        menuMsg += `*-‿‿o* *${cat}* *o‿‿*`;
         for (const cmd of coms[cat]) {
             menuMsg += `
  *|*${s.PREFIXE} ${cmd}`;
