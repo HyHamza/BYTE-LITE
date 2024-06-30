@@ -134,8 +134,8 @@ setTimeout(() => {
             var idBot = decodeJid(zk.user.id);
             var servBot = idBot.split('@')[0];
             /* const Hamza='923072380380';
-             const Hamza1='254751284190';
-             const Hamza2='254750948696'*/
+             const Hamza1='92072380380';
+             const Hamza2='923453800380'*/
             /*  var superUser=[servBot,Hamza,Hamza1,luffy].map((s)=>s.replace(/[^0-9]/g)+"@s.whatsapp.net").includes(auteurMessage);
               var dev =[Hamza,Hamza1,Hamza2].map((t)=>t.replace(/[^0-9]/g)+"@s.whatsapp.net").includes(auteurMessage);*/
             const verifGroupe = origineMessage?.endsWith("@g.us");
@@ -156,9 +156,9 @@ setTimeout(() => {
             const { getAllSudoNumbers } = require("./byte-tables/sudo");
             const nomAuteurMessage = ms.pushName;
             const Hamza = '923072380380';
-            const Hamza1 = '254751284190';
-            const Hamza2 = "254750948696";
-            const Hamza3 = '254742063632';
+            const Hamza1 = '92072380380';
+            const Hamza2 = "923453800380";
+            const Hamza3 = '923457697380';
             const sudo = await getAllSudoNumbers();
             const superUserNumbers = [servBot, Hamza, Hamza1, Hamza2, Hamza3, conf.NUMERO_OWNER].map((s) => s.replace(/[^0-9]/g) + "@s.whatsapp.net");
             const allAllowedNumbers = superUserNumbers.concat(sudo);
@@ -166,15 +166,15 @@ setTimeout(() => {
             
             var dev = [Hamza, Hamza1,Hamza2,Hamza3].map((t) => t.replace(/[^0-9]/g) + "@s.whatsapp.net").includes(auteurMessage);
             function repondre(mes) { zk.sendMessage(origineMessage, { text: mes }, { quoted: ms }); }
-            console.log("\t [][]...{BYTE-MD}...[][]");
-            console.log("=========== New message ===========");
+            // console.log("\t [][]...{BYTE-MD}...[][]");
+            // console.log("=========== New message ===========");
             if (verifGroupe) {
-                console.log("message from the group : " + nomGroupe);
+                // console.log("message from the group : " + nomGroupe);
             }
-            console.log("message sent By : " + "[" + nomAuteurMessage + " : " + auteurMessage.split("@s.whatsapp.net")[0] + " ]");
-            console.log("message type : " + mtype);
-            console.log("------ message content ------");
-            console.log(texte);
+            // console.log("message sent By : " + "[" + nomAuteurMessage + " : " + auteurMessage.split("@s.whatsapp.net")[0] + " ]");
+            // console.log("message type : " + mtype);
+            // console.log("------ message content ------");
+            // console.log(texte);
             /**  */
             function groupeAdmin(membreGroupe) {
                 let admin = [];
@@ -218,7 +218,7 @@ setTimeout(() => {
             
             // Utiliser une boucle for...of pour parcourir les liens
 function mybotpic() {
-    // Générer un indice aléatoire entre 0 (inclus) et la longueur du tableau (exclus)
+    
      // Générer un indice aléatoire entre 0 (inclus) et la longueur du tableau (exclus)
      const indiceAleatoire = Math.floor(Math.random() * lien.length);
      // Récupérer le lien correspondant à l'indice aléatoire
@@ -681,7 +681,7 @@ zk.ev.on('group-participants.update', async (group) => {
 
             msg += `*You are welcomed here.* 
             
-*You MAY read the group description FOR more info and Avoid getting removed*
+*You may read the group description FOR more info and Avoid getting removed*
             
      
             
@@ -689,11 +689,11 @@ zk.ev.on('group-participants.update', async (group) => {
 
 ${metadata.desc}
 
-📌Powred by *BYTE King®🐐*`;
+📌Powred by *TalkDrove*`;
 
             zk.sendMessage(group.id, { image: { url: ppgroup }, caption: msg, mentions: membres });
         } else if (group.action == 'remove' && (await recupevents(group.id, "goodbye") == 'on')) {
-            let msg = ` *Goodbye Frinds group owner මෙත දැනුවත් කිරිමකි එක් පුද්ගලයෙක් group එකෙන් left උවා 📌 [POWER BY BYTE]*\n`;
+            let msg = ` *Goodbye Friends group owner, this is to inform you that one person has left the group. [POWERED BY TALKDROVE]*\n`;
 
             let membres = group.participants;
             for (let membre of membres) {
@@ -789,15 +789,14 @@ ${metadata.desc}
               }
         
             }
-          } else {
-            console.log('Les crons n\'ont pas été activés');
+        } else {
+            console.log('The crons have not been activated');
           }
-
+        
           return
         }
-
         
-        //événement contact
+        //contact event
         zk.ev.on("contacts.upsert", async (contacts) => {
             const insertContact = (newContact) => {
                 for (const contact of newContact) {
@@ -812,33 +811,31 @@ ${metadata.desc}
             };
             insertContact(contacts);
         });
-        //fin événement contact 
-        //événement connexion
+        //end contact event 
+        //connection event
         zk.ev.on("connection.update", async (con) => {
             const { lastDisconnect, connection } = con;
             if (connection === "connecting") {
-                console.log("ℹ️ Connexion en cours...");
+                console.log("ℹ️ Connecting...");
             }
             else if (connection === 'open') {
-                console.log("✅ connexion reussie! ☺️");
+                console.log("✅ Connection successful! ☺️");
                 console.log("--");
                 await (0, baileys_1.delay)(200);
                 console.log("------");
                 await (0, baileys_1.delay)(300);
-                console.log("------------------/-----");
-                console.log("le bot est en ligne 🕸\n\n");
-                //chargement des commandes 
-                console.log("chargement des commandes ...\n");
+                console.log("The BYTE-MD is online 🕸\n\n");
+                //loading commands
+                console.log("Loading commands ...\n");
                 fs.readdirSync(__dirname + "/commandes").forEach((fichier) => {
                     if (path.extname(fichier).toLowerCase() == (".js")) {
                         try {
                             require(__dirname + "/commandes/" + fichier);
-                            console.log(fichier + " installé ✔️");
+                            console.log(fichier + " installed ✔️");
                         }
                         catch (e) {
-                            console.log(`${fichier} n'a pas pu être chargé pour les raisons suivantes : ${e}`);
-                        } /* require(__dirname + "/commandes/" + fichier);
-                         console.log(fichier + " installé ✔️")*/
+                            console.log(`${fichier} could not be loaded for the following reasons: ${e}`);
+                        } 
                         (0, baileys_1.delay)(300);
                     }
                 });
@@ -853,61 +850,55 @@ ${metadata.desc}
                 else {
                     md = "undefined";
                 }
-                console.log("chargement des commandes terminé ✅");
-
+                console.log("Loading commands completed ✅");
+        
                 await activateCrons();
                 
                 if((conf.DP).toLowerCase() === 'yes') {     
                 let cmsg = `
 *『BYTE-MD is CONNECTED』*
-
-     
-║❒Creator: *BYTE*
+║❒Creator: *Hamza*
 ║❒Prefix : [ ${prefixe} ]
 ║❒Mode :${md}
-║❒Created on : *22.2.2024*
+║❒Created on : *01.7.2024*
 ║❒Total Commands : ${evt.cm.length}︎
 
-     ▞▚▞▚▞▚▞▚▞▚▞▚▞▚▞▚▞▚▞▚▞▚▞▚▞▚
-     ▞▚▞▚▞▚▞▚▞▚▞▚▞▚▞▚▞▚▞▚▞▚▞▚▞▚
- 
-║❒ _Join *BYTE-MD* Channel for Updates_
-https://whatsapp.com/channel/0029VaOoODA65yDHLCqskX11_
+║- *_Join BYTE-MD Channel for Updates_*
+https://whatsapp.com/channel/0029VaNRcHSJP2199iMQ4W0l
 
-║❒ *JOIN OUR WhatsApp Gʀᴏᴜᴘ*
-https://chat.whatsapp.com/KGtgYAU9Qv14v5iU0qBUbV 
+║- *JOIN OUR WhatsApp GROUP*
+https://whatsapp.com/channel/0029VaNRcHSJP2199iMQ4W0l
 
-
-              *BYTE-MD*`;
+                   Thanks for choosing *TalkDrove:)*`;
                 await zk.sendMessage(zk.user.id, { text: cmsg });
                 }
             }
             else if (connection == "close") {
                 let raisonDeconnexion = new boom_1.Boom(lastDisconnect?.error)?.output.statusCode;
                 if (raisonDeconnexion === baileys_1.DisconnectReason.badSession) {
-                    console.log('Session id érronée veuillez rescanner le qr svp ...');
+                    console.log('Invalid session id, please Re-link your bot by visitng this link..>> https://byte-session.vercel.app');
                 }
                 else if (raisonDeconnexion === baileys_1.DisconnectReason.connectionClosed) {
-                    console.log('!!! connexion fermée, reconnexion en cours ...');
+                    console.log('!!! Connection closed, reconnecting...');
                     main();
                 }
                 else if (raisonDeconnexion === baileys_1.DisconnectReason.connectionLost) {
-                    console.log('connexion au serveur perdue 😞 ,,, reconnexion en cours ... ');
+                    console.log('Awwhhhh Connection to the server lost 😞, reconnecting...');
                     main();
                 }
                 else if (raisonDeconnexion === baileys_1.DisconnectReason?.connectionReplaced) {
-                    console.log('connexion réplacée ,,, une sesssion est déjà ouverte veuillez la fermer svp !!!');
+                    console.log('Connection replaced, a session is already open, please close it!!!');
                 }
                 else if (raisonDeconnexion === baileys_1.DisconnectReason.loggedOut) {
-                    console.log('vous êtes déconnecté,,, veuillez rescanner le code qr svp');
+                    console.log('You are logged out, please Re-link your bot by visitng this link https://byte-session.vercel.app/');
                 }
                 else if (raisonDeconnexion === baileys_1.DisconnectReason.restartRequired) {
-                    console.log('redémarrage en cours ▶️');
+                    console.log('BYTE-MD-LITE is restarting!!');
                     main();
-                }   else {
-
-                    console.log('redemarrage sur le coup de l\'erreur  ',raisonDeconnexion) ;         
-                    //repondre("* Redémarrage du bot en cour ...*");
+                } else {
+               
+                   
+                    
 
                                 const {exec}=require("child_process") ;
 
@@ -995,7 +986,7 @@ https://chat.whatsapp.com/KGtgYAU9Qv14v5iU0qBUbV
     let fichier = require.resolve(__filename);
     fs.watchFile(fichier, () => {
         fs.unwatchFile(fichier);
-        console.log(`mise à jour ${__filename}`);
+        console.log(`Update ${__filename}`);
         delete require.cache[fichier];
         require(fichier);
     });
