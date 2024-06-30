@@ -54,7 +54,7 @@ let infoMsg =  `
         menuMsg += `*-‿‿o *${cat}* *o‿‿*`;
         for (const cmd of coms[cat]) {
             menuMsg += `
- *|♦️* ${cmd}`;
+ *|*${s.PREFIXE} ${cmd}`;
         }
         menuMsg += `
 *╰═════════════⊷* \n`
