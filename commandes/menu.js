@@ -31,7 +31,7 @@ Hamza({ nomCom: "menu", categorie: "General" }, async (dest, zk, commandeOptions
 const temps = moment().format('HH:mm:ss');
 const date = moment().format('DD/MM/YYYY');
 let infoMsg =  `
-╭────〖BYTE-MD-Lite〗────╮
+╭────〖BYTE-MD-LITE〗────╮
 │﹄ *Préfix* : ${s.PREFIXE}
 │﹄ *User* : ${s.OWNER_NAME}
 │﹄ *Mode* : ${mode}
@@ -40,7 +40,7 @@ let infoMsg =  `
 │﹄ *Time* : ${temps} 
 │﹄ *Ram* : ${format(os.totalmem() - os.freemem())}/${format(os.totalmem())}
 │﹄ *Platform* : ${os.platform()}
-│﹄ *Developer* : Hamza
+│﹄ *Developer* : 𝐻𝒶𝓂𝓏𝒶
 │﹄ *Version* : v.lite
 ╰─────{*TalkDrove*}─────o: \n\n`;
 
@@ -62,10 +62,10 @@ let infoMsg =  `
 
     menuMsg += `
 
-*————— Channel link: —————*
+*———————————————————— Channel link: ———————————————————————————*
 
   _https://whatsapp.com/channel/0029VaNRcHSJP2199iMQ4W0l_                                         
-*-‿-︵-‿-︵-‿-︵-‿-︵-*
+*-‿-︵-‿-︵-‿-︵-‿--‿-︵-‿-︵-‿-︵-‿--‿-︵-‿-︵-‿-︵-‿-*
 `;
 
    var lien = mybotpic();
