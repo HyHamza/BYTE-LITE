@@ -1,3 +1,4 @@
+
 {
   "name":"BYTE-MD-LITE",
   "description":"A lite version of BYTE-MD for TalkDrove Followers",
@@ -25,12 +26,6 @@
       "required":false
     }
     ,
-     "PM_PERMIT" :
-     {
-      "description":"Other user can't use your bot in pm (type yes to active or no to deactive ; don't write in capital letter)",
-      "value":"no",
-      "required":false
-    }
     ,
     "BOT_NAME" : {
        
