@@ -5,7 +5,7 @@ Hamza({ nomCom: "repo", reaction: "🐼", nomFichier: __filename }, async (dest,
 
 
 const githubRepo = 'https://github.com/BYTE-BOT-1/BYTE-MD_LITE';
-const img = 'https://telegra.ph/file/cf24b099f90b5e6ed146b.mp4';
+const img = 'https://raw.githubusercontent.com/HyHamza/HyHamza/main/Images/BYTE-MD-LITE.jpeg';
 
 
     const response = await fetch(githubRepo); 
@@ -40,12 +40,3 @@ console.log("Could not fetch data")
 
 
 });
-
-   /* let z = 'Hello This is  *BYTE-MD* \n\n ' + "The Following is *BYTE-MD Repo.*";
-    let d = ' https://github.com/BYTE-BOT-1/BYTE-V1-MD';
-    let varmess = z + d;
-    var img = 'https://telegra.ph/file/cf24b099f90b5e6ed146b.mp4';
-    await zk.sendMessage(dest, { image: { url: img }, caption: varmess });
-    //console.log("montest")
-});
-console.log("mon test");*/
