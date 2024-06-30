@@ -1,0 +1,36 @@
+const {Hamza} =require("../TalkDrove/Hamza");
+const axios =require("axios");
+
+
+Hamza({ nomCom: "lyrics",
+        reaction: "✨",
+        categorie: "Search" }, async (dest, zk, commandeOptions) => {
+    
+    const { repondre, arg, ms } = commandeOptions;  
+        
+   try {
+
+    if (!arg || arg.length === 0) return repondre("please provide me the song name");
+
+    let  result  = await axios.get(`https://ultimetron.guruapi.tech/gpt3?prompt=${arg.join(' ')}`);
+
+    let lyrics = result.data.data;
+
+    if (lyrics.error) return repondre("no lyrics found");
+
+    let msg = `---------BYTE-MD-lyrics-finder--------
+
+*Artist :* ${lyrics.artist}
+
+
+*Title :* ${lyrics.title}
+
+
+${lyrics.lyrics}`
+
+    zk.sendMessage(dest,{image : { url : './media/lyrics-img.jpg'} , caption : msg}, { quoted : ms });
+    
+   } catch (err) {
+       repondre('Error')
+   }
+        })
