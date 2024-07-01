@@ -1,7 +1,6 @@
 const { Hamza } = require('../TalkDrove/Hamza');
 const s = require('../set')
 
-
 Hamza(
     {
         nomCom : "setvar",
@@ -26,7 +25,7 @@ Hamza(
                   [text.split('=')[0]]: text.split('=')[1],
           },
         });
-        await repondre('That Heroku var is changing,The bot is rebooting....')
+        await repondre('That Heroku var is changing, Thats why the bot is rebooting....')
     }
 );
 
