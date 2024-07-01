@@ -13,7 +13,7 @@ async (dest, zk, commandeOptions) => {
   const { ms, arg, repondre } = commandeOptions;
   
   const start = new Date().getTime();
-  await repondre('Please wait');
+  await repondre('Please wait...');
   const end = new Date().getTime();
   
   const ping = end - start;
@@ -21,3 +21,12 @@ async (dest, zk, commandeOptions) => {
     text: `*BYTE-MD ping is...* \`\`\`${ping}\`\`\` *ms* 🐼`
   }, { quoted: ms });
 });
+
+
+Hamza({ nomCom: 'ping',
+    desc: 'To check ping',
+    Categorie: 'General',
+    reaction: '🐼', 
+    fromMe: 'true', 
+       
+repondre('BYTE-MD is Active...🐼');
