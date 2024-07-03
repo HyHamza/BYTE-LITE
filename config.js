@@ -6,18 +6,18 @@ if (fs.existsSync('config.env')) require('dotenv').config({ path: __dirname+'/co
 global.owner = process.env.OWNER_NUMBER || '923072380380'  // Make SURE its Not Be Empty, Else Bot Stoped And Errors,
 global.mongodb = process.env.MONGODB_URI || "mongodb+srv://SithumKalhara:97531@cluster0.iva7dbo.mongodb.net/?retryWrites=true&w=majority"
 global.port= process.env.PORT || 5000
-global.email = 'Sithumkalhara271@gmail.com'
-global.github = 'https://github.com/Sithuwa/SITHUWA-MD'
-global.location = 'Sri Lanka'
+global.email = 'talkdrove@gmail.com'
+global.github = 'https://github.com/HyHamza/BYTE-MD-LITE'
+global.location = 'Earth'
 global.gurl = 'https://instagram.com/talkdrove' // add your username
 global.sudo = process.env.SUDO || "923072380380"
 global.devs = '923072380380';
-global.website = 'https://github.com/Sithuwa/SITHUWA-MD' //wa.me/+94000000000000
-global.THUMB_IMAGE = process.env.THUMB_IMAGE || 'https://telegra.ph/file/15b1dd8aeaa47888d75d7.jpg'
+global.website = 'HyHamza.vercel.app' //wa.me/+94000000000000
+global.THUMB_IMAGE = process.env.THUMB_IMAGE || 'https://raw.githubusercontent.com/HyHamza/HyHamza/main/Images/BYTE-MD-LITE.jpeg'
 module.exports = {
   sessionName: process.env.SESSION_ID || "",      //Put Your Session Id Here
   author:  process.env.PACK_AUTHER ||  'BYTE-MD',
-  packname:  process.env.PACK_NAME || 'MADE BY TALKDROVE  ',
+  packname:  process.env.PACK_NAME || 'MADE BY TALKDROVE',
   
   botname:   process.env.BOT_NAME === undefined ? "BYTE-MD" : process.env.BOT_NAME,
   ownername: process.env.OWNER_NAME === undefined ? 'TalkDrove' : process.env.OWNER_NAME,  
@@ -46,7 +46,7 @@ module.exports = {
     APP_NAME: process.env.HEROKU_APP_NAME === undefined ? '' : process.env.HEROKU_APP_NAME
 },
   VERSION: process.env.VERSION === undefined ? '0.1' : process.env.VERSION,
-  LANG: process.env.THEME|| 'sithuwa-md',
+  LANG: process.env.THEME|| 'BYTE-MD-LITE',
   WORKTYPE: process.env.WORKTYPE === undefined ? 'public' : process.env.WORKTYPE
 };
 
