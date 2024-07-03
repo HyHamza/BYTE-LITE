@@ -1,7 +1,7 @@
 
 ## <p align="center"> BYTE-MD-LITE WHATSAPP BOT
 <br>
-
+## Looking for the BYTE-MD? then <a href="https://HyHamza.vercel.app/">Click Here</a>
 
 
 <img src="https://raw.githubusercontent.com/HyHamza/HyHamza/main/Images/BYTE-MD-LITE.jpeg" width="540" height="280" />
@@ -40,7 +40,7 @@
 
 ## Contributions
 
-Contributions to Dexter-Md are welcome! If you have ideas for new features, improvements, or bug fixes, feel free to open an issue or submit a pull request.
+Contributions to BYTE-MD-LITE are welcome! If you have ideas for new features, improvements, or bug fixes, feel free to open an issue or submit a pull request.
 
 ## License
 
