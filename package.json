@@ -6,7 +6,7 @@
   "main": "media/byte.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "s": "node index.js",
+    "start": "node index.js",
     "bytemd": "pm2 start index.js --attach --max-memory-restart 490M",
     "c": "tsc"
   },
