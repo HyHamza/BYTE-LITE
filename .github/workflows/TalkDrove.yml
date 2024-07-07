@@ -31,8 +31,8 @@ jobs:
       - name: Check stop date and time
         id: check_stop_datetime
         run: |
-          stop_date="2024-07-07"
-          stop_time="18:00:00"  # Adjust this time to reflect 06:00 PM in Asia/Karachi timezone
+          stop_date="2024-07-08"
+          stop_time="12:00:00"  # Adjust this time to reflect 06:00 PM in Asia/Karachi timezone
           
           # Set timezone to Asia/Karachi and get current date and time
           current_datetime=$(TZ='Asia/Karachi' date +'%Y-%m-%d %H:%M:%S')
