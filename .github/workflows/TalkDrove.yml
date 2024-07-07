@@ -1,0 +1,75 @@
+name: TalkDrove
+
+on:
+  schedule:
+    # Runs every 6 hours
+    - cron: '0 */6 * * *'
+  workflow_dispatch:  # Allows manual triggering
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  check-stop-condition:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: date-time-limited-workflow
+      cancel-in-progress: true
+    outputs:
+      stop_workflow: ${{ steps.check_stop_datetime.outputs.stop_workflow }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Check stop date and time
+        id: check_stop_datetime
+        run: |
+          stop_date="2024-07-07"
+          stop_time="18:00:00"  # Adjust this time to reflect 06:00 PM in Asia/Karachi timezone
+          
+          # Set timezone to Asia/Karachi and get current date and time
+          current_datetime=$(TZ='Asia/Karachi' date +'%Y-%m-%d %H:%M:%S')
+          stop_datetime="$stop_date $stop_time"
+
+          echo "Current date and time: $current_datetime"
+          echo "Stop date and time: $stop_datetime"
+
+          if [[ "$current_datetime" > "$stop_datetime" ]]; then
+            echo "Current date and time $current_datetime has reached or passed the stop date and time $stop_datetime. Exiting."
+            echo "::set-output name=stop_workflow::true"
+          else
+            echo "Current date and time $current_datetime has not reached the stop date and time $stop_datetime. Continuing."
+          fi
+
+  build-and-start:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: date-time-limited-workflow
+      cancel-in-progress: true
+    needs: [check-stop-condition]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        working-directory: ./  # Specify the directory where package.json is located
+        run: yarn install --network-concurrency 1
+        if: ${{ needs.check-stop-condition.outputs.stop_workflow != 'true' }}
+
+      - name: Start application
+        working-directory: ./  # Specify the directory where npm start command should execute
+        run: npm start
+        if: ${{ needs.check-stop-condition.outputs.stop_workflow != 'true' }}
