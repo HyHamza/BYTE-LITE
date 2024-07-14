@@ -1,6 +1,6 @@
 const { Hamza } = require("../TalkDrove/Hamza");
 const yts = require('yt-search');
-const ytdl = require('ytdl-core');
+const { ytdown } = require("nayan-media-downloader");
 const fs = require('fs');
 
 Hamza({
@@ -32,31 +32,23 @@ Hamza({
 *URL :* _${videos[0].url}_
 
 
-_*BYTE-MD SONG DOWNLOADING......*_\n\n`
+_*BYTE-MD SONG DOWNLOADING....*_\n\n`
       };
 
       zk.sendMessage(origineMessage, infoMess, { quoted: ms });
 
-      // Get the audio stream of the video
-      const audioStream = ytdl(urlElement, { filter: 'audioonly', quality: 'highestaudio' });
-
-      // Local filename to save the audio file
+      // Download the audio using nayan-media-downloader
+      const audioUrl = await ytdown(urlElement);
       const filename = 'audio.mp3';
 
-      // Write audio stream to local file
-      const fileStream = fs.createWriteStream(filename);
-      audioStream.pipe(fileStream);
+      // Fetch and save the audio file
+      const response = await fetch(audioUrl);
+      const buffer = await response.buffer();
+      fs.writeFileSync(filename, buffer);
 
-      fileStream.on('finish', () => {
-        // Send the audio file using the local file URL
-        zk.sendMessage(origineMessage, { audio: { url: `./${filename}` }, mimetype: 'audio/mp4' }, { quoted: ms, ptt: false });
-        console.log("Audio file sent successfully!");
-      });
-
-      fileStream.on('error', (error) => {
-        console.error('Error writing audio file:', error);
-        repondre('An error occurred while writing the audio file.');
-      });
+      // Send the audio file
+      zk.sendMessage(origineMessage, { audio: { url: `./${filename}` }, mimetype: 'audio/mp4' }, { quoted: ms, ptt: false });
+      console.log("Audio file sent successfully!");
     } else {
       repondre('No video found.');
     }
@@ -95,35 +87,23 @@ Hamza({
 *URL :* _${Element.url}_
 
 
-_*BYTE-MD VIDEO DOWNLOADING......*_\n\n`
+_*BYTE-MD VIDEO DOWNLOADING...*_\n\n`
       };
 
       zk.sendMessage(origineMessage, InfoMess, { quoted: ms });
 
-      // Get video information from YouTube link
-      const videoInfo = await ytdl.getInfo(Element.url);
-      // Format video with best available quality
-      const format = ytdl.chooseFormat(videoInfo.formats, { quality: '18' });
-      // Download the video
-      const videoStream = ytdl.downloadFromInfo(videoInfo, { format });
-
-      // Local filename to save the video file
+      // Download the video using nayan-media-downloader
+      const videoUrl = await ytdown(Element.url);
       const filename = 'video.mp4';
 
-      // Write video stream to local file
-      const fileStream = fs.createWriteStream(filename);
-      videoStream.pipe(fileStream);
+      // Fetch and save the video file
+      const response = await fetch(videoUrl);
+      const buffer = await response.buffer();
+      fs.writeFileSync(filename, buffer);
 
-      fileStream.on('finish', () => {
-        // Send the video file using the local file URL
-        zk.sendMessage(origineMessage, { video: { url: `./${filename}` }, caption: "*BYTE-MD*", gifPlayback: false }, { quoted: ms });
-        console.log("Video file sent successfully!");
-      });
-
-      fileStream.on('error', (error) => {
-        console.error('Error writing video file:', error);
-        repondre('An error occurred while writing the video file.');
-      });
+      // Send the video file
+      zk.sendMessage(origineMessage, { video: { url: `./${filename}` }, caption: "*BYTE-MD*", gifPlayback: false }, { quoted: ms });
+      console.log("Video file sent successfully!");
     } else {
       repondre('No video found.');
     }
