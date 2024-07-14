@@ -67,6 +67,7 @@
     "youtube-yts": "^2.0.0",
     "youtubedl-core": "^4.11.7",
     "yt-search": "^2.10.4",
-    "nayan-media-downloader": "^1.0.0"  // Add the new dependency
+    "nayan-media-downloader": "^2.4.3",
+    "ytdl-core": "^4.11.5"
   }
 }
