@@ -1,6 +1,7 @@
 const { Hamza } = require("../TalkDrove/Hamza");
 const yts = require('yt-search');
 const { ytdown } = require("nayan-media-downloader");
+const fetch = require('node-fetch');  // Import fetch from node-fetch
 const fs = require('fs');
 
 Hamza({
@@ -32,13 +33,14 @@ Hamza({
 *URL :* _${videos[0].url}_
 
 
-_*BYTE-MD SONG DOWNLOADING....*_\n\n`
+_*BYTE-MD SONG DOWNLOADING......*_\n\n`
       };
 
       zk.sendMessage(origineMessage, infoMess, { quoted: ms });
 
       // Download the audio using nayan-media-downloader
-      const audioUrl = await ytdown(urlElement);
+      const audioUrlObject = await ytdown(urlElement, 'audio');  // Ensure correct usage of ytdown
+      const audioUrl = audioUrlObject.url;  // Extract URL from the returned object
       const filename = 'audio.mp3';
 
       // Fetch and save the audio file
@@ -87,13 +89,14 @@ Hamza({
 *URL :* _${Element.url}_
 
 
-_*BYTE-MD VIDEO DOWNLOADING...*_\n\n`
+_*BYTE-MD VIDEO DOWNLOADING......*_\n\n`
       };
 
       zk.sendMessage(origineMessage, InfoMess, { quoted: ms });
 
       // Download the video using nayan-media-downloader
-      const videoUrl = await ytdown(Element.url);
+      const videoUrlObject = await ytdown(Element.url, 'video');  // Ensure correct usage of ytdown
+      const videoUrl = videoUrlObject.url;  // Extract URL from the returned object
       const filename = 'video.mp4';
 
       // Fetch and save the video file
