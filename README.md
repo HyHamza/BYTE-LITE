@@ -1,10 +1,10 @@
 
 ## <p align="center"> BYTE-MD-LITE WHATSAPP BOT
 <br>
-## Looking for the BYTE-MD? then <a href="https://HyHamza.vercel.app/">Click Here</a>
+### Looking for the BYTE-MD? then <a href="https://github.com/HyHamza/BYTE-M">Click Here</a>
 
 
-<img src="https://raw.githubusercontent.com/HyHamza/HyHamza/main/Images/BYTE-MD-LITE.jpeg" width="540" height="280" />
+<img src="https://raw.githubusercontent.com/HyHamza/HyHamza/main/Images/BYTE-MD-LITE.jpeg" width="540" height="auto" />
 </p>     
 
 ### Setup
