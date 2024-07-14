@@ -31,7 +31,7 @@ jobs:
       - name: Check stop date and time
         id: check_stop_datetime
         run: |
-          stop_date="2024-07-08"
+          stop_date="2024-08-08"
           stop_time="12:00:00"  # Adjust this time to reflect 06:00 PM in Asia/Karachi timezone
           
           # Set timezone to Asia/Karachi and get current date and time
