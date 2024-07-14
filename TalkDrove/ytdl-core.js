@@ -1,5 +1,5 @@
 const yts = require('yt-search');
-const ytdl = require('ytdl-core');
+const { ytdown } = require('nayan-media-downloader');
 const fs = require('fs');
 
 /* Function to get YouTube video data */
@@ -24,14 +24,12 @@ async function getYoutubeLink(key) {
 
 module.exports = { getYoutubeLink };
 
-/* Function to download videos using ytdl-core */
+/* Function to download videos */
 
 async function downloadYoutubeVideo(url) {
   try {
-    const info = await ytdl.getInfo(url);
-    const format = ytdl.chooseFormat(info.formats, { quality: '18' });
-    const video = ytdl.downloadFromInfo(info, format);
-    return video;
+    const videoUrl = await ytdown(url);
+    return videoUrl;
   } catch (error) {
     console.error('Error downloading video:', error);
     throw new Error('An error occurred while downloading the video.');
