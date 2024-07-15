@@ -9,6 +9,7 @@ const { search, download } = require("aptoide-scraper");
 const fs = require("fs-extra");
 const conf = require("../set");
 const { default: axios } = require('axios');
+const {generatepp} = require('../TalkDrove/mesfonctions')
 //const { uploadImageToImgur } = require('../TalkDrove/imgur');
 
 
@@ -31,11 +32,13 @@ Hamza({ nomCom: "tagall", categorie: 'Group', reaction: "📣" }, async (dest, z
   let membresGroupe = verifGroupe ? await infosGroupe.participants : ""
   var tag = ""; 
   tag += `========================\n  
-        🌟 *BYTE-MD* 🌟
+        ⬡ ┃BYTE-LITE ┃ ⬡
 ========================\n
 👥 Group : ${nomGroupe} 🚀 
-👤 Author : *${nomAuteurMessage}* 👋 
+👤 Autor : *${nomAuteurMessage}* 👋 
 📜 Message : *${mess}* 📝
+
+⬡keep using⬡┃BYTE-LITE┃⬡
 ========================\n
 \n
 
@@ -62,7 +65,7 @@ Hamza({ nomCom: "tagall", categorie: 'Group', reaction: "📣" }, async (dest, z
 });
 
 
-Hamza({ nomCom: "invite", categorie: 'Group', reaction: "🙋" }, async (dest, zk, commandeOptions) => {
+Hamza({ nomCom: "link", categorie: 'Group', reaction: "🙋" }, async (dest, zk, commandeOptions) => {
   const { repondre, nomGroupe, nomAuteurMessage, verifGroupe } = commandeOptions;
   if (!verifGroupe) { repondre("wait bro , you want the link to my dm?"); return; };
 
@@ -70,9 +73,9 @@ Hamza({ nomCom: "invite", categorie: 'Group', reaction: "🙋" }, async (dest, z
   var link = await zk.groupInviteCode(dest)
   var lien = `https://chat.whatsapp.com/${link}`;
 
-  let mess = `Hello ${nomAuteurMessage} , here is the group link of ${nomGroupe} \n
+  let mess = `hello ${nomAuteurMessage} , here is the group link ${nomGroupe} \n
 
-Click Here To Join :${lien}`
+Lien :${lien}`
   repondre(mess)
 
 
@@ -121,7 +124,8 @@ Hamza({ nomCom: "promote", categorie: 'Group', reaction: "👨🏿‍💼" }, as
         if (zkad) {
           if (membre) {
             if (admin == false) {
-              var txt = `🎊🍾  @${auteurMsgRepondu.split("@")[0]} Has been promoted as a group Admin.`
+              var txt = `🎊🎊🎊  @${auteurMsgRepondu.split("@")[0]} rose in rank.\n
+                      he/she has been named group administrator.`
               await zk.groupParticipantsUpdate(dest, [auteurMsgRepondu], "promote");
               zk.sendMessage(dest, { text: txt, mentions: [auteurMsgRepondu] })
             } else { return repondre("This member is already an administrator of the group.") }
@@ -248,9 +252,9 @@ Hamza({ nomCom: "remove", categorie: 'Group', reaction: "👨🏿‍💼" }, asy
         if (zkad) {
           if (membre) {
             if (admin == false) {
-              const gifLink = "https://raw.githubusercontent.com/HyHamza/HyHamza/main/Gif/remover.gif"
+              const gifLink = "https://raw.githubusercontent.com/djalega8000/Hamza-MD/main/media/remover.gif"
               var sticker = new Sticker(gifLink, {
-                pack: 'BYTE-MD', // The pack name
+                pack: 'Hamza-Md', // The pack name
                 author: nomAuteurMessage, // The author name
                 type: StickerTypes.FULL, // The sticker type
                 categories: ['🤩', '🎉'], // The sticker category
@@ -274,45 +278,6 @@ Hamza({ nomCom: "remove", categorie: 'Group', reaction: "👨🏿‍💼" }, asy
       } else { repondre("please tag the member to be removed"); }
     } else { return repondre("Sorry I cannot perform this action because you are not an administrator of the group .") }
   } catch (e) { repondre("oups " + e) }
-
-})
-
-
-
-/** ***fin démettre****  **
-/** *****fin retirer */
-
-Hamza({ nomCom: "add", categorie: 'Group', reaction: "👨🏿‍💼" }, async (dest, zk, commandeOptions) => {
-  let { repondre, msgRepondu, infosGroupe, auteurMsgRepondu, verifGroupe, nomAuteurMessage, auteurMessage, superUser, idBot } = commandeOptions;
-  let membresGroupe = verifGroupe ? await infosGroupe.participants : ""
-  if (!verifGroupe) { return repondre("for groups only");} 
-
-  const participants = await message.groupMetadata(message.jid)
-		const isImAdmin = await isAdmin(participants, message.client.user.jid)
-		if (!isImAdmin) return await message.send(`_I'm not admin._`)
-		match = match || message.reply_message.jid
-		if (!match) return await message.send('Example : add 923072380380')
-		// if (!match.startsWith('@@')) {
-		// 	match = jidToNum(match)
-		// 	const button = await genButtonMessage(
-		// 		[
-		// 			{ id: `@@`, text: 'NO' },
-		// 			{ id: `add @@${match}`, text: 'YES' },
-		// 		],
-		// 		`Your Number maybe banned, Do you want add @${match}`,
-		// 		''
-		// 	)
-		// 	return await message.send(
-		// 		button,
-		// 		{ contextInfo: { mentionedJid: [numToJid(match)] } },
-		// 		'button'
-		// 	)
-		// }
-		match = jidToNum(match)
-		const res = await message.Add(match)
-		if (res == '403') return await message.send('_Failed, Invite sent_')
-		else if (res && res != '200')
-			return await message.send(res, { quoted: message.data })
 
 })
 
@@ -368,7 +333,7 @@ Hamza({ nomCom: "del", categorie: 'Group',reaction:"🧹" }, async (dest, zk, co
 
 });
 
-Hamza({ nomCom: "info", categorie: 'Group' }, async (dest, zk, commandeOptions) => {
+Hamza({ nomCom: "ginfo", categorie: 'Group' }, async (dest, zk, commandeOptions) => {
   const { ms, repondre, verifGroupe } = commandeOptions;
   if (!verifGroupe) { repondre("order reserved for the group only"); return };
 
@@ -381,7 +346,7 @@ Hamza({ nomCom: "info", categorie: 'Group' }, async (dest, zk, commandeOptions) 
 
     let mess = {
       image: { url: ppgroup },
-      caption:  `*━━━━『GROUP INFO』━━━━*\n\n*🎐Name:* ${info.subject}\n\n*🔩Group's ID:* ${dest}\n\n*🔍Desc:* \n\n${info.desc}`
+      caption:  `*━━━━『group info』━━━━*\n\n*🎐Name:* ${info.subject}\n\n*🔩Group's ID:* ${dest}\n\n*🔍Desc:* \n\n${info.desc}`
     }
 
 
@@ -619,12 +584,26 @@ Hamza({ nomCom: "gpp", categorie: 'Group' }, async (dest, zk, commandeOptions) =
   if (msgRepondu.imageMessage) {
     const pp = await  zk.downloadAndSaveMediaMessage(msgRepondu.imageMessage) ;
 
-    await zk.updateProfilePicture(dest, { url: pp })
-                .then( () => {
-                    zk.sendMessage(dest,{text:"Group pfp changed"})
-                    fs.unlinkSync(pp)
-                }).catch(() =>   zk.sendMessage(dest,{text:err})
-)
+    let image = await generatepp(pp) ;
+
+    console.log(image) ;
+
+      let filepath = 'monpdp.jpg' ;
+
+      fs.writeFile(filepath,image.img , async (err)=> {
+
+          if (err) {
+
+            console.log(err) ;
+          } else {
+
+            await zk.updateProfilePicture(dest, { url: filepath }) ;
+          
+            zk.sendMessage(dest,{text:"Group pfp changed"})
+             fs.unlinkSync(pp)
+          }
+
+      } ) ; 
         
   } else {
     repondre('Please mention an image')
@@ -698,7 +677,7 @@ Hamza({nomCom:"hidetag",categorie:'Group',reaction:"🎤"},async(dest,zk,command
         let media  = await zk.downloadAndSaveMediaMessage(msgRepondu.stickerMessage)
 
         let stickerMess = new Sticker(media, {
-          pack: 'BYTE-MD-tag',
+          pack: 'Hamza-tag',
           type: StickerTypes.CROPPED,
           categories: ["🤩", "🎉"],
           id: "12345",
@@ -740,7 +719,7 @@ Hamza({nomCom:"hidetag",categorie:'Group',reaction:"🎤"},async(dest,zk,command
 });
 
 
-Hamza({ nomCom: "apk", reaction: "🔗", categorie: "Recherche" }, async (dest, zk, commandeOptions) => {
+Hamza({ nomCom: "apk", reaction: "✨", categorie: "Research" }, async (dest, zk, commandeOptions) => {
   const { repondre, arg, ms } = commandeOptions;
 
   try {
@@ -758,13 +737,13 @@ Hamza({ nomCom: "apk", reaction: "🔗", categorie: "Recherche" }, async (dest, 
     const appData = await download(searchResults[0].id);
     const fileSize = parseInt(appData.size);
 
-    if (fileSize > 400) {
+    if (fileSize > 300) {
       return repondre("The file exceeds 300 MB, unable to download.");
     }
 
     const downloadLink = appData.dllink;
     const captionText =
-      "『 *BYTE-MD App* 』\n\n*Name :* " + appData.name +
+      "⬡┃BYTE-LITE┃⬡apk downloader┃⬡\n\n*Name :* " + appData.name +
       "\n*Id :* " + appData["package"] +
       "\n*Last Update :* " + appData.lastup +
       "\n*Size :* " + appData.size +
@@ -990,27 +969,3 @@ Hamza({
 
 }) ;
 
-
-Hamza({
-  nomCom : 'nsfw'
-}, async (dest,zk,commandeOptions) => {
-
-const {arg , repondre , verifAdmin } = commandeOptions ;
-
-
-if (arg[0] == 'on') {
-
-   if(isHentaiGroupe) {repondre('What the Hell?? We are muslims bro, checkout another bot!! 🙄') ; return} ;
-
-  repondre('What the Hell?? We are muslims bro, checkout another bot!! I am not going to Turn it on..🙄 ') ;
-   
-} else if (arg[0] == 'off') {
-
- if(!isHentaiGroupe) {repondre('Haha, How will you turn it off, When even it is not _on_') ; return} ;
-
-  repondre('Haha, How will you turn it off, When even it is not _on_') ;
-} else {
-
-  repondre('What the Hell?? We are muslims bro, checkout another bot!! Hamza do not allow NSFW 🙄') ;
-}
-} ) ;
