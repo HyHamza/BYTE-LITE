@@ -1,16 +1,17 @@
 const { Hamza } = require('../TalkDrove/Hamza');
 const s = require('../set')
 
+
 Hamza(
     {
         nomCom : "setvar",
-        categorie : "heroku"
+        categorie : "TalkDrove-Vars"
     }, async (dest , zk , commandeOptions) =>{
 
        const {ms,repondre,superUser , arg} = commandeOptions ;
        
        if(!superUser){repondre('only Mods can use this commande');return};
-       if(!arg[0] || !(arg.join('').split('='))) {repondre('Bad format ; Exemple of using :\nSetvar OWNER_NAME=DEXTER KING');return};
+       if(!arg[0] || !(arg.join('').split('='))) {repondre('Bad format ; Exemple of using :\nSetvar OWNER_NAME=Beltah');return};
      
     const text = arg.join(" ")
      const Heroku = require("heroku-client");
@@ -25,14 +26,14 @@ Hamza(
                   [text.split('=')[0]]: text.split('=')[1],
           },
         });
-        await repondre('That Heroku var is changing, Thats why the bot is rebooting....')
+        await repondre('Heroku var changes , rebootings....')
     }
 );
 
 Hamza(
     {
-        nomCom : "allvar",
-        categorie : "heroku"
+        nomCom : "getallvar",
+        categorie : "TalkDrove-Vars"
     }, async (dest , zk , commandeOptions) =>{
 
        const {ms,repondre,superUser , arg} = commandeOptions ;
@@ -47,9 +48,9 @@ Hamza(
 			let baseURI = "/apps/" + s.HEROKU_APP_NAME;
 
             let h = await heroku.get(baseURI+'/config-vars')
-let str = '*All my HEROKU Vars*\n\n'
+let str = '*TalkDrove-Vll vars*\n\n'
 for (vr in h) {
-str+= '⚡ *'+vr+'* '+'= '+h[vr]+'\n'
+str+= '☉ *'+vr+'* '+'= '+h[vr]+'\n'
 }
  repondre(str)
 
@@ -62,7 +63,7 @@ str+= '⚡ *'+vr+'* '+'= '+h[vr]+'\n'
     Hamza(
         {
             nomCom : "getvar",
-            categorie : "heroku"
+            categorie : "TalkDrove-Vars"
         }, async (dest , zk , commandeOptions) =>{
     
            const {ms,repondre,superUser , arg} = commandeOptions ;
@@ -74,7 +75,7 @@ str+= '⚡ *'+vr+'* '+'= '+h[vr]+'\n'
             const Heroku = require("heroku-client");
                
             const heroku = new Heroku({
-              token: s.HEROKU_API_KEY,
+              token: s.HEROKU_APY_KEY,
             });
             let baseURI = "/apps/" + s.HEROKU_APP_NAME;
         let h = await heroku.get(baseURI+'/config-vars')
