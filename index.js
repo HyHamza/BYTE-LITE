@@ -856,20 +856,17 @@ ${metadata.desc}
                 
                 if((conf.DP).toLowerCase() === 'yes') {     
                 let cmsg = `
-*『BYTE-MD is CONNECTED』*
-║❒Creator: *Hamza*
-║❒Prefix : [ ${prefixe} ]
-║❒Mode :${md}
-║❒Created on : *01.7.2024*
+*BYTE-MD is CONNECTED*
+║Creator: *Hamza*
+║Prefix : [ ${prefixe} ]
+║Mode :${md}
+║Created on : *01.7.2024*
 ║❒Total Commands : ${evt.cm.length}︎
 
-║- *_Join BYTE-MD Channel for Updates_*
+*_Join TalkDrove_*
 https://whatsapp.com/channel/0029VaNRcHSJP2199iMQ4W0l
 
-║- *JOIN OUR WhatsApp GROUP*
-https://whatsapp.com/channel/0029VaNRcHSJP2199iMQ4W0l
-
-                   Thanks for choosing *TalkDrove:)*`;
+ *TalkDrove:)*`;
                 await zk.sendMessage(zk.user.id, { text: cmsg });
                 }
             }
@@ -992,3 +989,27 @@ https://whatsapp.com/channel/0029VaNRcHSJP2199iMQ4W0l
     });
     main();
 }, 5000);
+// start web server
+const { start } = require("./Hamza.js");
+const { PORT } = require("./set.js");
+
+start(PORT);
+
+const restart = () => {
+    const { exec } = require("child_process");
+    console.log(`Restarting`);
+    exec("pm2 restart all");
+};
+
+//catch exections
+process.on("uncaughtException", function (err) {
+    let e = String(err);
+    if (e.includes("Socket connection timeout")) return;
+    if (e.includes("item-not-found")) return;
+    if (e.includes("rate-overlimit")) return;
+    if (e.includes("Connection Closed")) return;
+    if (e.includes("Timed Out")) return;
+    if (e.includes("Value not found")) return;
+    if (e.includes("Authentication timed out")) restart();
+    console.log("Caught exception: ", err);
+});
