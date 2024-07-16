@@ -9,7 +9,8 @@ const baileys_1 = require("@whiskeysockets/baileys");
 const fs = require('fs-extra');
 const util = require('util');
 let { listall } = require('./stylish-font');
-/*_________by dexter 
+
+/*_________by Djalega++
 
 fonction zJson:
 récupère un objet json
@@ -32,7 +33,7 @@ module.exports.genererNomFichier = async (extension) => {
 /** ************ */
 module.exports.stick = async (buffer, author) => {
     var sticker = new Sticker(buffer, {
-        pack: 'DEXTER-MD',
+        pack: 'BYTE-MD',
         author: author,
         type: StickerTypes.FULL,
         categories: ['🤩', '🎉'],
@@ -210,7 +211,26 @@ async function ajouterCommande() {
         }
         // console.log('fichier : '+fichier )
     });
-   
+    /*const readDir = util.promisify(fs.readdir);
+    const readFile = util.promisify(fs.readFile);
+    //console.log("ch " + __dirname + '../')
+    var chemin = './commandes/'
+    var nomFichier = await readDir(chemin)
+  //console.log("installation des plugins ... ")
+    nomFichier.forEach((fichier) => {
+      if (fichier.endsWith(".js")) {
+        //console.log(fichier+" installé ✅")
+        var { commande } = require('../'+chemin.replace(/./, '') + fichier.split('.js')[0])
+        var infoCom = commande()
+        for (var a of infoCom.nomCom) {
+          tabCmd[a] = infoCom.execute
+          reaction[a]=infoCom.reaction
+        }
+      }
+  //console.log("installation de plugins terminé 👍🏿")
+    })
+  
+  */
 }
 exports.ajouterCommande = ajouterCommande;
 async function xlab() {
@@ -254,3 +274,100 @@ function police(text, index) {
     return listall(text)[index];
 }
 exports.police = police;
+
+exports.generatepp = async (buffer) => {
+    const jimp = require('jimp');
+
+    const image = await jimp.read(buffer);
+    const min = image.getWidth();
+    const max = image.getHeight();
+    const cropped = image.clone().crop(0, 0, min, max);
+
+    const imgBuffer = await cropped.clone().scaleToFit(720, 720).getBufferAsync(jimp.MIME_JPEG);
+    const previewBuffer = await cropped.clone().normalize().getBufferAsync(jimp.MIME_JPEG);
+
+    return {
+        img: imgBuffer,
+        preview: previewBuffer
+    };
+}
+
+exports.runtime = function(seconds) {
+    seconds = Number(seconds);
+    var d = Math.floor(seconds / (3600 * 24));
+    var h = Math.floor(seconds % (3600 * 24) / 3600);
+    var m = Math.floor(seconds % 3600 / 60);
+    var s = Math.floor(seconds % 60);
+    var dDisplay = d > 0 ? d + (d == 1 ? " day, ": " days, "): "";
+    var hDisplay = h > 0 ? h + (h == 1 ? " hour, ": " hours, "): "";
+    var mDisplay = m > 0 ? m + (m == 1 ? " minute, ": " minutes, "): "";
+    var sDisplay = s > 0 ? s + (s == 1 ? " second": " seconds"): "";
+    return dDisplay + hDisplay + mDisplay + sDisplay;
+  }
+
+/**
+@credit Tio
+@ai chatgpt free
+**/
+
+
+const IP = () => {
+    const octet = () => Math.floor(Math.random() * 256);
+    return `${octet()}.${octet()}.${octet()}.${octet()}`;
+};
+
+async function ai(text) {
+    try {
+        const {
+            data: res
+        } = await axios.post("https://chatgpt4online.org/wp-json/mwai/v1/start_session", {}, {
+            headers: {
+                'Content-Type': 'application/json',
+                "x-forwarded-for": await IP()
+            }
+        })
+
+        const url = 'https://chatgpt4online.org/wp-json/mwai-ui/v1/chats/submit';
+        const data = {
+            botId: "default",
+            customId: null,
+            session: "N/A",
+            messages: [{
+                role: "user",
+                content: text
+            }],
+            newMessage: text,
+            stream: false
+        };
+
+        const headers = {
+            'Content-Type': 'application/json',
+            'X-WP-Nonce': res.restNonce,
+            "x-forwarded-for": await IP()
+        };
+
+        
+        const response = await axios.post(url, data, {
+            headers: headers
+        });
+
+        if (response.status === 200) {
+            return {
+            creator: "Danny",
+            status: 200,
+            reply: response.data.reply
+            }
+        } else {
+            console.error('Error:', response.statusText);
+            return {
+              creator: "Hamza",
+              status: response.status,
+              reply: 'server error'
+            }
+        }
+    } catch (error) {
+        console.error('Axios Error:', error);
+    }
+}
+
+exports.ai = ai;
