@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const { Hamza } = require("../TalkDrove/Hamza");
 
-Hamza({ nomCom: "repo", catégorie:"General", reaction: "✨", nomFichier: __filename }, async (dest, zk, commandeOptions) => {
+Hamza({ nomCom: "repo", catégorie:"General", reaction: "👋", nomFichier: __filename }, async (dest, zk, commandeOptions) => {
   const githubRepo = 'https://api.github.com/repos/HyHamza/BYTE-MD-LITE';
   const img = 'https://raw.githubusercontent.com/HyHamza/HyHamza/main/Images/BYTE-MD-LITE.jpeg';
 
