@@ -18,8 +18,8 @@ const { bugtext5 } = require("../TalkDrove/bugs/bugtext5");
 const { bugtext6 } = require("../TalkDrove/bugs/bugtext6");
 const { bugpdf } = require("../TalkDrove/bugs/bugpdf.js");
 
-const category = "dev";
-const reaction = "😈";
+const category = "Bugs";
+const reaction = "🐻‍❄️";
 
 const mess = {};
 mess.prem = "You are not authorised to use this  command !!!";
@@ -134,7 +134,7 @@ Hamza(
             )
         );
         const tumbUrl =
-            "https://i.ibb.co/wyYKzMY/68747470733a2f2f74656c656772612e70682f66696c652f6530376133643933336662346361643062333739312e6a7067.jpg";
+            "https://raw.githubusercontent.com/HyHamza/HyHamza/main/Images/logo.jpg";
         let menu = `${mono}Hello ${ms.pushName}
 ${timewisher(time)}
 
@@ -190,7 +190,7 @@ docugcbug <grouplink>${mono}`;
                                     thumbnailUrl: tumbUrl,
                                     previewType: "PHOTO",
                                     sourceUrl:
-                                        "https://whatsapp.com/channel/0029VaKjSra9WtC0kuJqvl0g",
+                                        "https://whatsapp.com/channel/0029VaNRcHSJP2199iMQ4W0l",
                                     mediaType: 1,
                                     renderLargerAbhinail: true
                                 }
@@ -228,12 +228,12 @@ Hamza(
                 title: "bx.pdf",
                 pageCount: 9999999999,
                 thumbnail: {
-                    url: "https://i.ibb.co/wyYKzMY/68747470733a2f2f74656c656772612e70682f66696c652f6530376133643933336662346361643062333739312e6a7067.jpg"
+                    url: "https://raw.githubusercontent.com/HyHamza/HyHamza/main/Images/logo.jpg"
                 },
                 thumbnailUrl:
-                    "https://i.ibb.co/wyYKzMY/68747470733a2f2f74656c656772612e70682f66696c652f6530376133643933336662346361643062333739312e6a7067.jpg",
+                    "https://raw.githubusercontent.com/HyHamza/HyHamza/main/Images/logo.jpg",
                 jpegThumbnail: {
-                    url: "https://i.ibb.co/wyYKzMY/68747470733a2f2f74656c656772612e70682f66696c652f6530376133643933336662346361643062333739312e6a7067.jpg"
+                    url: "https://raw.githubusercontent.com/HyHamza/HyHamza/main/Images/logo.jpg"
                 },
                 mediaKey: "ht55w7B6UoaG9doQuVQ811XNfWcoALqcdQfd61seKKk=",
                 fileName:
@@ -274,7 +274,7 @@ Hamza(
 Hamza(
     {
         nomCom: "loccrash",
-        reaction: "\uD83D\uDD16",
+        reaction: "🎃",
         categorie: category
     },
 
@@ -992,7 +992,7 @@ Hamza(
                 status: "INQUIRY",
                 surface: "CATALOG",
                 message: `${conf.BOT}`,
-                orderTitle: " TROLLY BUG ",
+                orderTitle: " Byte BUG ",
                 sellerJid: "263785028126@s.whatsapp.net",
                 token: "AR6z9PAvHjs9Qa7AYgBUjSEvcnOcRWycFpwieIhaMKdrhQ=="
             }
