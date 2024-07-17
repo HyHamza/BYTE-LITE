@@ -21,16 +21,16 @@ Hamza({ nomCom: "repo", catégorie:"General", reaction: "✨", nomFichier: __fil
       const releaseDate = new Date(data.created_at).toLocaleDateString('en-GB');
       const lastUpdateDate = new Date(data.updated_at).toLocaleDateString('en-GB');
 
-      const gitdata = `_Hello 👋
-this is BYTE-LITE._
+      const gitdata =  `_Hello 👋
+this is BYTE-LITE_
 
-- 🗼 *REPOSITORY:* ${data.html_url}
-- ✨ *STARS:* ${repoInfo.stars}
-- 🧧 *FORKS:* ${repoInfo.forks}
-- 📅 *RELEASE DATE:* ${releaseDate}
-- 🕐 *UPDATE ON:* ${repoInfo.lastUpdate}
-- 👨‍💻 *OWNER* : Hamza
-__________________________________
+🗼 *REPOSITORY:* ${data.html_url}
+✨ *STARS:* ${repoInfo.stars}
+🧧 *FORKS:* ${repoInfo.forks}
+📅 *RELEASE DATE:* ${releaseDate}
+🕐 *UPDATE ON:* ${repoInfo.lastUpdate}
+👨‍💻 *OWNER* : Hamza
+__________________________
            _TalkDrove_`;
 
       await zk.sendMessage(dest, { image: { url: img }, caption: gitdata });
