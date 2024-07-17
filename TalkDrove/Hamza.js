@@ -20,7 +20,7 @@ function Hamza(obj, fonctions) {
   return infoComs;
 }
 module.exports = {
-  zokou,
+  Hamza,
   Module: Hamza,
   cm
 };
