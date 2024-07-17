@@ -31,30 +31,27 @@ Hamza({ nomCom: "menu", categorie: "General" }, async (dest, zk, commandeOptions
 const temps = moment().format('HH:mm:ss');
 const date = moment().format('DD/MM/YYYY');
 let infoMsg =  `
-╭────〖BYTE-MD-LITE〗────╮
+╭────〖 *BYTE-LITE* 〗────╮
 │﹄ *Préfix* : ${s.PREFIXE}
 │﹄ *User* : ${s.OWNER_NAME}
 │﹄ *Mode* : ${mode}
 │﹄ *Commands* : ${cm.length} 
-│﹄ *Date* : ${date}
-│﹄ *Time* : ${temps} 
 │﹄ *Ram* : ${format(os.totalmem() - os.freemem())}/${format(os.totalmem())}
-│﹄ *Platform* : ${os.platform()}
 │﹄ *Developer* : 𝐻𝒶𝓂𝓏𝒶
 │﹄ *Version* : v.lite
-╰─────{*TalkDrove*}─────o: \n\n`;
+╰─────{ *TalkDrove* }─────o: \n\n`;
 
   let menuMsg=`  
 
-*BYTE-MD Commands :*
+*BYTE.V-lite Commands :*
 ◇                             ◇
 `;
 
     for (const cat in coms) {
-        menuMsg += `*-‿‿o* *${cat}* *o‿‿*`;
+        menuMsg += `*o:* *${cat}* *o:*`;
         for (const cmd of coms[cat]) {
             menuMsg += `
- *|*${s.PREFIXE} ${cmd}`;
+ *| *${s.PREFIXE} ${cmd}`;
         }
         menuMsg += `
 *╰═════════════⊷* \n`
@@ -62,10 +59,11 @@ let infoMsg =  `
 
     menuMsg += `
 
-*———————————————————— Channel link: ———————————————————————————*
+*——————— Channel link: ———————*
 
-  _https://whatsapp.com/channel/0029VaNRcHSJP2199iMQ4W0l_                                         
-*-‿-︵-‿-︵-‿-︵-‿--‿-︵-‿-︵-‿-︵-‿--‿-︵-‿-︵-‿-︵-‿-*
+https://whatsapp.com/channel/0029VaNRcHSJP2199iMQ4W0l
+  
+*——————————————————————————————*
 `;
 
    var lien = mybotpic();
