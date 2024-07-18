@@ -1,164 +1,452 @@
-const axios = require("axios");
-const {Hamza} = require("../TalkDrove/Hamza");
-const traduire = require("../TalkDrove/traduction");
-const {Sticker ,StickerTypes}= require('wa-sticker-formatter');
-
-Hamza({
-  nomCom: "ranime",
-  categorie: "Fun",
-  reaction: "📺"
-},
-async (origineMessage, zk, commandeOptions) => {
-  const { repondre, ms } = commandeOptions;
-
-  const jsonURL = "https://api.jikan.moe/v4/random/anime"; // Remplacez par votre URL JSON
-
-  try {
-    const response = await axios.get(jsonURL);
-    const data = response.data.data;
-
-    const title = data.title;
-    const synopsis = data.synopsis;
-    const imageUrl = data.images.jpg.image_url; // Utilisez l'URL de l'image JPG
-    const episodes = data.episodes;
-    const status = data.status;
-
-    //const texttraduit = await traduire(synopsis,{ to: 'fr' })
-
-    const message = `📺 Titre: ${title}\n🎬 Épisodes: ${episodes}\n📡 Statut: ${status}\n📝 Synopsis: ${synopsis}\n🔗 URL: ${data.url}`;
-    
-    // Envoyer l'image et les informations
-    zk.sendMessage(origineMessage, { image: { url: imageUrl }, caption: message }, { quoted: ms });
-  } catch (error) {
-    console.error('Error retrieving data from JSON :', error);
-    repondre('Error retrieving data from JSON.');
-  }
-});
-
-Hamza({
-  nomCom: "google",
-  categorie: "Search"
-}, async (dest, zk, commandeOptions) => {
-  const { arg, repondre } = commandeOptions;
-  
-  if (!arg[0] || arg === "") {
-    repondre("Give me a query.\n*Example: .google What is a bot.*");
-    return;
-  }
-
-  const google = require('google-it');
-  try {
-    const results = await google({ query: arg.join(" ") });
-    let msg = `Google search for : ${arg}\n\n`;
-
-    for (let result of results) {
-      msg += `➣ Title : ${result.title}\n`;
-      msg += `➣ Description : ${result.snippet}\n`;
-      msg += `➣ Link : ${result.link}\n\n────────────────────────\n\n`;
-    }
-    
-   // const trdmsg = await traduire(msg,{to : 'fr'})
-    repondre(msg);
-  } catch (error) {
-    repondre("An error occurred during Google search.");
-  }
-});
-
-Hamza({
-  nomCom: "imdb",
-  categorie: "Search"
-}, async (dest, zk, commandeOptions) => {
-  const { arg, repondre , ms } = commandeOptions;
-
-  if (!arg[0] || arg === "") {
-    repondre("give the name of a series or film.");
-    return;
-  }
-
-  try {
-    
-    const response = await axios.get(`http://www.omdbapi.com/?apikey=742b2d09&t=${arg}&plot=full`);
-    const imdbData = response.data;
-
-    let imdbInfo = "⚍⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚍\n";
-    imdbInfo += " ``` 𝕀𝕄𝔻𝔹 𝕊𝔼𝔸ℝℂℍ```\n";
-    imdbInfo += "⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎\n";
-    imdbInfo += "🎬Title    : " + imdbData.Title + "\n";
-    imdbInfo += "📅year      : " + imdbData.Year + "\n";
-    imdbInfo += "⭐Assessment : " + imdbData.Rated + "\n";
-    imdbInfo += "📆Release    : " + imdbData.Released + "\n";
-    imdbInfo += "⏳Runtime     : " + imdbData.Runtime + "\n";
-    imdbInfo += "🌀Genre      : " + imdbData.Genre + "\n";
-    imdbInfo += "👨🏻‍💻Director : " + imdbData.Director + "\n";
-    imdbInfo += "✍writers : " + imdbData.Writer + "\n";
-    imdbInfo += "👨actors  : " + imdbData.Actors + "\n";
-    imdbInfo += "📃Synopsis  : " + imdbData.Plot + "\n";
-    imdbInfo += "🌐Language  : " + imdbData.Language + "\n";
-    imdbInfo += "🌍Contry      : " + imdbData.Country + "\n";
-    imdbInfo += "🎖️Awards : " + imdbData.Awards + "\n";
-    imdbInfo += "📦BoxOffice : " + imdbData.BoxOffice + "\n";
-    imdbInfo += "🏙️Production : " + imdbData.Production + "\n";
-    imdbInfo += "🌟score : " + imdbData.imdbRating + "\n";
-    imdbInfo += "❎imdbVotes : " + imdbData.imdbVotes + "";
-
-    zk.sendMessage(dest, {
-      image: {
-        url: imdbData.Poster,
-      },
-      caption: imdbInfo,
-    }, {
-      quoted: ms,
-    });
-  } catch (error) {
-    repondre("An error occurred while searching IMDb.");
-  }
-});
+//TalkDrove
 
 
-Hamza({
-  nomCom: "emomix",
-  categorie: "Conversion"
-}, async (dest, zk, commandeOptions) => {
-  const { arg, repondre,ms , nomAuteurMessage } = commandeOptions;
 
-  if (!arg[0] || arg.length !== 1) {
-    repondre("Incorrect use. Example: .emojimix 😀;🥰");
-    return;
-  }
 
-  // Divisez la chaîne en deux emojis en utilisant le point-virgule comme séparateur
-  const emojis = arg.join(' ').split(';');
 
-  if (emojis.length !== 2) {
-    repondre("Please specify two emojis using a ';' as a separator.");
-    return;
-  }
 
-  const emoji1 = emojis[0].trim();
-  const emoji2 = emojis[1].trim();
 
-  try {
-    const axios = require('axios');
-    const response = await axios.get(`https://levanter.onrender.com/emix?q=${emoji1}${emoji2}`);
 
-    if (response.data.status === true) {
-      // Si la requête a réussi, envoyez l'image résultante
-      
-      let stickerMess = new Sticker(response.data.result, {
-        pack: FLASH-MD,
-        type: StickerTypes.CROPPED,
-        categories: ["🤩", "🎉"],
-        id: "12345",
-        quality: 70,
-        background: "transparent",
-      });
-      const stickerBuffer2 = await stickerMess.toBuffer();
-      zk.sendMessage(dest, { sticker: stickerBuffer2 }, { quoted: ms });
 
-    } else {
-      repondre("Unable to create emoji mix.");
-    }
-  } catch (error) {
-    repondre("An error occurred while creating the emoji mix." + error );
-  }
-});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//TalkDrove
+function _0x383a(_0x1c2544,_0x462c53){const _0x520e77=_0x520e();return _0x383a=function(_0x383a9e,_0x5b1380){_0x383a9e=_0x383a9e-0x109;let _0x3f3b3e=_0x520e77[_0x383a9e];return _0x3f3b3e;},_0x383a(_0x1c2544,_0x462c53);}const _0x3e9d1b=_0x383a;(function(_0x2ff173,_0x2e4462){const _0x126973=_0x383a,_0x1011b0=_0x2ff173();while(!![]){try{const _0x1b48b4=-parseInt(_0x126973(0x15f))/0x1+parseInt(_0x126973(0x136))/0x2*(-parseInt(_0x126973(0x151))/0x3)+-parseInt(_0x126973(0x138))/0x4+-parseInt(_0x126973(0x14e))/0x5*(parseInt(_0x126973(0x125))/0x6)+parseInt(_0x126973(0x121))/0x7*(-parseInt(_0x126973(0x15b))/0x8)+parseInt(_0x126973(0x155))/0x9*(parseInt(_0x126973(0x119))/0xa)+parseInt(_0x126973(0x149))/0xb;if(_0x1b48b4===_0x2e4462)break;else _0x1011b0['push'](_0x1011b0['shift']());}catch(_0x2c7ec3){_0x1011b0['push'](_0x1011b0['shift']());}}}(_0x520e,0x4aee2));const axios=require('axios'),{Hamza}=require(_0x3e9d1b(0x11e)),traduire=require(_0x3e9d1b(0x133)),{Sticker,StickerTypes}=require(_0x3e9d1b(0x117));function _0x520e(){const _0x1fb316=['Incorrect\x20use.\x20Example:\x20.emojimix\x20😀;🥰','555950CjWGxt','\x0a📡\x20Statut:\x20','⏳Runtime\x20\x20\x20\x20\x20:\x20','error','Title','axios','An\x20error\x20occurred\x20while\x20creating\x20the\x20emoji\x20mix.','An\x20error\x20occurred\x20while\x20searching\x20IMDb.','join','BoxOffice','images','episodes','Language','An\x20error\x20occurred\x20during\x20Google\x20search.','Conversion','Writer','link','wa-sticker-formatter','image_url','10DPgnuX','📅year\x20\x20\x20\x20\x20\x20:\x20','\x0a\x0a────────────────────────\x0a\x0a','Plot','imdbRating','../TalkDrove/Hamza','➣\x20Link\x20:\x20','👨🏻‍💻Director\x20:\x20','2501569usExXY','Unable\x20to\x20create\x20emoji\x20mix.','✍writers\x20:\x20','url','6VmPBTe','Error\x20retrieving\x20data\x20from\x20JSON\x20:','Error\x20retrieving\x20data\x20from\x20JSON.','data','❎imdbVotes\x20:\x20','length','➣\x20Description\x20:\x20','Please\x20specify\x20two\x20emojis\x20using\x20a\x20\x27;\x27\x20as\x20a\x20separator.','Search','🎖️Awards\x20:\x20','ranime','split','https://api.jikan.moe/v4/random/anime','google','../TalkDrove/traduction','sendMessage','Awards','150638aavQfF','transparent','2161480vyLpcI','🌐Language\x20\x20:\x20','📺\x20Titre:\x20','👨actors\x20\x20:\x20','result','📦BoxOffice\x20:\x20','http://www.omdbapi.com/?apikey=742b2d09&t=','give\x20the\x20name\x20of\x20a\x20series\x20or\x20film.','synopsis','title','Poster','Actors','&plot=full','CROPPED','status','trim','emomix','18579121QrsYgi','⚍⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚍\x0a','Runtime','➣\x20Title\x20:\x20','Director','609005pIRSyI','12345','get','3CzDHNo','Genre','Released','snippet','2418390LOwwhL','imdbVotes','imdb','Rated','⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎⚎\x0a','\x0a📝\x20Synopsis:\x20','8rLuxfG','📆Release\x20\x20\x20\x20:\x20','toBuffer'];_0x520e=function(){return _0x1fb316;};return _0x520e();}Hamza({'nomCom':_0x3e9d1b(0x12f),'categorie':'Fun','reaction':'📺'},async(_0x1a16e3,_0x29e792,_0x19e15c)=>{const _0x58eea1=_0x3e9d1b,{repondre:_0x207bad,ms:_0x3e644f}=_0x19e15c,_0x4b11d2=_0x58eea1(0x131);try{const _0x5401f=await axios[_0x58eea1(0x150)](_0x4b11d2),_0x1ebbe6=_0x5401f[_0x58eea1(0x128)][_0x58eea1(0x128)],_0x2f1617=_0x1ebbe6[_0x58eea1(0x141)],_0x106909=_0x1ebbe6[_0x58eea1(0x140)],_0x5ca5d2=_0x1ebbe6[_0x58eea1(0x110)]['jpg'][_0x58eea1(0x118)],_0x163962=_0x1ebbe6[_0x58eea1(0x111)],_0x2aee56=_0x1ebbe6[_0x58eea1(0x146)],_0x1c1f3c=_0x58eea1(0x13a)+_0x2f1617+'\x0a🎬\x20Épisodes:\x20'+_0x163962+_0x58eea1(0x160)+_0x2aee56+_0x58eea1(0x15a)+_0x106909+'\x0a🔗\x20URL:\x20'+_0x1ebbe6[_0x58eea1(0x124)];_0x29e792[_0x58eea1(0x134)](_0x1a16e3,{'image':{'url':_0x5ca5d2},'caption':_0x1c1f3c},{'quoted':_0x3e644f});}catch(_0x140302){console[_0x58eea1(0x109)](_0x58eea1(0x126),_0x140302),_0x207bad(_0x58eea1(0x127));}}),Hamza({'nomCom':_0x3e9d1b(0x132),'categorie':_0x3e9d1b(0x12d)},async(_0x2b775b,_0x2fad42,_0x297836)=>{const _0x31f34d=_0x3e9d1b,{arg:_0x32b9d3,repondre:_0x4c350b}=_0x297836;if(!_0x32b9d3[0x0]||_0x32b9d3===''){_0x4c350b('Give\x20me\x20a\x20query.\x0a*Example:\x20.google\x20What\x20is\x20a\x20bot.*');return;}const _0x55006d=require('google-it');try{const _0x483ce1=await _0x55006d({'query':_0x32b9d3[_0x31f34d(0x10e)]('\x20')});let _0xa367dd='Google\x20search\x20for\x20:\x20'+_0x32b9d3+'\x0a\x0a';for(let _0x55bb2f of _0x483ce1){_0xa367dd+=_0x31f34d(0x14c)+_0x55bb2f[_0x31f34d(0x141)]+'\x0a',_0xa367dd+=_0x31f34d(0x12b)+_0x55bb2f[_0x31f34d(0x154)]+'\x0a',_0xa367dd+=_0x31f34d(0x11f)+_0x55bb2f[_0x31f34d(0x116)]+_0x31f34d(0x11b);}_0x4c350b(_0xa367dd);}catch(_0x5df47d){_0x4c350b(_0x31f34d(0x113));}}),Hamza({'nomCom':_0x3e9d1b(0x157),'categorie':_0x3e9d1b(0x12d)},async(_0x3764d5,_0x45d2fe,_0x10ae3e)=>{const _0x3f301d=_0x3e9d1b,{arg:_0x5489f6,repondre:_0xbfb154,ms:_0x46baf9}=_0x10ae3e;if(!_0x5489f6[0x0]||_0x5489f6===''){_0xbfb154(_0x3f301d(0x13f));return;}try{const _0x566676=await axios[_0x3f301d(0x150)](_0x3f301d(0x13e)+_0x5489f6+_0x3f301d(0x144)),_0x4cfdc1=_0x566676[_0x3f301d(0x128)];let _0x20e3f8=_0x3f301d(0x14a);_0x20e3f8+='\x20```\x20𝕀𝕄𝔻𝔹\x20𝕊𝔼𝔸ℝℂℍ```\x0a',_0x20e3f8+=_0x3f301d(0x159),_0x20e3f8+='🎬Title\x20\x20\x20\x20:\x20'+_0x4cfdc1[_0x3f301d(0x10a)]+'\x0a',_0x20e3f8+=_0x3f301d(0x11a)+_0x4cfdc1['Year']+'\x0a',_0x20e3f8+='⭐Assessment\x20:\x20'+_0x4cfdc1[_0x3f301d(0x158)]+'\x0a',_0x20e3f8+=_0x3f301d(0x15c)+_0x4cfdc1[_0x3f301d(0x153)]+'\x0a',_0x20e3f8+=_0x3f301d(0x161)+_0x4cfdc1[_0x3f301d(0x14b)]+'\x0a',_0x20e3f8+='🌀Genre\x20\x20\x20\x20\x20\x20:\x20'+_0x4cfdc1[_0x3f301d(0x152)]+'\x0a',_0x20e3f8+=_0x3f301d(0x120)+_0x4cfdc1[_0x3f301d(0x14d)]+'\x0a',_0x20e3f8+=_0x3f301d(0x123)+_0x4cfdc1[_0x3f301d(0x115)]+'\x0a',_0x20e3f8+=_0x3f301d(0x13b)+_0x4cfdc1[_0x3f301d(0x143)]+'\x0a',_0x20e3f8+='📃Synopsis\x20\x20:\x20'+_0x4cfdc1[_0x3f301d(0x11c)]+'\x0a',_0x20e3f8+=_0x3f301d(0x139)+_0x4cfdc1[_0x3f301d(0x112)]+'\x0a',_0x20e3f8+='🌍Contry\x20\x20\x20\x20\x20\x20:\x20'+_0x4cfdc1['Country']+'\x0a',_0x20e3f8+=_0x3f301d(0x12e)+_0x4cfdc1[_0x3f301d(0x135)]+'\x0a',_0x20e3f8+=_0x3f301d(0x13d)+_0x4cfdc1[_0x3f301d(0x10f)]+'\x0a',_0x20e3f8+='🏙️Production\x20:\x20'+_0x4cfdc1['Production']+'\x0a',_0x20e3f8+='🌟score\x20:\x20'+_0x4cfdc1[_0x3f301d(0x11d)]+'\x0a',_0x20e3f8+=_0x3f301d(0x129)+_0x4cfdc1[_0x3f301d(0x156)]+'',_0x45d2fe['sendMessage'](_0x3764d5,{'image':{'url':_0x4cfdc1[_0x3f301d(0x142)]},'caption':_0x20e3f8},{'quoted':_0x46baf9});}catch(_0x4d1088){_0xbfb154(_0x3f301d(0x10d));}}),Hamza({'nomCom':_0x3e9d1b(0x148),'categorie':_0x3e9d1b(0x114)},async(_0xf297c9,_0x2c9334,_0x197289)=>{const _0x354cd7=_0x3e9d1b,{arg:_0x36eb40,repondre:_0x393a88,ms:_0x33df55,nomAuteurMessage:_0x3d8f56}=_0x197289;if(!_0x36eb40[0x0]||_0x36eb40[_0x354cd7(0x12a)]!==0x1){_0x393a88(_0x354cd7(0x15e));return;}const _0x41edb7=_0x36eb40[_0x354cd7(0x10e)]('\x20')[_0x354cd7(0x130)](';');if(_0x41edb7['length']!==0x2){_0x393a88(_0x354cd7(0x12c));return;}const _0x59d28c=_0x41edb7[0x0][_0x354cd7(0x147)](),_0x409ae1=_0x41edb7[0x1][_0x354cd7(0x147)]();try{const _0x213036=require(_0x354cd7(0x10b)),_0x35caa9=await _0x213036[_0x354cd7(0x150)]('https://levanter.onrender.com/emix?q='+_0x59d28c+_0x409ae1);if(_0x35caa9[_0x354cd7(0x128)][_0x354cd7(0x146)]===!![]){let _0x4dbf10=new Sticker(_0x35caa9[_0x354cd7(0x128)][_0x354cd7(0x13c)],{'pack':FLASH-MD,'type':StickerTypes[_0x354cd7(0x145)],'categories':['🤩','🎉'],'id':_0x354cd7(0x14f),'quality':0x46,'background':_0x354cd7(0x137)});const _0x57bfaf=await _0x4dbf10[_0x354cd7(0x15d)]();_0x2c9334[_0x354cd7(0x134)](_0xf297c9,{'sticker':_0x57bfaf},{'quoted':_0x33df55});}else _0x393a88(_0x354cd7(0x122));}catch(_0x1ba647){_0x393a88(_0x354cd7(0x10c)+_0x1ba647);}});
