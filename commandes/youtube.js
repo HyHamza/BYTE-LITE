@@ -1,64 +1,85 @@
 const { Hamza } = require("../TalkDrove/Hamza");
 const yts = require('yt-search');
-const { ytdown } = require("nayan-media-downloader");
-const fetch = require('node-fetch');  // Import fetch from node-fetch
+const ytdl = require('ytdl-core');
 const fs = require('fs');
+const yt=require("../TalkDrove/dl/ytdl-core.js")
+const ffmpeg = require("fluent-ffmpeg");
+const yts1 = require("youtube-yts");
+//var fs =require("fs-extra")
 
 Hamza({
-  nomCom: "song",
+  nomCom: "play",
   categorie: "Search",
   reaction: "💿"
 }, async (origineMessage, zk, commandeOptions) => {
   const { ms, repondre, arg } = commandeOptions;
      
   if (!arg[0]) {
-    repondre("Please type the song name you want to download.");
+    repondre("wich song do you want.");
     return;
   }
 
   try {
-    let query = arg.join(" ");
-    const search = await yts(query);
+    let topo = arg.join(" ")
+    const search = await yts(topo);
     const videos = search.videos;
 
     if (videos && videos.length > 0 && videos[0]) {
       const urlElement = videos[0].url;
           
-      let infoMess = {
-        image: { url: videos[0].thumbnail },
-        caption : `\n*Song name :* _${videos[0].title}_
+       let infoMess = {
+          image: {url : videos[0]. thumbnail},
+         caption : `\n⬡BYTE song downloader📂\n\n*song name : _${videos[0].title}_
 
-*Duration :* _${videos[0].timestamp}_
+Time : _${videos[0].timestamp}_
 
-*URL :* _${videos[0].url}_
+Url : _${videos[0].url}_
 
 
-_*BYTE-MD SONG DOWNLOADING......*_\n\n`
-      };
+_┃BYTE is downloading your file📂┃_\n\n`
+       }
 
-      zk.sendMessage(origineMessage, infoMess, { quoted: ms });
+      
 
-      // Download the audio using nayan-media-downloader
-      const audioUrlObject = await ytdown(urlElement, 'audio');  // Ensure correct usage of ytdown
-      const audioUrl = audioUrlObject.url;  // Extract URL from the returned object
+      
+
+      
+       zk.sendMessage(origineMessage,infoMess,{quoted:ms}) ;
+      // Obtenir le flux audio de la vidéo
+      const audioStream = ytdl(urlElement, { filter: 'audioonly', quality: 'highestaudio' });
+
+      // Nom du fichier local pour sauvegarder le fichier audio
       const filename = 'audio.mp3';
 
-      // Fetch and save the audio file
-      const response = await fetch(audioUrl);
-      const buffer = await response.buffer();
-      fs.writeFileSync(filename, buffer);
+      // Écrire le flux audio dans un fichier local
+      const fileStream = fs.createWriteStream(filename);
+      audioStream.pipe(fileStream);
 
-      // Send the audio file
-      zk.sendMessage(origineMessage, { audio: { url: `./${filename}` }, mimetype: 'audio/mp4' }, { quoted: ms, ptt: false });
-      console.log("Audio file sent successfully!");
+      fileStream.on('finish', () => {
+        // Envoi du fichier audio en utilisant l'URL du fichier local
+      
+
+     zk.sendMessage(origineMessage, { audio: { url:"audio.mp3"},mimetype:'audio/mp4' }, { quoted: ms,ptt: false });
+        console.log("Envoi du fichier audio terminé !");
+
+     
+      });
+
+      fileStream.on('error', (error) => {
+        console.error('Erreur lors de l\'écriture du fichier audio :', error);
+        repondre('Une erreur est survenue lors de l\'écriture du fichier audio.');
+      });
     } else {
-      repondre('No video found.');
+      repondre('Aucune vidéo trouvée.');
     }
   } catch (error) {
-    console.error('Error during video search or download:', error);
-    repondre('An error occurred during the search or download of the video.');
+    console.error('Erreur lors de la recherche ou du téléchargement de la vidéo :', error);
+    
+    repondre('Une erreur est survenue lors de la recherche ou du téléchargement de la vidéo.');
   }
 });
+
+  
 
 Hamza({
   nomCom: "video",
@@ -68,13 +89,13 @@ Hamza({
   const { arg, ms, repondre } = commandeOptions;
 
   if (!arg[0]) {
-    repondre("Please insert video name.");
+    repondre("insert video name");
     return;
   }
 
+  const topo = arg.join(" ");
   try {
-    const query = arg.join(" ");
-    const search = await yts(query);
+    const search = await yts(topo);
     const videos = search.videos;
 
     if (videos && videos.length > 0 && videos[0]) {
@@ -82,36 +103,42 @@ Hamza({
 
       let InfoMess = {
         image: { url: videos[0].thumbnail },
-        caption: `*Video name :* _${Element.title}_
-
-*Duration :* _${Element.timestamp}_
-
-*URL :* _${Element.url}_
-
-
-_*BYTE-MD VIDEO DOWNLOADING......*_\n\n`
+        caption: `⬡TKM bot song downloader📂\n\nVideo name : _${Element.title}_
+Time : _${Element.timestamp}_
+Url : _${Element.url}_
+_\n┃BYTE is downloading your file📂┃_\n\n`
       };
 
       zk.sendMessage(origineMessage, InfoMess, { quoted: ms });
 
-      // Download the video using nayan-media-downloader
-      const videoUrlObject = await ytdown(Element.url, 'video');  // Ensure correct usage of ytdown
-      const videoUrl = videoUrlObject.url;  // Extract URL from the returned object
+      // Obtenir les informations de la vidéo à partir du lien YouTube
+      const videoInfo = await ytdl.getInfo(Element.url);
+      // Format vidéo avec la meilleure qualité disponible
+      const format = ytdl.chooseFormat(videoInfo.formats, { quality: '18' });
+      // Télécharger la vidéo
+      const videoStream = ytdl.downloadFromInfo(videoInfo, { format });
+
+      // Nom du fichier local pour sauvegarder la vidéo
       const filename = 'video.mp4';
 
-      // Fetch and save the video file
-      const response = await fetch(videoUrl);
-      const buffer = await response.buffer();
-      fs.writeFileSync(filename, buffer);
+      // Écrire le flux vidéo dans un fichier local
+      const fileStream = fs.createWriteStream(filename);
+      videoStream.pipe(fileStream);
 
-      // Send the video file
-      zk.sendMessage(origineMessage, { video: { url: `./${filename}` }, caption: "*BYTE-MD*", gifPlayback: false }, { quoted: ms });
-      console.log("Video file sent successfully!");
+      fileStream.on('finish', () => {
+        // Envoi du fichier vidéo en utilisant l'URL du fichier local
+        zk.sendMessage(origineMessage, { video: { url :"./video.mp4"} , caption: "┃generated by TKM bot┃", gifPlayback: false }, { quoted: ms });
+      });
+
+      fileStream.on('error', (error) => {
+        console.error('Erreur lors de l\'écriture du fichier vidéo :', error);
+        repondre('Une erreur est survenue lors de l\'écriture du fichier vidéo.');
+      });
     } else {
-      repondre('No video found.');
+      repondre('No video found');
     }
   } catch (error) {
-    console.error('Error during video search or download:', error);
-    repondre('An error occurred during the search or download of the video.');
+    console.error('Erreur lors de la recherche ou du téléchargement de la vidéo :', error);
+    repondre('Une erreur est survenue lors de la recherche ou du téléchargement de la vidéo.');
   }
 });
