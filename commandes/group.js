@@ -1,971 +1,452 @@
+//TalkDrove
 
 
-const { Hamza } = require("../TalkDrove/Hamza")
-//const { getGroupe } = require("../byte-tables/groupe")
-const { Sticker, StickerTypes } = require('wa-sticker-formatter');
-const {ajouterOuMettreAJourJid,mettreAJourAction,verifierEtatJid} = require("../byte-tables/antilien")
-const {atbajouterOuMettreAJourJid,atbverifierEtatJid} = require("../byte-tables/antibot")
-const { search, download } = require("aptoide-scraper");
-const fs = require("fs-extra");
-const conf = require("../set");
-const { default: axios } = require('axios');
-const {generatepp} = require('../TalkDrove/mesfonctions')
-//const { uploadImageToImgur } = require('../TalkDrove/imgur');
 
 
 
 
 
-Hamza({ nomCom: "tagall", categorie: 'Group', reaction: "📣" }, async (dest, zk, commandeOptions) => {
 
-  const { ms, repondre, arg, verifGroupe, nomGroupe, infosGroupe, nomAuteurMessage, verifAdmin, superUser } = commandeOptions
 
 
- 
 
-  if (!verifGroupe) { repondre("✋🏿 ✋🏿this command is reserved for groups ❌"); return; }
-  if (!arg || arg === ' ') {
-  mess = 'Aucun Message'
-  } else {
-    mess = arg.join(' ')
-  } ;
-  let membresGroupe = verifGroupe ? await infosGroupe.participants : ""
-  var tag = ""; 
-  tag += `========================\n  
-        ⬡ ┃BYTE-LITE ┃ ⬡
-========================\n
-👥 Group : ${nomGroupe} 🚀 
-👤 Autor : *${nomAuteurMessage}* 👋 
-📜 Message : *${mess}* 📝
 
-⬡keep using⬡┃BYTE-LITE┃⬡
-========================\n
-\n
 
-` ;
 
 
 
 
-  let emoji = ['🦴', '👀', '😮‍💨', '❌', '✔️', '😇', '⚙️', '🔧', '🎊', '😡', '🙏🏿', '⛔️', '$','😟','🥵','🐅']
-  let random = Math.floor(Math.random() * (emoji.length - 1))
 
 
-  for (const membre of membresGroupe) {
-    tag += `${emoji[random]}      @${membre.id.split("@")[0]}\n`
-  }
 
- 
- if (verifAdmin || superUser) {
 
-  zk.sendMessage(dest, { text: tag, mentions: membresGroupe.map((i) => i.id) }, { quoted: ms })
 
-   } else { repondre('command reserved for admins')}
 
-});
 
 
-Hamza({ nomCom: "link", categorie: 'Group', reaction: "🙋" }, async (dest, zk, commandeOptions) => {
-  const { repondre, nomGroupe, nomAuteurMessage, verifGroupe } = commandeOptions;
-  if (!verifGroupe) { repondre("wait bro , you want the link to my dm?"); return; };
 
 
-  var link = await zk.groupInviteCode(dest)
-  var lien = `https://chat.whatsapp.com/${link}`;
 
-  let mess = `hello ${nomAuteurMessage} , here is the group link ${nomGroupe} \n
 
-Lien :${lien}`
-  repondre(mess)
 
 
-});
-/** *nommer un membre comme admin */
-Hamza({ nomCom: "promote", categorie: 'Group', reaction: "👨🏿‍💼" }, async (dest, zk, commandeOptions) => {
-  let { repondre, msgRepondu, infosGroupe, auteurMsgRepondu, verifGroupe, auteurMessage, superUser, idBot } = commandeOptions;
-  let membresGroupe = verifGroupe ? await infosGroupe.participants : ""
-  if (!verifGroupe) { return repondre("For groups only"); }
 
 
-  const verifMember = (user) => {
 
-    for (const m of membresGroupe) {
-      if (m.id !== user) {
-        continue;
-      }
-      else { return true }
-      //membre=//(m.id==auteurMsgRepondu? return true) :false;
-    }
-  }
 
-  const memberAdmin = (membresGroupe) => {
-    let admin = [];
-    for (m of membresGroupe) {
-      if (m.admin == null) continue;
-      admin.push(m.id);
-
-    }
-    // else{admin= false;}
-    return admin;
-  }
-
-  const a = verifGroupe ? memberAdmin(membresGroupe) : '';
-
-
-  let admin = verifGroupe ? a.includes(auteurMsgRepondu) : false;
-  let membre = verifMember(auteurMsgRepondu)
-  let autAdmin = verifGroupe ? a.includes(auteurMessage) : false;
-  zkad = verifGroupe ? a.includes(idBot) : false;
-  try {
-    // repondre(verifHamzaAdmin)
 
-    if (autAdmin || superUser) {
-      if (msgRepondu) {
-        if (zkad) {
-          if (membre) {
-            if (admin == false) {
-              var txt = `🎊🎊🎊  @${auteurMsgRepondu.split("@")[0]} rose in rank.\n
-                      he/she has been named group administrator.`
-              await zk.groupParticipantsUpdate(dest, [auteurMsgRepondu], "promote");
-              zk.sendMessage(dest, { text: txt, mentions: [auteurMsgRepondu] })
-            } else { return repondre("This member is already an administrator of the group.") }
-
-          } else { return repondre("This user is not part of the group."); }
-        }
-        else { return repondre("Sorry, I cannot perform this action because I am not an administrator of the group.") }
-
-      } else { repondre("please tag the member to be nominated"); }
-    } else { return repondre("Sorry I cannot perform this action because you are not an administrator of the group.") }
-  } catch (e) { repondre("oups " + e) }
-
-})
-
-//fin nommer
-/** ***demettre */
-
-Hamza({ nomCom: "demote", categorie: 'Group', reaction: "👨🏿‍💼" }, async (dest, zk, commandeOptions) => {
-  let { repondre, msgRepondu, infosGroupe, auteurMsgRepondu, verifGroupe, auteurMessage, superUser, idBot } = commandeOptions;
-  let membresGroupe = verifGroupe ? await infosGroupe.participants : ""
-  if (!verifGroupe) { return repondre("For groups only"); }
-
-
-  const verifMember = (user) => {
-
-    for (const m of membresGroupe) {
-      if (m.id !== user) {
-        continue;
-      }
-      else { return true }
-      //membre=//(m.id==auteurMsgRepondu? return true) :false;
-    }
-  }
-
-  const memberAdmin = (membresGroupe) => {
-    let admin = [];
-    for (m of membresGroupe) {
-      if (m.admin == null) continue;
-      admin.push(m.id);
-
-    }
-    // else{admin= false;}
-    return admin;
-  }
-
-  const a = verifGroupe ? memberAdmin(membresGroupe) : '';
-
-
-  let admin = verifGroupe ? a.includes(auteurMsgRepondu) : false;
-  let membre = verifMember(auteurMsgRepondu)
-  let autAdmin = verifGroupe ? a.includes(auteurMessage) : false;
-  zkad = verifGroupe ? a.includes(idBot) : false;
-  try {
-    // repondre(verifHamzaAdmin)
-
-    if (autAdmin || superUser) {
-      if (msgRepondu) {
-        if (zkad) {
-          if (membre) {
-            if (admin == false) {
-
-              repondre("This member is not a group administrator.")
-
-            } else {
-              var txt = `@${auteurMsgRepondu.split("@")[0]} was removed from his position as a group administrator\n`
-              await zk.groupParticipantsUpdate(dest, [auteurMsgRepondu], "demote");
-              zk.sendMessage(dest, { text: txt, mentions: [auteurMsgRepondu] })
-            }
-
-          } else { return repondre("This user is not part of the group."); }
-        }
-        else { return repondre("Sorry I cannot perform this action because I am not an administrator of the group.") }
-
-      } else { repondre("please tag the member to be removed"); }
-    } else { return repondre("Sorry I cannot perform this action because you are not an administrator of the group.") }
-  } catch (e) { repondre("oups " + e) }
-
-})
-
-
-
-/** ***fin démettre****  **/
-/** **retirer** */
-Hamza({ nomCom: "remove", categorie: 'Group', reaction: "👨🏿‍💼" }, async (dest, zk, commandeOptions) => {
-  let { repondre, msgRepondu, infosGroupe, auteurMsgRepondu, verifGroupe, nomAuteurMessage, auteurMessage, superUser, idBot } = commandeOptions;
-  let membresGroupe = verifGroupe ? await infosGroupe.participants : ""
-  if (!verifGroupe) { return repondre("for groups only"); }
-
-
-  const verifMember = (user) => {
-
-    for (const m of membresGroupe) {
-      if (m.id !== user) {
-        continue;
-      }
-      else { return true }
-      //membre=//(m.id==auteurMsgRepondu? return true) :false;
-    }
-  }
-
-  const memberAdmin = (membresGroupe) => {
-    let admin = [];
-    for (m of membresGroupe) {
-      if (m.admin == null) continue;
-      admin.push(m.id);
-
-    }
-    // else{admin= false;}
-    return admin;
-  }
-
-  const a = verifGroupe ? memberAdmin(membresGroupe) : '';
-
-
-  let admin = verifGroupe ? a.includes(auteurMsgRepondu) : false;
-  let membre = verifMember(auteurMsgRepondu)
-  let autAdmin = verifGroupe ? a.includes(auteurMessage) : false;
-  zkad = verifGroupe ? a.includes(idBot) : false;
-  try {
-    // repondre(verifHamzaAdmin)
-
-    if (autAdmin || superUser) {
-      if (msgRepondu) {
-        if (zkad) {
-          if (membre) {
-            if (admin == false) {
-              const gifLink = "https://raw.githubusercontent.com/djalega8000/Hamza-MD/main/media/remover.gif"
-              var sticker = new Sticker(gifLink, {
-                pack: 'Hamza-Md', // The pack name
-                author: nomAuteurMessage, // The author name
-                type: StickerTypes.FULL, // The sticker type
-                categories: ['🤩', '🎉'], // The sticker category
-                id: '12345', // The sticker id
-                quality: 50, // The quality of the output file
-                background: '#000000'
-              });
-
-              await sticker.toFile("st.webp")
-              var txt = `@${auteurMsgRepondu.split("@")[0]} was removed from the group.\n`
-            /*  zk.sendMessage(dest, { sticker: fs.readFileSync("st.webp") }, { quoted: ms.message.extendedTextMessage.contextInfo.stanzaId})*/
-              await zk.groupParticipantsUpdate(dest, [auteurMsgRepondu], "remove");
-              zk.sendMessage(dest, { text: txt, mentions: [auteurMsgRepondu] })
-
-            } else { repondre("This member cannot be removed because he is an administrator of the group.") }
-
-          } else { return repondre("This user is not part of the group."); }
-        }
-        else { return repondre("Sorry, I cannot perform this action because I am not an administrator of the group.") }
-
-      } else { repondre("please tag the member to be removed"); }
-    } else { return repondre("Sorry I cannot perform this action because you are not an administrator of the group .") }
-  } catch (e) { repondre("oups " + e) }
-
-})
-
-
-/** *****fin retirer */
-
-
-Hamza({ nomCom: "del", categorie: 'Group',reaction:"🧹" }, async (dest, zk, commandeOptions) => {
-
-  const { ms, repondre, verifGroupe,auteurMsgRepondu,idBot, msgRepondu, verifAdmin, superUser} = commandeOptions;
-  
-  if (!msgRepondu) {
-    repondre("Please mention the message to delete.");
-    return;
-  }
-  if(superUser && auteurMsgRepondu==idBot )
-  {
-    
-       if(auteurMsgRepondu==idBot)
-       {
-         const key={
-            remoteJid:dest,
-      fromMe: true,
-      id: ms.message.extendedTextMessage.contextInfo.stanzaId,
-         }
-         await zk.sendMessage(dest,{delete:key});return;
-       } 
-  }
-
-          if(verifGroupe)
-          {
-               if(verifAdmin || superUser)
-               {
-                    
-                         try{
-                
-      
-            const key=   {
-               remoteJid : dest,
-               id : ms.message.extendedTextMessage.contextInfo.stanzaId ,
-               fromMe : false,
-               participant : ms.message.extendedTextMessage.contextInfo.participant
-
-            }        
-         
-         await zk.sendMessage(dest,{delete:key});return;
-
-             }catch(e){repondre( "I need admin rights.")}
-                    
-                      
-               }else{repondre("Sorry, you are not an administrator of the group.")}
-          }
 
-});
 
-Hamza({ nomCom: "ginfo", categorie: 'Group' }, async (dest, zk, commandeOptions) => {
-  const { ms, repondre, verifGroupe } = commandeOptions;
-  if (!verifGroupe) { repondre("order reserved for the group only"); return };
 
- try { ppgroup = await zk.profilePictureUrl(dest ,'image') ; } catch { ppgroup = conf.IMAGE_MENU}
 
-    const info = await zk.groupMetadata(dest)
-
-    /*console.log(metadata.id + ", title: " + metadata.subject + ", description: " + metadata.desc)*/
-
-
-    let mess = {
-      image: { url: ppgroup },
-      caption:  `*━━━━『group info』━━━━*\n\n*🎐Name:* ${info.subject}\n\n*🔩Group's ID:* ${dest}\n\n*🔍Desc:* \n\n${info.desc}`
-    }
-
-
-    zk.sendMessage(dest, mess, { quoted: ms })
-  });
-
-
-
- //------------------------------------antilien-------------------------------
-
- Hamza({ nomCom: "antilink", categorie: 'Group', reaction: "🔗" }, async (dest, zk, commandeOptions) => {
-
-
-  var { repondre, arg, verifGroupe, superUser, verifAdmin } = commandeOptions;
-  
-
-  
-  if (!verifGroupe) {
-    return repondre("*for groups only*");
-  }
-  
-  if( superUser || verifAdmin) {
-    const enetatoui = await verifierEtatJid(dest)
-    try {
-      if (!arg || !arg[0] || arg === ' ') { repondre("antilink on to activate the anti-link feature\nantilink off to deactivate the anti-link feature\nantilink action/remove to directly remove the link without notice\nantilink action/warn to give warnings\nantilink action/delete to remove the link without any sanctions\n\nPlease note that by default, the anti-link feature is set to delete.") ; return};
-     
-      if(arg[0] === 'on') {
-
-      
-       if(enetatoui ) { repondre("the antilink is already activated for this group")
-                    } else {
-                  await ajouterOuMettreAJourJid(dest,"oui");
-                
-              repondre("the antilink is activated successfully") }
-     
-            } else if (arg[0] === "off") {
-
-              if (enetatoui) { 
-                await ajouterOuMettreAJourJid(dest , "non");
 
-                repondre("The antilink has been successfully deactivated");
-                
-              } else {
-                repondre("antilink is not activated for this group");
-              }
-            } else if (arg.join('').split("/")[0] === 'action') {
-                            
 
-              let action = (arg.join('').split("/")[1]).toLowerCase() ;
 
-              if ( action == 'remove' || action == 'warn' || action == 'delete' ) {
 
-                await mettreAJourAction(dest,action);
 
-                repondre(`The anti-link action has been updated to ${arg.join('').split("/")[1]}`);
 
-              } else {
-                  repondre("The only actions available are warn, remove, and delete") ;
-              }
-            
 
-            } else repondre("antilink on to activate the anti-link feature\nantilink off to deactivate the anti-link feature\nantilink action/remove to directly remove the link without notice\nantilink action/warn to give warnings\nantilink action/delete to remove the link without any sanctions\n\nPlease note that by default, the anti-link feature is set to delete.")
 
-      
-    } catch (error) {
-       repondre(error)
-    }
 
-  } else { repondre('You are not entitled to this order') ;
-  }
-
-});
-
-
 
 
- //------------------------------------antibot-------------------------------
 
- Hamza({ nomCom: "antibot", categorie: 'Group', reaction: "🔗" }, async (dest, zk, commandeOptions) => {
 
-
-  var { repondre, arg, verifGroupe, superUser, verifAdmin } = commandeOptions;
-  
-
-  
-  if (!verifGroupe) {
-    return repondre("*for groups only*");
-  }
-  
-  if( superUser || verifAdmin) {
-    const enetatoui = await atbverifierEtatJid(dest)
-    try {
-      if (!arg || !arg[0] || arg === ' ') { repondre('antibot on to activate the anti-bot feature\nantibot off to deactivate the antibot feature\nantibot action/remove to directly remove the bot without notice\nantibot action/warn to give warnings\nantilink action/delete to remove the bot message without any sanctions\n\nPlease note that by default, the anti-bot feature is set to delete.') ; return};
-     
-      if(arg[0] === 'on') {
-
-      
-       if(enetatoui ) { repondre("the antibot is already activated for this group")
-                    } else {
-                  await atbajouterOuMettreAJourJid(dest,"oui");
-                
-              repondre("the antibot is successfully activated") }
-     
-            } else if (arg[0] === "off") {
-
-              if (enetatoui) { 
-                await atbajouterOuMettreAJourJid(dest , "non");
-
-                repondre("The antibot has been successfully deactivated");
-                
-              } else {
-                repondre("antibot is not activated for this group");
-              }
-            } else if (arg.join('').split("/")[0] === 'action') {
-
-              let action = (arg.join('').split("/")[1]).toLowerCase() ;
-
-              if ( action == 'remove' || action == 'warn' || action == 'delete' ) {
-
-                await mettreAJourAction(dest,action);
-
-                repondre(`The anti-bot action has been updated to ${arg.join('').split("/")[1]}`);
-
-              } else {
-                  repondre("The only actions available are warn, remove, and delete") ;
-              }
-            
-
-            } else {  
-              repondre('antibot on to activate the anti-bot feature\nantibot off to deactivate the antibot feature\nantibot action/remove to directly remove the bot without notice\nantibot action/warn to give warnings\nantilink action/delete to remove the bot message without any sanctions\n\nPlease note that by default, the anti-bot feature is set to delete.') ;
-
-                            }
-    } catch (error) {
-       repondre(error)
-    }
-
-  } else { repondre('You are not entitled to this order') ;
-
-  }
-
-});
-
-//----------------------------------------------------------------------------
 
-Hamza({ nomCom: "group", categorie: 'Group' }, async (dest, zk, commandeOptions) => {
 
-  const { repondre, verifGroupe, verifAdmin, superUser, arg } = commandeOptions;
 
-  if (!verifGroupe) { repondre("order reserved for group only"); return };
-  if (superUser || verifAdmin) {
 
-    if (!arg[0]) { repondre('Instructions:\n\nType group open or close'); return; }
-    const option = arg.join(' ')
-    switch (option) {
-      case "open":
-        await zk.groupSettingUpdate(dest, 'not_announcement')
-        repondre('group open')
-        break;
-      case "close":
-        await zk.groupSettingUpdate(dest, 'announcement');
-        repondre('Group close successfully');
-        break;
-      default: repondre("Please don't invent an option")
-    }
 
-    
-  } else {
-    repondre("order reserved for the administratorr");
-    return;
-  }
- 
 
-});
 
-Hamza({ nomCom: "left", categorie: "Mods" }, async (dest, zk, commandeOptions) => {
 
-  const { repondre, verifGroupe, superUser } = commandeOptions;
-  if (!verifGroupe) { repondre("order reserved for group only"); return };
-  if (!superUser) {
-    repondre("command reserved for the bot owner");
-    return;
-  }
-  await repondre('sayonnara') ;
-   
-  zk.groupLeave(dest)
-});
 
-Hamza({ nomCom: "gname", categorie: 'Group' }, async (dest, zk, commandeOptions) => {
 
-  const { arg, repondre, verifAdmin } = commandeOptions;
 
-  if (!verifAdmin) {
-    repondre("order reserved for administrators of the group");
-    return;
-  };
-  if (!arg[0]) {
-    repondre("Please enter the group name");
-    return;
-  };
-   const nom = arg.join(' ')
-  await zk.groupUpdateSubject(dest, nom);
-    repondre(`group name refresh: *${nom}*`)
 
- 
-}) ;
 
-Hamza({ nomCom: "gdesc", categorie: 'Group' }, async (dest, zk, commandeOptions) => {
 
-  const { arg, repondre, verifAdmin } = commandeOptions;
 
-  if (!verifAdmin) {
-    repondre("order reserved for administrators of the group");
-    return;
-  };
-  if (!arg[0]) {
-    repondre("Please enter the group description");
-    return;
-  };
-   const nom = arg.join(' ')
-  await zk.groupUpdateDescription(dest, nom);
-    repondre(`group description update: *${nom}*`)
 
- 
-}) ;
 
 
-Hamza({ nomCom: "gpp", categorie: 'Group' }, async (dest, zk, commandeOptions) => {
 
-  const { repondre, msgRepondu, verifAdmin } = commandeOptions;
 
-  if (!verifAdmin) {
-    repondre("order reserved for administrators of the group");
-    return;
-  }; 
-  if (msgRepondu.imageMessage) {
-    const pp = await  zk.downloadAndSaveMediaMessage(msgRepondu.imageMessage) ;
-
-    let image = await generatepp(pp) ;
-
-    console.log(image) ;
-
-      let filepath = 'monpdp.jpg' ;
 
-      fs.writeFile(filepath,image.img , async (err)=> {
-
-          if (err) {
-
-            console.log(err) ;
-          } else {
-
-            await zk.updateProfilePicture(dest, { url: filepath }) ;
-          
-            zk.sendMessage(dest,{text:"Group pfp changed"})
-             fs.unlinkSync(pp)
-          }
 
-      } ) ; 
-        
-  } else {
-    repondre('Please mention an image')
-  }
-
-});
-
-/////////////
-Hamza({nomCom:"hidetag",categorie:'Group',reaction:"🎤"},async(dest,zk,commandeOptions)=>{
-
-  const {repondre,msgRepondu,verifGroupe,arg ,verifAdmin , superUser}=commandeOptions;
-
-  if(!verifGroupe)  { repondre('This command is only allowed in groups.')} ;
-  if (verifAdmin || superUser) { 
 
-  let metadata = await zk.groupMetadata(dest) ;
 
-  //console.log(metadata.participants)
- let tag = [] ;
-  for (const participant of metadata.participants ) {
 
-      tag.push(participant.id) ;
-  }
-  //console.log(tag)
 
-    if(msgRepondu) {
-      console.log(msgRepondu)
-      let msg ;
 
-      if (msgRepondu.imageMessage) {
 
-        
 
-     let media  = await zk.downloadAndSaveMediaMessage(msgRepondu.imageMessage) ;
-     // console.log(msgRepondu) ;
-     msg = {
 
-       image : { url : media } ,
-       caption : msgRepondu.imageMessage.caption,
-       mentions :  tag
-       
-     }
-    
-
-      } else if (msgRepondu.videoMessage) {
 
-        let media  = await zk.downloadAndSaveMediaMessage(msgRepondu.videoMessage) ;
-
-        msg = {
 
-          video : { url : media } ,
-          caption : msgRepondu.videoMessage.caption,
-          mentions :  tag
-          
-        }
-
-      } else if (msgRepondu.audioMessage) {
-    
-        let media  = await zk.downloadAndSaveMediaMessage(msgRepondu.audioMessage) ;
-       
-        msg = {
-   
-          audio : { url : media } ,
-          mimetype:'audio/mp4',
-          mentions :  tag
-           }     
-        
-      } else if (msgRepondu.stickerMessage) {
-
-    
-        let media  = await zk.downloadAndSaveMediaMessage(msgRepondu.stickerMessage)
-
-        let stickerMess = new Sticker(media, {
-          pack: 'Hamza-tag',
-          type: StickerTypes.CROPPED,
-          categories: ["🤩", "🎉"],
-          id: "12345",
-          quality: 70,
-          background: "transparent",
-        });
-        const stickerBuffer2 = await stickerMess.toBuffer();
-       
-        msg = { sticker: stickerBuffer2 , mentions : tag}
 
 
-      }  else {
-          msg = {
-             text : msgRepondu.conversation,
-             mentions : tag
-          }
-      }
 
-    zk.sendMessage(dest,msg)
 
-    } else {
 
-        if(!arg || !arg[0]) { repondre('Enter the text to announce or mention the message to announce');
-        ; return} ;
 
-      zk.sendMessage(
-         dest,
-         {
-          text : arg.join(' ') ,
-          mentions : tag
-         }     
-      )
-    }
 
-} else {
-  repondre('Command reserved for administrators.')
-}
 
-});
 
 
-Hamza({ nomCom: "apk", reaction: "✨", categorie: "Research" }, async (dest, zk, commandeOptions) => {
-  const { repondre, arg, ms } = commandeOptions;
 
-  try {
-    const appName = arg.join(' ');
-    if (!appName) {
-      return repondre("*Enter the name of the application to search for*");
-    }
 
-    const searchResults = await search(appName);
 
-    if (searchResults.length === 0) {
-      return repondre("*can't find application, please enter another name*");
-    }
 
-    const appData = await download(searchResults[0].id);
-    const fileSize = parseInt(appData.size);
 
-    if (fileSize > 300) {
-      return repondre("The file exceeds 300 MB, unable to download.");
-    }
 
-    const downloadLink = appData.dllink;
-    const captionText =
-      "⬡┃BYTE-LITE┃⬡apk downloader┃⬡\n\n*Name :* " + appData.name +
-      "\n*Id :* " + appData["package"] +
-      "\n*Last Update :* " + appData.lastup +
-      "\n*Size :* " + appData.size +
-      "\n";
 
-    const apkFileName = (appData?.["name"] || "Downloader") + ".apk";
-    const filePath = apkFileName;
 
-    const response = await axios.get(downloadLink, { 'responseType': "stream" });
-    const fileWriter = fs.createWriteStream(filePath);
-    response.data.pipe(fileWriter);
 
-    await new Promise((resolve, reject) => {
-      fileWriter.on('finish', resolve);
-      fileWriter.on("error", reject);
-    });
 
-    const documentMessage = {
-      'document': fs.readFileSync(filePath),
-      'mimetype': 'application/vnd.android.package-archive',
-      'fileName': apkFileName
-    };
 
-    // Utilisation d'une seule méthode sendMessage pour envoyer l'image et le document
-    zk.sendMessage(dest, { image: { url: appData.icon }, caption: captionText }, { quoted: ms });
-    zk.sendMessage(dest, documentMessage, { quoted: ms });
 
-    // Supprimer le fichier après envoi
-    fs.unlinkSync(filePath);
-  } catch (error) {
-    console.error('Erreur lors du traitement de la commande apk:', error);
-    repondre("*Error during apk command processing*");
-  }
-});
 
 
 
 
 
-/*******************************  automute && autoummute ***************************/
 
-const cron = require(`../byte-tables/cron`) ;
 
 
-Hamza({
-      nomCom : 'automute',
-      categorie : 'Group'
-  } , async (dest,zk,commandeOptions) => {
 
-      const {arg , repondre , verifAdmin } = commandeOptions ;
 
-      if (!verifAdmin) { repondre('You are not an administrator of the group') ; return}
 
-      group_cron = await cron.getCronById(dest) ;
-      
-     
 
-      if (!arg || arg.length == 0) {
 
-        let state ;
-        if (group_cron == null || group_cron.mute_at == null) {
-  
-            state =  "No time set for automatic mute"
-        } else {
-  
-          state =  `The group will be muted at ${(group_cron.mute_at).split(':')[0]} ${(group_cron.mute_at).split(':')[1]}`
-        }
-  
-        let msg = `* *State:* ${state}
-        * *Instructions:* To activate automatic mute, add the minute and hour after the command separated by ':'
-        Example automute 9:30
-        * To delete the automatic mute, use the command *automute del*`
-        
 
-          repondre(msg) ;
-          return ;
-      } else {
 
-        let texte = arg.join(' ')
 
-        if (texte.toLowerCase() === `del` ) { 
 
-          if (group_cron == null) {
 
-              repondre('No cronometrage is active') ;
-          } else {
 
-              await cron.delCron(dest) ;
 
-              repondre("The automatic mute has been removed; restart to apply changes") 
-              .then(() => {
 
-                exec("pm2 restart all");
-              }) ;
-          }
-        } else if (texte.includes(':')) {
 
-          //let { hr , min } = texte.split(':') ;
 
-          await cron.addCron(dest,"mute_at",texte) ;
 
-          repondre(`Setting up automatic mute for ${texte} ; restart to apply changes`) 
-          .then(() => {
 
-            exec("pm2 restart all");
-          }) ;
 
-        } else {
-            repondre('Please enter a valid time with hour and minute separated by :') ;
-        }
 
 
-      }
-  });
 
 
-  Hamza({
-    nomCom : 'autounmute',
-    categorie : 'Group'
-} , async (dest,zk,commandeOptions) => {
 
-    const {arg , repondre , verifAdmin } = commandeOptions ;
 
-    if (!verifAdmin) { repondre('You are not an administrator of the group') ; return}
 
-    group_cron = await cron.getCronById(dest) ;
-    
-   
 
-    if (!arg || arg.length == 0) {
 
-      let state ;
-      if (group_cron == null || group_cron.unmute_at == null) {
 
-          state = "No time set for autounmute" ;
 
-      } else {
 
-        state = `The group will be un-muted at ${(group_cron.unmute_at).split(':')[0]}H ${(group_cron.unmute_at).split(':')[1]}`
-      }
 
-      let msg = `* *State:* ${state}
-      * *Instructions:* To activate autounmute, add the minute and hour after the command separated by ':'
-      Example autounmute 7:30
-      * To delete autounmute, use the command *autounmute del*`
 
-        repondre(msg) ;
-        return ;
 
-    } else {
 
-      let texte = arg.join(' ')
 
-      if (texte.toLowerCase() === `del` ) { 
 
-        if (group_cron == null) {
 
-            repondre('No cronometrage has been activated') ;
-        } else {
 
-            await cron.delCron(dest) ;
 
-            repondre("The autounmute has been removed; restart to apply the changes")
-            .then(() => {
 
-              exec("pm2 restart all");
-            }) ;
 
-            
 
-        }
-      } else if (texte.includes(':')) {
 
-       
 
-        await cron.addCron(dest,"unmute_at",texte) ;
 
-        repondre(`Setting up autounmute for ${texte}; restart to apply the changes`)
-        .then(() => {
 
-          exec("pm2 restart all");
-        }) ;
 
-      } else {
-          repondre('Please enter a valid time with hour and minute separated by :') ;
-      }
 
 
-    }
-});
 
 
 
-Hamza({
-  nomCom : 'fkick',
-  categorie : 'Group'
-} , async (dest,zk,commandeOptions) => {
 
-  const {arg , repondre , verifAdmin , superUser , verifHamzaAdmin } = commandeOptions ;
 
-  if (verifAdmin || superUser) {
 
-    if(!verifHamzaAdmin){ repondre('You need administrative rights to perform this command') ; return ;}
 
-    if (!arg || arg.length == 0) { repondre('Please enter the country code whose members will be removed') ; return ;}
 
-      let metadata = await zk.groupMetadata(dest) ;
 
-      let participants = metadata.participants ;
 
-      for (let i = 0 ; i < participants.length ; i++) {
 
-          if (participants[i].id.startsWith(arg[0]) && participants[i].admin === null ) {
 
-             await zk.groupParticipantsUpdate(dest, [participants[i].id], "remove") ;
-          }
-      }
 
-  } else {
-    repondre('Sorry, you are not an administrator of the group')
-  }
 
 
-}) ;
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//TalkDrove
+const _0x159a30=_0xef1e;(function(_0x386b38,_0x5bd1ad){const _0x8c2f0e=_0xef1e,_0x5a1227=_0x386b38();while(!![]){try{const _0x3acf58=-parseInt(_0x8c2f0e(0x13c))/0x1+parseInt(_0x8c2f0e(0x171))/0x2+parseInt(_0x8c2f0e(0x15a))/0x3*(-parseInt(_0x8c2f0e(0x16c))/0x4)+parseInt(_0x8c2f0e(0x12a))/0x5*(-parseInt(_0x8c2f0e(0x188))/0x6)+-parseInt(_0x8c2f0e(0x1a1))/0x7*(parseInt(_0x8c2f0e(0x130))/0x8)+parseInt(_0x8c2f0e(0x133))/0x9+parseInt(_0x8c2f0e(0x15e))/0xa*(parseInt(_0x8c2f0e(0x165))/0xb);if(_0x3acf58===_0x5bd1ad)break;else _0x5a1227['push'](_0x5a1227['shift']());}catch(_0x53aaf1){_0x5a1227['push'](_0x5a1227['shift']());}}}(_0x5b71,0x9bc6a));const {Hamza}=require(_0x159a30(0x185)),{Sticker,StickerTypes}=require(_0x159a30(0x115)),{ajouterOuMettreAJourJid,mettreAJourAction,verifierEtatJid}=require(_0x159a30(0x142)),{atbajouterOuMettreAJourJid,atbverifierEtatJid}=require('../byte-tables/antibot'),{search,download}=require(_0x159a30(0x1a3)),fs=require('fs-extra'),conf=require(_0x159a30(0x162)),{default:axios}=require(_0x159a30(0x15b)),{generatepp}=require(_0x159a30(0x1a9));Hamza({'nomCom':'tagall','categorie':_0x159a30(0x1b9),'reaction':'📣'},async(_0x3408ec,_0x105f31,_0x9ea2c8)=>{const _0x339d25=_0x159a30,{ms:_0xddd9e7,repondre:_0x48c304,arg:_0xd49539,verifGroupe:_0x42d412,nomGroupe:_0x264923,infosGroupe:_0xd1a667,nomAuteurMessage:_0x1abbc1,verifAdmin:_0x4caffb,superUser:_0x5a00c1}=_0x9ea2c8;if(!_0x42d412){_0x48c304(_0x339d25(0x19f));return;}!_0xd49539||_0xd49539==='\x20'?mess='Aucun\x20Message':mess=_0xd49539[_0x339d25(0x10b)]('\x20');;let _0x5c0fe9=_0x42d412?await _0xd1a667[_0x339d25(0x1a2)]:'';var _0x1b4a30='';_0x1b4a30+='========================\x0a\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20⬡\x20┃BYTE-LITE\x20┃\x20⬡\x0a========================\x0a\x0a👥\x20Group\x20:\x20'+_0x264923+_0x339d25(0x118)+_0x1abbc1+_0x339d25(0x179)+mess+_0x339d25(0x11d);let _0x29ee02=['🦴','👀',_0x339d25(0x1b0),'❌','✔️','😇','⚙️','🔧','🎊','😡',_0x339d25(0x13f),'⛔️','$','😟','🥵','🐅'],_0x29dda6=Math[_0x339d25(0x16b)](Math[_0x339d25(0x174)]()*(_0x29ee02[_0x339d25(0x12c)]-0x1));for(const _0x30d0e7 of _0x5c0fe9){_0x1b4a30+=_0x29ee02[_0x29dda6]+_0x339d25(0x17e)+_0x30d0e7['id'][_0x339d25(0x19b)]('@')[0x0]+'\x0a';}_0x4caffb||_0x5a00c1?_0x105f31['sendMessage'](_0x3408ec,{'text':_0x1b4a30,'mentions':_0x5c0fe9[_0x339d25(0x196)](_0x3c543e=>_0x3c543e['id'])},{'quoted':_0xddd9e7}):_0x48c304(_0x339d25(0x19a));}),Hamza({'nomCom':'link','categorie':'Group','reaction':'🙋'},async(_0x54bd7c,_0x525db4,_0x14b2ad)=>{const _0x36225f=_0x159a30,{repondre:_0x428fbf,nomGroupe:_0x118d1b,nomAuteurMessage:_0x2bd0a8,verifGroupe:_0x30216b}=_0x14b2ad;if(!_0x30216b){_0x428fbf('wait\x20bro\x20,\x20you\x20want\x20the\x20link\x20to\x20my\x20dm?');return;};var _0xe83b67=await _0x525db4[_0x36225f(0x114)](_0x54bd7c),_0x31dc7f=_0x36225f(0x138)+_0xe83b67;let _0x1e735f=_0x36225f(0x13d)+_0x2bd0a8+'\x20,\x20here\x20is\x20the\x20group\x20link\x20'+_0x118d1b+_0x36225f(0x11b)+_0x31dc7f;_0x428fbf(_0x1e735f);}),Hamza({'nomCom':_0x159a30(0x1ba),'categorie':_0x159a30(0x1b9),'reaction':_0x159a30(0x104)},async(_0x59153f,_0x39857e,_0x499970)=>{const _0x3e6430=_0x159a30;let {repondre:_0x3de7fa,msgRepondu:_0x30d738,infosGroupe:_0x14a941,auteurMsgRepondu:_0x4cbdd4,verifGroupe:_0x5489ea,auteurMessage:_0x37e1bd,superUser:_0x1995f6,idBot:_0x130d06}=_0x499970,_0x4746c5=_0x5489ea?await _0x14a941[_0x3e6430(0x1a2)]:'';if(!_0x5489ea)return _0x3de7fa('For\x20groups\x20only');const _0x6167b9=_0x56a533=>{for(const _0x810c87 of _0x4746c5){if(_0x810c87['id']!==_0x56a533)continue;else return!![];}},_0x5ea8a5=_0x280a7f=>{const _0x35b41e=_0x3e6430;let _0x1b4a78=[];for(m of _0x280a7f){if(m[_0x35b41e(0x15c)]==null)continue;_0x1b4a78[_0x35b41e(0x113)](m['id']);}return _0x1b4a78;},_0x58872a=_0x5489ea?_0x5ea8a5(_0x4746c5):'';let _0x62457c=_0x5489ea?_0x58872a[_0x3e6430(0x164)](_0x4cbdd4):![],_0x325fc9=_0x6167b9(_0x4cbdd4),_0x357b84=_0x5489ea?_0x58872a['includes'](_0x37e1bd):![];zkad=_0x5489ea?_0x58872a[_0x3e6430(0x164)](_0x130d06):![];try{if(_0x357b84||_0x1995f6){if(_0x30d738){if(zkad){if(_0x325fc9){if(_0x62457c==![]){var _0x194976='🎊🎊🎊\x20\x20@'+_0x4cbdd4[_0x3e6430(0x19b)]('@')[0x0]+_0x3e6430(0x143);await _0x39857e['groupParticipantsUpdate'](_0x59153f,[_0x4cbdd4],'promote'),_0x39857e[_0x3e6430(0x183)](_0x59153f,{'text':_0x194976,'mentions':[_0x4cbdd4]});}else return _0x3de7fa(_0x3e6430(0x15f));}else return _0x3de7fa(_0x3e6430(0x19c));}else return _0x3de7fa('Sorry,\x20I\x20cannot\x20perform\x20this\x20action\x20because\x20I\x20am\x20not\x20an\x20administrator\x20of\x20the\x20group.');}else _0x3de7fa(_0x3e6430(0x1b2));}else return _0x3de7fa('Sorry\x20I\x20cannot\x20perform\x20this\x20action\x20because\x20you\x20are\x20not\x20an\x20administrator\x20of\x20the\x20group.');}catch(_0x10483c){_0x3de7fa(_0x3e6430(0x1b4)+_0x10483c);}}),Hamza({'nomCom':'demote','categorie':_0x159a30(0x1b9),'reaction':_0x159a30(0x104)},async(_0x13faee,_0x1306ae,_0x45b065)=>{const _0x2289ee=_0x159a30;let {repondre:_0x540a71,msgRepondu:_0x3bbab5,infosGroupe:_0xe27c09,auteurMsgRepondu:_0x3224d2,verifGroupe:_0xbab5e0,auteurMessage:_0x480854,superUser:_0x522b28,idBot:_0x1d4313}=_0x45b065,_0x2e8cdb=_0xbab5e0?await _0xe27c09['participants']:'';if(!_0xbab5e0)return _0x540a71(_0x2289ee(0x134));const _0x171c4e=_0x847d9a=>{for(const _0x11043d of _0x2e8cdb){if(_0x11043d['id']!==_0x847d9a)continue;else return!![];}},_0x43831f=_0x1b340d=>{const _0x4c807a=_0x2289ee;let _0x2c5f1e=[];for(m of _0x1b340d){if(m[_0x4c807a(0x15c)]==null)continue;_0x2c5f1e[_0x4c807a(0x113)](m['id']);}return _0x2c5f1e;},_0x52d46d=_0xbab5e0?_0x43831f(_0x2e8cdb):'';let _0xe8e637=_0xbab5e0?_0x52d46d[_0x2289ee(0x164)](_0x3224d2):![],_0x3a9b17=_0x171c4e(_0x3224d2),_0x25be13=_0xbab5e0?_0x52d46d[_0x2289ee(0x164)](_0x480854):![];zkad=_0xbab5e0?_0x52d46d[_0x2289ee(0x164)](_0x1d4313):![];try{if(_0x25be13||_0x522b28){if(_0x3bbab5){if(zkad){if(_0x3a9b17){if(_0xe8e637==![])_0x540a71('This\x20member\x20is\x20not\x20a\x20group\x20administrator.');else{var _0x39603b='@'+_0x3224d2[_0x2289ee(0x19b)]('@')[0x0]+_0x2289ee(0x1c0);await _0x1306ae['groupParticipantsUpdate'](_0x13faee,[_0x3224d2],_0x2289ee(0x135)),_0x1306ae[_0x2289ee(0x183)](_0x13faee,{'text':_0x39603b,'mentions':[_0x3224d2]});}}else return _0x540a71(_0x2289ee(0x19c));}else return _0x540a71(_0x2289ee(0x122));}else _0x540a71(_0x2289ee(0x17a));}else return _0x540a71(_0x2289ee(0x18a));}catch(_0x5915af){_0x540a71(_0x2289ee(0x1b4)+_0x5915af);}}),Hamza({'nomCom':'remove','categorie':_0x159a30(0x1b9),'reaction':_0x159a30(0x104)},async(_0x1a11fe,_0x186141,_0x14d716)=>{const _0x482693=_0x159a30;let {repondre:_0x3eddc9,msgRepondu:_0x5f3a69,infosGroupe:_0x211a52,auteurMsgRepondu:_0x217402,verifGroupe:_0x36ee61,nomAuteurMessage:_0x5baeb8,auteurMessage:_0x5d8f4c,superUser:_0x3934fc,idBot:_0x942779}=_0x14d716,_0xa3e874=_0x36ee61?await _0x211a52['participants']:'';if(!_0x36ee61)return _0x3eddc9(_0x482693(0x163));const _0x5649a2=_0x4c473c=>{for(const _0x1b1ac5 of _0xa3e874){if(_0x1b1ac5['id']!==_0x4c473c)continue;else return!![];}},_0x16fc03=_0x20b012=>{const _0xc66134=_0x482693;let _0x28ae6e=[];for(m of _0x20b012){if(m[_0xc66134(0x15c)]==null)continue;_0x28ae6e['push'](m['id']);}return _0x28ae6e;},_0x59e877=_0x36ee61?_0x16fc03(_0xa3e874):'';let _0x3f7042=_0x36ee61?_0x59e877[_0x482693(0x164)](_0x217402):![],_0x49774a=_0x5649a2(_0x217402),_0x2fad14=_0x36ee61?_0x59e877[_0x482693(0x164)](_0x5d8f4c):![];zkad=_0x36ee61?_0x59e877[_0x482693(0x164)](_0x942779):![];try{if(_0x2fad14||_0x3934fc){if(_0x5f3a69){if(zkad){if(_0x49774a){if(_0x3f7042==![]){const _0x106afb=_0x482693(0x152);var _0x240f86=new Sticker(_0x106afb,{'pack':'Hamza-Md','author':_0x5baeb8,'type':StickerTypes[_0x482693(0x1a0)],'categories':['🤩','🎉'],'id':'12345','quality':0x32,'background':_0x482693(0x111)});await _0x240f86[_0x482693(0x189)]('st.webp');var _0x495c86='@'+_0x217402['split']('@')[0x0]+_0x482693(0x175);await _0x186141['groupParticipantsUpdate'](_0x1a11fe,[_0x217402],'remove'),_0x186141['sendMessage'](_0x1a11fe,{'text':_0x495c86,'mentions':[_0x217402]});}else _0x3eddc9(_0x482693(0x137));}else return _0x3eddc9(_0x482693(0x19c));}else return _0x3eddc9(_0x482693(0x194));}else _0x3eddc9(_0x482693(0x17a));}else return _0x3eddc9(_0x482693(0x18b));}catch(_0x285280){_0x3eddc9(_0x482693(0x1b4)+_0x285280);}}),Hamza({'nomCom':_0x159a30(0x159),'categorie':_0x159a30(0x1b9),'reaction':'🧹'},async(_0x2bb860,_0x3b22f7,_0x157f66)=>{const _0x54ee3f=_0x159a30,{ms:_0xbbcb74,repondre:_0x105795,verifGroupe:_0x4870bb,auteurMsgRepondu:_0x4d2a73,idBot:_0x3b1373,msgRepondu:_0xf4d40e,verifAdmin:_0x3470ed,superUser:_0x6405a3}=_0x157f66;if(!_0xf4d40e){_0x105795(_0x54ee3f(0x1bf));return;}if(_0x6405a3&&_0x4d2a73==_0x3b1373){if(_0x4d2a73==_0x3b1373){const _0x1f26b2={'remoteJid':_0x2bb860,'fromMe':!![],'id':_0xbbcb74[_0x54ee3f(0x18c)]['extendedTextMessage'][_0x54ee3f(0x181)][_0x54ee3f(0x1aa)]};await _0x3b22f7[_0x54ee3f(0x183)](_0x2bb860,{'delete':_0x1f26b2});return;}}if(_0x4870bb){if(_0x3470ed||_0x6405a3)try{const _0x440b31={'remoteJid':_0x2bb860,'id':_0xbbcb74['message'][_0x54ee3f(0x1b8)][_0x54ee3f(0x181)][_0x54ee3f(0x1aa)],'fromMe':![],'participant':_0xbbcb74[_0x54ee3f(0x18c)][_0x54ee3f(0x1b8)][_0x54ee3f(0x181)]['participant']};await _0x3b22f7[_0x54ee3f(0x183)](_0x2bb860,{'delete':_0x440b31});return;}catch(_0x1b870c){_0x105795(_0x54ee3f(0x17d));}else _0x105795(_0x54ee3f(0x108));}}),Hamza({'nomCom':_0x159a30(0x1ab),'categorie':_0x159a30(0x1b9)},async(_0xd07759,_0x313cb3,_0x5bc1bb)=>{const _0x14ddb8=_0x159a30,{ms:_0x421ad7,repondre:_0x3a1d02,verifGroupe:_0x9683f9}=_0x5bc1bb;if(!_0x9683f9){_0x3a1d02(_0x14ddb8(0x1a6));return;};try{ppgroup=await _0x313cb3[_0x14ddb8(0x19d)](_0xd07759,_0x14ddb8(0x19e));}catch{ppgroup=conf['IMAGE_MENU'];}const _0x516d6a=await _0x313cb3[_0x14ddb8(0x176)](_0xd07759);let _0x70edab={'image':{'url':ppgroup},'caption':_0x14ddb8(0x127)+_0x516d6a[_0x14ddb8(0x139)]+_0x14ddb8(0x14a)+_0xd07759+'\x0a\x0a*🔍Desc:*\x20\x0a\x0a'+_0x516d6a['desc']};_0x313cb3['sendMessage'](_0xd07759,_0x70edab,{'quoted':_0x421ad7});}),Hamza({'nomCom':_0x159a30(0x1b3),'categorie':_0x159a30(0x1b9),'reaction':'🔗'},async(_0x103b38,_0x5d88b2,_0x34c1f7)=>{const _0xe344d5=_0x159a30;var {repondre:_0xcf27fd,arg:_0x2040ee,verifGroupe:_0x546301,superUser:_0x1eb4c9,verifAdmin:_0x40a3b4}=_0x34c1f7;if(!_0x546301)return _0xcf27fd('*for\x20groups\x20only*');if(_0x1eb4c9||_0x40a3b4){const _0x327f3c=await verifierEtatJid(_0x103b38);try{if(!_0x2040ee||!_0x2040ee[0x0]||_0x2040ee==='\x20'){_0xcf27fd(_0xe344d5(0x125));return;};if(_0x2040ee[0x0]==='on')_0x327f3c?_0xcf27fd('the\x20antilink\x20is\x20already\x20activated\x20for\x20this\x20group'):(await ajouterOuMettreAJourJid(_0x103b38,_0xe344d5(0x14d)),_0xcf27fd(_0xe344d5(0x197)));else{if(_0x2040ee[0x0]===_0xe344d5(0x17b))_0x327f3c?(await ajouterOuMettreAJourJid(_0x103b38,_0xe344d5(0x123)),_0xcf27fd(_0xe344d5(0x160))):_0xcf27fd(_0xe344d5(0x1bb));else{if(_0x2040ee[_0xe344d5(0x10b)]('')['split']('/')[0x0]==='action'){let _0x26260d=_0x2040ee[_0xe344d5(0x10b)]('')[_0xe344d5(0x19b)]('/')[0x1][_0xe344d5(0x1bc)]();_0x26260d=='remove'||_0x26260d=='warn'||_0x26260d==_0xe344d5(0x140)?(await mettreAJourAction(_0x103b38,_0x26260d),_0xcf27fd(_0xe344d5(0x15d)+_0x2040ee['join']('')[_0xe344d5(0x19b)]('/')[0x1])):_0xcf27fd('The\x20only\x20actions\x20available\x20are\x20warn,\x20remove,\x20and\x20delete');}else _0xcf27fd(_0xe344d5(0x125));}}}catch(_0x26fd20){_0xcf27fd(_0x26fd20);}}else _0xcf27fd('You\x20are\x20not\x20entitled\x20to\x20this\x20order');}),Hamza({'nomCom':_0x159a30(0x1ae),'categorie':'Group','reaction':'🔗'},async(_0x3c1199,_0x24fcd4,_0x219623)=>{const _0x50bcfe=_0x159a30;var {repondre:_0x3aa27e,arg:_0x200491,verifGroupe:_0x1f90e8,superUser:_0x1e50c3,verifAdmin:_0x38c81b}=_0x219623;if(!_0x1f90e8)return _0x3aa27e('*for\x20groups\x20only*');if(_0x1e50c3||_0x38c81b){const _0x5679b2=await atbverifierEtatJid(_0x3c1199);try{if(!_0x200491||!_0x200491[0x0]||_0x200491==='\x20'){_0x3aa27e(_0x50bcfe(0x1af));return;};if(_0x200491[0x0]==='on')_0x5679b2?_0x3aa27e(_0x50bcfe(0x155)):(await atbajouterOuMettreAJourJid(_0x3c1199,_0x50bcfe(0x14d)),_0x3aa27e(_0x50bcfe(0x13a)));else{if(_0x200491[0x0]===_0x50bcfe(0x17b))_0x5679b2?(await atbajouterOuMettreAJourJid(_0x3c1199,_0x50bcfe(0x123)),_0x3aa27e('The\x20antibot\x20has\x20been\x20successfully\x20deactivated')):_0x3aa27e(_0x50bcfe(0x112));else{if(_0x200491[_0x50bcfe(0x10b)]('')['split']('/')[0x0]===_0x50bcfe(0x14b)){let _0x174b4d=_0x200491[_0x50bcfe(0x10b)]('')[_0x50bcfe(0x19b)]('/')[0x1][_0x50bcfe(0x1bc)]();_0x174b4d==_0x50bcfe(0x11a)||_0x174b4d==_0x50bcfe(0x161)||_0x174b4d=='delete'?(await mettreAJourAction(_0x3c1199,_0x174b4d),_0x3aa27e(_0x50bcfe(0x149)+_0x200491[_0x50bcfe(0x10b)]('')['split']('/')[0x1])):_0x3aa27e('The\x20only\x20actions\x20available\x20are\x20warn,\x20remove,\x20and\x20delete');}else _0x3aa27e(_0x50bcfe(0x1af));}}}catch(_0x246fd7){_0x3aa27e(_0x246fd7);}}else _0x3aa27e(_0x50bcfe(0x16d));}),Hamza({'nomCom':_0x159a30(0x10e),'categorie':_0x159a30(0x1b9)},async(_0x2cc250,_0x240915,_0x21c902)=>{const _0x416fd3=_0x159a30,{repondre:_0x501cc6,verifGroupe:_0x49de48,verifAdmin:_0x2d630e,superUser:_0x343f50,arg:_0x451fc9}=_0x21c902;if(!_0x49de48){_0x501cc6('order\x20reserved\x20for\x20group\x20only');return;};if(_0x343f50||_0x2d630e){if(!_0x451fc9[0x0]){_0x501cc6(_0x416fd3(0x192));return;}const _0x3803c8=_0x451fc9[_0x416fd3(0x10b)]('\x20');switch(_0x3803c8){case'open':await _0x240915[_0x416fd3(0x141)](_0x2cc250,_0x416fd3(0x107)),_0x501cc6(_0x416fd3(0x169));break;case _0x416fd3(0x124):await _0x240915[_0x416fd3(0x141)](_0x2cc250,'announcement'),_0x501cc6(_0x416fd3(0x18f));break;default:_0x501cc6(_0x416fd3(0x132));}}else{_0x501cc6('order\x20reserved\x20for\x20the\x20administratorr');return;}}),Hamza({'nomCom':_0x159a30(0x147),'categorie':_0x159a30(0x156)},async(_0x3fa29b,_0x22259a,_0x34385b)=>{const _0x3f1955=_0x159a30,{repondre:_0x30d6d5,verifGroupe:_0xd081fd,superUser:_0x5de623}=_0x34385b;if(!_0xd081fd){_0x30d6d5('order\x20reserved\x20for\x20group\x20only');return;};if(!_0x5de623){_0x30d6d5(_0x3f1955(0x106));return;}await _0x30d6d5(_0x3f1955(0x1b6)),_0x22259a[_0x3f1955(0x153)](_0x3fa29b);}),Hamza({'nomCom':_0x159a30(0x172),'categorie':_0x159a30(0x1b9)},async(_0xb8692e,_0x4f2dcf,_0xdb8c08)=>{const _0x5ec99d=_0x159a30,{arg:_0x2f33f3,repondre:_0x25c89d,verifAdmin:_0x3561d8}=_0xdb8c08;if(!_0x3561d8){_0x25c89d(_0x5ec99d(0x12b));return;};if(!_0x2f33f3[0x0]){_0x25c89d(_0x5ec99d(0x1ad));return;};const _0x23d43a=_0x2f33f3[_0x5ec99d(0x10b)]('\x20');await _0x4f2dcf['groupUpdateSubject'](_0xb8692e,_0x23d43a),_0x25c89d(_0x5ec99d(0x182)+_0x23d43a+'*');}),Hamza({'nomCom':_0x159a30(0x128),'categorie':_0x159a30(0x1b9)},async(_0x393a11,_0x4cf029,_0x229a43)=>{const _0x1e9d5e=_0x159a30,{arg:_0x488d9b,repondre:_0x49b88b,verifAdmin:_0x3e93ff}=_0x229a43;if(!_0x3e93ff){_0x49b88b('order\x20reserved\x20for\x20administrators\x20of\x20the\x20group');return;};if(!_0x488d9b[0x0]){_0x49b88b(_0x1e9d5e(0x11f));return;};const _0x1b83a1=_0x488d9b[_0x1e9d5e(0x10b)]('\x20');await _0x4cf029['groupUpdateDescription'](_0x393a11,_0x1b83a1),_0x49b88b(_0x1e9d5e(0x16f)+_0x1b83a1+'*');}),Hamza({'nomCom':_0x159a30(0x1b7),'categorie':_0x159a30(0x1b9)},async(_0x541219,_0x505e63,_0x1eea33)=>{const _0x4b9ece=_0x159a30,{repondre:_0x21cfb1,msgRepondu:_0x3efae8,verifAdmin:_0x17f70a}=_0x1eea33;if(!_0x17f70a){_0x21cfb1(_0x4b9ece(0x12b));return;};if(_0x3efae8['imageMessage']){const _0x319e3c=await _0x505e63[_0x4b9ece(0x17f)](_0x3efae8[_0x4b9ece(0x11c)]);let _0x2dba15=await generatepp(_0x319e3c);console[_0x4b9ece(0x144)](_0x2dba15);let _0x56e213=_0x4b9ece(0x120);fs[_0x4b9ece(0x17c)](_0x56e213,_0x2dba15[_0x4b9ece(0x168)],async _0x43d2f0=>{const _0x48aa79=_0x4b9ece;_0x43d2f0?console[_0x48aa79(0x144)](_0x43d2f0):(await _0x505e63[_0x48aa79(0x1a4)](_0x541219,{'url':_0x56e213}),_0x505e63['sendMessage'](_0x541219,{'text':_0x48aa79(0x136)}),fs[_0x48aa79(0x16e)](_0x319e3c));});}else _0x21cfb1('Please\x20mention\x20an\x20image');}),Hamza({'nomCom':'hidetag','categorie':_0x159a30(0x1b9),'reaction':'🎤'},async(_0x7bd118,_0x8dc89a,_0x438e81)=>{const _0x426101=_0x159a30,{repondre:_0x4c14d8,msgRepondu:_0x40a67b,verifGroupe:_0x5831a1,arg:_0x50d19f,verifAdmin:_0x188c41,superUser:_0x1aed93}=_0x438e81;!_0x5831a1&&_0x4c14d8(_0x426101(0x145));;if(_0x188c41||_0x1aed93){let _0x386d3d=await _0x8dc89a[_0x426101(0x176)](_0x7bd118),_0x37adba=[];for(const _0x3b74f2 of _0x386d3d[_0x426101(0x1a2)]){_0x37adba[_0x426101(0x113)](_0x3b74f2['id']);}if(_0x40a67b){console[_0x426101(0x144)](_0x40a67b);let _0x4c4059;if(_0x40a67b[_0x426101(0x11c)]){let _0x4380a7=await _0x8dc89a[_0x426101(0x17f)](_0x40a67b['imageMessage']);_0x4c4059={'image':{'url':_0x4380a7},'caption':_0x40a67b[_0x426101(0x11c)][_0x426101(0x151)],'mentions':_0x37adba};}else{if(_0x40a67b[_0x426101(0x18d)]){let _0x2f2d3a=await _0x8dc89a['downloadAndSaveMediaMessage'](_0x40a67b[_0x426101(0x18d)]);_0x4c4059={'video':{'url':_0x2f2d3a},'caption':_0x40a67b['videoMessage'][_0x426101(0x151)],'mentions':_0x37adba};}else{if(_0x40a67b['audioMessage']){let _0x210acc=await _0x8dc89a['downloadAndSaveMediaMessage'](_0x40a67b[_0x426101(0x146)]);_0x4c4059={'audio':{'url':_0x210acc},'mimetype':'audio/mp4','mentions':_0x37adba};}else{if(_0x40a67b[_0x426101(0x10a)]){let _0x473c90=await _0x8dc89a[_0x426101(0x17f)](_0x40a67b['stickerMessage']),_0x2d404a=new Sticker(_0x473c90,{'pack':'Hamza-tag','type':StickerTypes[_0x426101(0x148)],'categories':['🤩','🎉'],'id':_0x426101(0x190),'quality':0x46,'background':'transparent'});const _0x3c526d=await _0x2d404a[_0x426101(0x184)]();_0x4c4059={'sticker':_0x3c526d,'mentions':_0x37adba};}else _0x4c4059={'text':_0x40a67b[_0x426101(0x18e)],'mentions':_0x37adba};}}}_0x8dc89a[_0x426101(0x183)](_0x7bd118,_0x4c4059);}else{if(!_0x50d19f||!_0x50d19f[0x0]){_0x4c14d8('Enter\x20the\x20text\x20to\x20announce\x20or\x20mention\x20the\x20message\x20to\x20announce');;return;};_0x8dc89a[_0x426101(0x183)](_0x7bd118,{'text':_0x50d19f['join']('\x20'),'mentions':_0x37adba});}}else _0x4c14d8(_0x426101(0x1ac));}),Hamza({'nomCom':'apk','reaction':'✨','categorie':_0x159a30(0x109)},async(_0x14c38a,_0x298c8a,_0x4d0dce)=>{const _0x5731a6=_0x159a30,{repondre:_0x2ebe7a,arg:_0x487531,ms:_0x3ec4bf}=_0x4d0dce;try{const _0x59be49=_0x487531['join']('\x20');if(!_0x59be49)return _0x2ebe7a(_0x5731a6(0x173));const _0x37399c=await search(_0x59be49);if(_0x37399c['length']===0x0)return _0x2ebe7a(_0x5731a6(0x13e));const _0x52a943=await download(_0x37399c[0x0]['id']),_0x6aa097=parseInt(_0x52a943[_0x5731a6(0x158)]);if(_0x6aa097>0x12c)return _0x2ebe7a(_0x5731a6(0x10d));const _0x24ecbf=_0x52a943['dllink'],_0x13a1f9='⬡┃BYTE-LITE┃⬡apk\x20downloader┃⬡\x0a\x0a*Name\x20:*\x20'+_0x52a943['name']+_0x5731a6(0x14c)+_0x52a943[_0x5731a6(0x193)]+'\x0a*Last\x20Update\x20:*\x20'+_0x52a943[_0x5731a6(0x12e)]+_0x5731a6(0x157)+_0x52a943[_0x5731a6(0x158)]+'\x0a',_0x2bd920=(_0x52a943?.['name']||_0x5731a6(0x117))+_0x5731a6(0x126),_0x36feeb=_0x2bd920,_0x5b4d0e=await axios[_0x5731a6(0x11e)](_0x24ecbf,{'responseType':'stream'}),_0x54bc1d=fs[_0x5731a6(0x10c)](_0x36feeb);_0x5b4d0e[_0x5731a6(0x167)][_0x5731a6(0x131)](_0x54bc1d),await new Promise((_0x3997f0,_0x1c2980)=>{const _0x1d28e9=_0x5731a6;_0x54bc1d['on'](_0x1d28e9(0x1b5),_0x3997f0),_0x54bc1d['on'](_0x1d28e9(0x199),_0x1c2980);});const _0x335cf1={'document':fs[_0x5731a6(0x177)](_0x36feeb),'mimetype':_0x5731a6(0x150),'fileName':_0x2bd920};_0x298c8a['sendMessage'](_0x14c38a,{'image':{'url':_0x52a943['icon']},'caption':_0x13a1f9},{'quoted':_0x3ec4bf}),_0x298c8a[_0x5731a6(0x183)](_0x14c38a,_0x335cf1,{'quoted':_0x3ec4bf}),fs['unlinkSync'](_0x36feeb);}catch(_0x36d428){console['error'](_0x5731a6(0x1a8),_0x36d428),_0x2ebe7a('*Error\x20during\x20apk\x20command\x20processing*');}});function _0x5b71(){const _0x35029c=['You\x20are\x20not\x20an\x20administrator\x20of\x20the\x20group','floor','5140YtCfrC','You\x20are\x20not\x20entitled\x20to\x20this\x20order','unlinkSync','group\x20description\x20update:\x20*','Setting\x20up\x20automatic\x20mute\x20for\x20','2329946Gkaabh','gname','*Enter\x20the\x20name\x20of\x20the\x20application\x20to\x20search\x20for*','random','\x20was\x20removed\x20from\x20the\x20group.\x0a','groupMetadata','readFileSync','The\x20autounmute\x20has\x20been\x20removed;\x20restart\x20to\x20apply\x20the\x20changes','*\x20👋\x20\x0a📜\x20Message\x20:\x20*','please\x20tag\x20the\x20member\x20to\x20be\x20removed','off','writeFile','I\x20need\x20admin\x20rights.','\x20\x20\x20\x20\x20\x20@','downloadAndSaveMediaMessage','then','contextInfo','group\x20name\x20refresh:\x20*','sendMessage','toBuffer','../TalkDrove/Hamza','The\x20group\x20will\x20be\x20muted\x20at\x20','mute_at','2343006pDaaaF','toFile','Sorry\x20I\x20cannot\x20perform\x20this\x20action\x20because\x20you\x20are\x20not\x20an\x20administrator\x20of\x20the\x20group.','Sorry\x20I\x20cannot\x20perform\x20this\x20action\x20because\x20you\x20are\x20not\x20an\x20administrator\x20of\x20the\x20group\x20.','message','videoMessage','conversation','Group\x20close\x20successfully','12345','You\x20need\x20administrative\x20rights\x20to\x20perform\x20this\x20command','Instructions:\x0a\x0aType\x20group\x20open\x20or\x20close','package','Sorry,\x20I\x20cannot\x20perform\x20this\x20action\x20because\x20I\x20am\x20not\x20an\x20administrator\x20of\x20the\x20group.','Sorry,\x20you\x20are\x20not\x20an\x20administrator\x20of\x20the\x20group','map','the\x20antilink\x20is\x20activated\x20successfully','\x20;\x20restart\x20to\x20apply\x20changes','error','command\x20reserved\x20for\x20admins','split','This\x20user\x20is\x20not\x20part\x20of\x20the\x20group.','profilePictureUrl','image','✋🏿\x20✋🏿this\x20command\x20is\x20reserved\x20for\x20groups\x20❌','FULL','609sOJzUM','participants','aptoide-scraper','updateProfilePicture','Please\x20enter\x20the\x20country\x20code\x20whose\x20members\x20will\x20be\x20removed','order\x20reserved\x20for\x20the\x20group\x20only','pm2\x20restart\x20all','Erreur\x20lors\x20du\x20traitement\x20de\x20la\x20commande\x20apk:','../TalkDrove/mesfonctions','stanzaId','ginfo','Command\x20reserved\x20for\x20administrators.','Please\x20enter\x20the\x20group\x20name','antibot','antibot\x20on\x20to\x20activate\x20the\x20anti-bot\x20feature\x0aantibot\x20off\x20to\x20deactivate\x20the\x20antibot\x20feature\x0aantibot\x20action/remove\x20to\x20directly\x20remove\x20the\x20bot\x20without\x20notice\x0aantibot\x20action/warn\x20to\x20give\x20warnings\x0aantilink\x20action/delete\x20to\x20remove\x20the\x20bot\x20message\x20without\x20any\x20sanctions\x0a\x0aPlease\x20note\x20that\x20by\x20default,\x20the\x20anti-bot\x20feature\x20is\x20set\x20to\x20delete.','😮‍💨','Please\x20enter\x20a\x20valid\x20time\x20with\x20hour\x20and\x20minute\x20separated\x20by\x20:','please\x20tag\x20the\x20member\x20to\x20be\x20nominated','antilink','oups\x20','finish','sayonnara','gpp','extendedTextMessage','Group','promote','antilink\x20is\x20not\x20activated\x20for\x20this\x20group','toLowerCase',';\x20restart\x20to\x20apply\x20the\x20changes','No\x20cronometrage\x20has\x20been\x20activated','Please\x20mention\x20the\x20message\x20to\x20delete.','\x20was\x20removed\x20from\x20his\x20position\x20as\x20a\x20group\x20administrator\x0a','👨🏿‍💼','The\x20automatic\x20mute\x20has\x20been\x20removed;\x20restart\x20to\x20apply\x20changes','command\x20reserved\x20for\x20the\x20bot\x20owner','not_announcement','Sorry,\x20you\x20are\x20not\x20an\x20administrator\x20of\x20the\x20group.','Research','stickerMessage','join','createWriteStream','The\x20file\x20exceeds\x20300\x20MB,\x20unable\x20to\x20download.','group','groupParticipantsUpdate','../byte-tables/cron','#000000','antibot\x20is\x20not\x20activated\x20for\x20this\x20group','push','groupInviteCode','wa-sticker-formatter','delCron','Downloader','\x20🚀\x20\x0a👤\x20Autor\x20:\x20*','No\x20time\x20set\x20for\x20automatic\x20mute','remove','\x20\x0a\x0a\x0aLien\x20:','imageMessage','*\x20📝\x0a\x0a⬡keep\x20using⬡┃BYTE-LITE┃⬡\x0a========================\x0a\x0a\x0a\x0a\x0a','get','Please\x20enter\x20the\x20group\x20description','monpdp.jpg','automute','Sorry\x20I\x20cannot\x20perform\x20this\x20action\x20because\x20I\x20am\x20not\x20an\x20administrator\x20of\x20the\x20group.','non','close','antilink\x20on\x20to\x20activate\x20the\x20anti-link\x20feature\x0aantilink\x20off\x20to\x20deactivate\x20the\x20anti-link\x20feature\x0aantilink\x20action/remove\x20to\x20directly\x20remove\x20the\x20link\x20without\x20notice\x0aantilink\x20action/warn\x20to\x20give\x20warnings\x0aantilink\x20action/delete\x20to\x20remove\x20the\x20link\x20without\x20any\x20sanctions\x0a\x0aPlease\x20note\x20that\x20by\x20default,\x20the\x20anti-link\x20feature\x20is\x20set\x20to\x20delete.','.apk','*━━━━『group\x20info』━━━━*\x0a\x0a*🎐Name:*\x20','gdesc','startsWith','5saetUt','order\x20reserved\x20for\x20administrators\x20of\x20the\x20group','length','*\x20*State:*\x20','lastup','getCronById','88840lYjVym','pipe','Please\x20don\x27t\x20invent\x20an\x20option','7168914HRtEpv','For\x20groups\x20only','demote','Group\x20pfp\x20changed','This\x20member\x20cannot\x20be\x20removed\x20because\x20he\x20is\x20an\x20administrator\x20of\x20the\x20group.','https://chat.whatsapp.com/','subject','the\x20antibot\x20is\x20successfully\x20activated','addCron','1041310aSPRaC','hello\x20','*can\x27t\x20find\x20application,\x20please\x20enter\x20another\x20name*','🙏🏿','delete','groupSettingUpdate','../byte-tables/antilien','\x20rose\x20in\x20rank.\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20he/she\x20has\x20been\x20named\x20group\x20administrator.','log','This\x20command\x20is\x20only\x20allowed\x20in\x20groups.','audioMessage','left','CROPPED','The\x20anti-bot\x20action\x20has\x20been\x20updated\x20to\x20','\x0a\x0a*🔩Group\x27s\x20ID:*\x20','action','\x0a*Id\x20:*\x20','oui','\x0a\x20\x20\x20\x20\x20\x20*\x20*Instructions:*\x20To\x20activate\x20autounmute,\x20add\x20the\x20minute\x20and\x20hour\x20after\x20the\x20command\x20separated\x20by\x20\x27:\x27\x0a\x20\x20\x20\x20\x20\x20Example\x20autounmute\x207:30\x0a\x20\x20\x20\x20\x20\x20*\x20To\x20delete\x20autounmute,\x20use\x20the\x20command\x20*autounmute\x20del*','\x0a\x20\x20\x20\x20\x20\x20\x20\x20*\x20*Instructions:*\x20To\x20activate\x20automatic\x20mute,\x20add\x20the\x20minute\x20and\x20hour\x20after\x20the\x20command\x20separated\x20by\x20\x27:\x27\x0a\x20\x20\x20\x20\x20\x20\x20\x20Example\x20automute\x209:30\x0a\x20\x20\x20\x20\x20\x20\x20\x20*\x20To\x20delete\x20the\x20automatic\x20mute,\x20use\x20the\x20command\x20*automute\x20del*','application/vnd.android.package-archive','caption','https://raw.githubusercontent.com/djalega8000/Hamza-MD/main/media/remover.gif','groupLeave','unmute_at','the\x20antibot\x20is\x20already\x20activated\x20for\x20this\x20group','Mods','\x0a*Size\x20:*\x20','size','del','1356GFLUFN','axios','admin','The\x20anti-link\x20action\x20has\x20been\x20updated\x20to\x20','50kGJDOX','This\x20member\x20is\x20already\x20an\x20administrator\x20of\x20the\x20group.','The\x20antilink\x20has\x20been\x20successfully\x20deactivated','warn','../set','for\x20groups\x20only','includes','3641671jxzUAz','No\x20time\x20set\x20for\x20autounmute','data','img','group\x20open'];_0x5b71=function(){return _0x35029c;};return _0x5b71();}const cron=require(_0x159a30(0x110));function _0xef1e(_0x241f3c,_0x39b9e2){const _0x5b7195=_0x5b71();return _0xef1e=function(_0xef1ed8,_0x510acf){_0xef1ed8=_0xef1ed8-0x104;let _0x168e2b=_0x5b7195[_0xef1ed8];return _0x168e2b;},_0xef1e(_0x241f3c,_0x39b9e2);}Hamza({'nomCom':_0x159a30(0x121),'categorie':_0x159a30(0x1b9)},async(_0x4c0c32,_0x536756,_0x3b2826)=>{const _0x30a789=_0x159a30,{arg:_0x212a59,repondre:_0x3aa864,verifAdmin:_0x39b8c7}=_0x3b2826;if(!_0x39b8c7){_0x3aa864('You\x20are\x20not\x20an\x20administrator\x20of\x20the\x20group');return;}group_cron=await cron[_0x30a789(0x12f)](_0x4c0c32);if(!_0x212a59||_0x212a59[_0x30a789(0x12c)]==0x0){let _0x46f021;group_cron==null||group_cron['mute_at']==null?_0x46f021=_0x30a789(0x119):_0x46f021=_0x30a789(0x186)+group_cron['mute_at']['split'](':')[0x0]+'\x20'+group_cron[_0x30a789(0x187)][_0x30a789(0x19b)](':')[0x1];let _0x21a9ed=_0x30a789(0x12d)+_0x46f021+_0x30a789(0x14f);_0x3aa864(_0x21a9ed);return;}else{let _0xd1544d=_0x212a59[_0x30a789(0x10b)]('\x20');if(_0xd1544d[_0x30a789(0x1bc)]()===_0x30a789(0x159))group_cron==null?_0x3aa864('No\x20cronometrage\x20is\x20active'):(await cron['delCron'](_0x4c0c32),_0x3aa864(_0x30a789(0x105))['then'](()=>{const _0x55b51c=_0x30a789;exec(_0x55b51c(0x1a7));}));else _0xd1544d[_0x30a789(0x164)](':')?(await cron[_0x30a789(0x13b)](_0x4c0c32,_0x30a789(0x187),_0xd1544d),_0x3aa864(_0x30a789(0x170)+_0xd1544d+_0x30a789(0x198))[_0x30a789(0x180)](()=>{const _0x3da8a2=_0x30a789;exec(_0x3da8a2(0x1a7));})):_0x3aa864(_0x30a789(0x1b1));}}),Hamza({'nomCom':'autounmute','categorie':_0x159a30(0x1b9)},async(_0x164686,_0x200086,_0x5caf9a)=>{const _0x3966b2=_0x159a30,{arg:_0x16e2c5,repondre:_0x2c9910,verifAdmin:_0x326931}=_0x5caf9a;if(!_0x326931){_0x2c9910(_0x3966b2(0x16a));return;}group_cron=await cron[_0x3966b2(0x12f)](_0x164686);if(!_0x16e2c5||_0x16e2c5[_0x3966b2(0x12c)]==0x0){let _0x1bb39e;group_cron==null||group_cron[_0x3966b2(0x154)]==null?_0x1bb39e=_0x3966b2(0x166):_0x1bb39e='The\x20group\x20will\x20be\x20un-muted\x20at\x20'+group_cron['unmute_at'][_0x3966b2(0x19b)](':')[0x0]+'H\x20'+group_cron[_0x3966b2(0x154)][_0x3966b2(0x19b)](':')[0x1];let _0x33183c=_0x3966b2(0x12d)+_0x1bb39e+_0x3966b2(0x14e);_0x2c9910(_0x33183c);return;}else{let _0x5d7b6d=_0x16e2c5['join']('\x20');if(_0x5d7b6d[_0x3966b2(0x1bc)]()===_0x3966b2(0x159))group_cron==null?_0x2c9910(_0x3966b2(0x1be)):(await cron[_0x3966b2(0x116)](_0x164686),_0x2c9910(_0x3966b2(0x178))[_0x3966b2(0x180)](()=>{const _0x5b1eb9=_0x3966b2;exec(_0x5b1eb9(0x1a7));}));else _0x5d7b6d[_0x3966b2(0x164)](':')?(await cron[_0x3966b2(0x13b)](_0x164686,_0x3966b2(0x154),_0x5d7b6d),_0x2c9910('Setting\x20up\x20autounmute\x20for\x20'+_0x5d7b6d+_0x3966b2(0x1bd))[_0x3966b2(0x180)](()=>{exec('pm2\x20restart\x20all');})):_0x2c9910('Please\x20enter\x20a\x20valid\x20time\x20with\x20hour\x20and\x20minute\x20separated\x20by\x20:');}}),Hamza({'nomCom':'fkick','categorie':_0x159a30(0x1b9)},async(_0x3a8165,_0x9c702b,_0x566a44)=>{const _0xbf1af7=_0x159a30,{arg:_0x2705a1,repondre:_0xf95ab1,verifAdmin:_0x36c24c,superUser:_0x34883d,verifHamzaAdmin:_0xe60b23}=_0x566a44;if(_0x36c24c||_0x34883d){if(!_0xe60b23){_0xf95ab1(_0xbf1af7(0x191));return;}if(!_0x2705a1||_0x2705a1['length']==0x0){_0xf95ab1(_0xbf1af7(0x1a5));return;}let _0x4dd18b=await _0x9c702b[_0xbf1af7(0x176)](_0x3a8165),_0x28187e=_0x4dd18b['participants'];for(let _0x439cfa=0x0;_0x439cfa<_0x28187e[_0xbf1af7(0x12c)];_0x439cfa++){_0x28187e[_0x439cfa]['id'][_0xbf1af7(0x129)](_0x2705a1[0x0])&&_0x28187e[_0x439cfa][_0xbf1af7(0x15c)]===null&&await _0x9c702b[_0xbf1af7(0x10f)](_0x3a8165,[_0x28187e[_0x439cfa]['id']],'remove');}}else _0xf95ab1(_0xbf1af7(0x195));});
