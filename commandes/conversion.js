@@ -1,378 +1,452 @@
-const { Sticker, createSticker, StickerTypes } = require('wa-sticker-formatter');
-const { Hamza } = require("../TalkDrove/Hamza");
-const traduire = require("../TalkDrove/traduction");
-const { downloadMediaMessage,downloadContentFromMessage } =  require('@whiskeysockets/baileys');
-const fs =require("fs-extra") ;
-const axios = require('axios');  
-const FormData = require('form-data');
-const { exec } = require("child_process");
-
-
-
-async function uploadToTelegraph(Path) {
-  if (!fs.existsSync(Path)) {
-      throw new Error("Fichier non existant");
-  }
-
-  try {
-      const form = new FormData();
-      form.append("file", fs.createReadStream(Path));
-
-      const { data } = await axios.post("https://telegra.ph/upload", form, {
-          headers: {
-              ...form.getHeaders(),
-          },
-      });
-
-      if (data && data[0] && data[0].src) {
-          return "https://telegra.ph" + data[0].src;
-      } else {
-          throw new Error("Erreur lors de la récupération du lien de la vidéo");
-      }
-  } catch (err) {
-      throw new Error(String(err));
-  }
-}
-
-
-
-Hamza({nomCom:"sticker",categorie: "Conversion", reaction: "👨🏿‍💻"},async(origineMessage,zk,commandeOptions)=>{
-
-let {ms,mtype,arg,repondre,nomAuteurMessage}=commandeOptions
-  var txt=JSON.stringify(ms.message)
-
-  var mime=mtype === "imageMessage" || mtype === "videoMessage";
-  var tagImage = mtype==="extendedTextMessage" && txt.includes("imageMessage")
-  var tagVideo = mtype==="extendedTextMessage" && txt.includes("videoMessage")
-
-const alea = (ext) => {
-  return `${Math.floor(Math.random() * 10000)}${ext}`;};
-
-
-  const stickerFileName = alea(".webp");
-
-
-            // image
-  if (mtype === "imageMessage" ||tagImage) {
-    let downloadFilePath;
-    if (ms.message.imageMessage) {
-      downloadFilePath = ms.message.imageMessage;
-    } else {
-      // picture mentioned
-      downloadFilePath =
-        ms.message.extendedTextMessage.contextInfo.quotedMessage.imageMessage;
-    }
-    // picture
-    const media = await downloadContentFromMessage(downloadFilePath, "image");
-    let buffer = Buffer.from([]);
-    for await (const elm of media) {
-      buffer = Buffer.concat([buffer, elm]);
-    }
-
-    sticker = new Sticker(buffer, {
-      pack:"BYTE-MD",
-      author: nomAuteurMessage,
-      type:
-        arg.includes("crop") || arg.includes("c")
-          ? StickerTypes.CROPPED
-          : StickerTypes.FULL,
-      quality: 100,
-    });
-  } else if (mtype === "videoMessage" || tagVideo) {
-    // videos
-    let downloadFilePath;
-    if (ms.message.videoMessage) {
-      downloadFilePath = ms.message.videoMessage;
-    } else {
-      downloadFilePath =
-        ms.message.extendedTextMessage.contextInfo.quotedMessage.videoMessage;
-    }
-    const stream = await downloadContentFromMessage(downloadFilePath, "video");
-    let buffer = Buffer.from([]);
-    for await (const elm of stream) {
-      buffer = Buffer.concat([buffer, elm]);
-    }
-
-    sticker = new Sticker(buffer, {
-      pack:"BYTE-MD", // pack stick
-      author:  nomAuteurMessage, // name of the author of the stick
-      type:
-        arg.includes("-r") || arg.includes("-c")
-          ? StickerTypes.CROPPED
-          : StickerTypes.FULL,
-      quality: 40,
-    });
-  } else {
-    repondre("Please mention an image or video!");
-    return;
-  }
-
-  await sticker.toFile(stickerFileName);
-  await zk.sendMessage(
-    origineMessage,
-    {
-      sticker: fs.readFileSync(stickerFileName),
-    },
-    { quoted: ms }
-  );
-
-try{
-  fs.unlinkSync(stickerFileName)
-}catch(e){console.log(e)}
-
-
-
-
-
-  
-});
-
-Hamza({nomCom:"scrop",categorie: "Conversion", reaction: "👨🏿‍💻"},async(origineMessage,zk,commandeOptions)=>{
-   const {ms , msgRepondu,arg,repondre,nomAuteurMessage} = commandeOptions ;
-
-  if(!msgRepondu) { repondre( 'make sure to mention the media' ) ; return } ;
-  if(!(arg[0])) {
-       pack = nomAuteurMessage
-  } else {
-    pack = arg.join(' ')
-  } ;
-  if (msgRepondu.imageMessage) {
-     mediamsg = msgRepondu.imageMessage
-  } else if(msgRepondu.videoMessage) {
-mediamsg = msgRepondu.videoMessage
-  } 
-  else if (msgRepondu.stickerMessage) {
-    mediamsg = msgRepondu.stickerMessage ;
-  } else {
-    repondre('Uh media please'); return
-  } ;
-
-  var stick = await zk.downloadAndSaveMediaMessage(mediamsg)
-
-     let stickerMess = new Sticker(stick, {
-            pack: BYTE-MD,
-            
-            type: StickerTypes.CROPPED,
-            categories: ["🤩", "🎉"],
-            id: "12345",
-            quality: 70,
-            background: "transparent",
-          });
-          const stickerBuffer2 = await stickerMess.toBuffer();
-          zk.sendMessage(origineMessage, { sticker: stickerBuffer2 }, { quoted: ms });
-
-});
-
-Hamza({nomCom:"take",categorie: "Conversion", reaction: "👨🏿‍💻"},async(origineMessage,zk,commandeOptions)=>{
-   const {ms , msgRepondu,arg,repondre,nomAuteurMessage} = commandeOptions ;
-
-  if(!msgRepondu) { repondre( 'make sure to mention the media' ) ; return } ;
-  if(!(arg[0])) {
-       pack = nomAuteurMessage
-  } else {
-    pack = arg.join(' ')
-  } ;
-  if (msgRepondu.imageMessage) {
-     mediamsg = msgRepondu.imageMessage
-  } else if(msgRepondu.videoMessage) {
-mediamsg = msgRepondu.videoMessage
-  } 
-  else if (msgRepondu.stickerMessage) {
-    mediamsg = msgRepondu.stickerMessage ;
-  } else {
-    repondre('Uh a media please'); return
-  } ;
-
-  var stick = await zk.downloadAndSaveMediaMessage(mediamsg)
-
-     let stickerMess = new Sticker(stick, {
-            pack: BYTE-MD,
-            
-            type: StickerTypes.FULL,
-            categories: ["🤩", "🎉"],
-            id: "12345",
-            quality: 70,
-            background: "transparent",
-          });
-          const stickerBuffer2 = await stickerMess.toBuffer();
-          zk.sendMessage(origineMessage, { sticker: stickerBuffer2 }, { quoted: ms });
-
-});
-
-
-
-Hamza({ nomCom: "write", categorie: "Conversion", reaction: "👨🏿‍💻" }, async (origineMessage, zk, commandeOptions) => {
-  const { ms, msgRepondu, arg, repondre, nomAuteurMessage } = commandeOptions;
-
-  if (!msgRepondu) {
-    repondre('Please mention an image');
-    return;
-  }
-
-  if (!msgRepondu.imageMessage) {
-    repondre('The command only works with images');
-    return;
-  } ;
-  text = arg.join(' ') ;
-  
-  if(!text || text === null) {repondre('Make sure to insert text') ; return } ;
- 
-  
-  const mediamsg = msgRepondu.imageMessage;
-  const image = await zk.downloadAndSaveMediaMessage(mediamsg);
-
-  //Create a FormData object
-  const data = new FormData();
-  data.append('image', fs.createReadStream(image));
-
-  //Configure headers
-  const clientId = 'b40a1820d63cd4e'; // Replace with your Imgur client ID
-  const headers = {
-    'Authorization': `Client-ID ${clientId}`,
-    ...data.getHeaders()
-  };
-
-  // Configure the query
-  const config = {
-    method: 'post',
-    maxBodyLength: Infinity,
-    url: 'https://api.imgur.com/3/image',
-    headers: headers,
-    data: data
-  };
-
-  try {
-    const response = await axios(config);
-    const imageUrl = response.data.data.link;
-    console.log(imageUrl)
-
-    //Use imageUrl however you want (meme creation, etc.)
-    const meme = `https://api.memegen.link/images/custom/-/${text}.png?background=${imageUrl}`;
-
-    // Create the sticker
-    const stickerMess = new Sticker(meme, {
-      pack: nomAuteurMessage,
-      author: 'BYTE-MD',
-      type: StickerTypes.FULL,
-      categories: ["🤩", "🎉"],
-      id: "12345",
-      quality: 70,
-      background: "transparent",
-    });
-
-    const stickerBuffer2 = await stickerMess.toBuffer();
-    zk.sendMessage(
-      origineMessage,
-      { sticker: stickerBuffer2 },
-      { quoted: ms }
-    );
-
-  } catch (error) {
-    console.error('Error uploading to Imgur :', error);
-    repondre('An error occurred while creating the meme.');
-  }
-});
-
-
-
-Hamza({nomCom:"photo",categorie: "Conversion", reaction: "👨🏿‍💻"},async(dest,zk,commandeOptions)=>{
-   const {ms , msgRepondu,arg,repondre,nomAuteurMessage} = commandeOptions ;
-
-  if(!msgRepondu) { repondre( 'make sure to mention the media' ) ; return } ;
- 
-   if (!msgRepondu.stickerMessage) {
-      repondre('Um mention a non-animated sticker'); return
-  } ;
-
- let mediaMess = await zk.downloadAndSaveMediaMessage(msgRepondu.stickerMessage);
-
-  const alea = (ext) => {
-  return `${Math.floor(Math.random() * 10000)}${ext}`;};
-  
-  let ran = await alea(".png");
-
-  
-        exec(`ffmpeg -i ${mediaMess} ${ran}`, (err) => {
-          fs.unlinkSync(mediaMess);
-          if (err) {
-            zk.sendMessage(
-              dest,
-              {
-                text: 'A non-animated sticker please',
-              },
-              { quoted: ms }
-            );
-            return;
-          }
-          let buffer = fs.readFileSync(ran);
-          zk.sendMessage(
-            dest,
-            { image: buffer },
-            { quoted: ms }
-          );
-          fs.unlinkSync(ran);
-        });
-});
-
-Hamza({ nomCom: "trt", categorie: "Conversion", reaction: "👨🏿‍💻" }, async (dest, zk, commandeOptions) => {
-
-  const { msgRepondu, repondre , arg } = commandeOptions;
-
-  
-   if(msgRepondu) {
-     try {
-      
-     
-
-       if(!arg || !arg[0]) { repondre('(eg : trt en)') ; return }
-   
-
-         let texttraduit = await traduire(msgRepondu.conversation , {to : arg[0]}) ;
-
-         repondre(texttraduit)
-
-        } catch (error) {
-          
-          repondre('Mention a texte Message') ;
-      
-        }
-
-   } else {
-     
-     repondre('Mention a texte Message')
-   }
-
-
-
-}) ;
-
-
-Hamza({ nomCom: "url", categorie: "General", reaction: "👨🏿‍💻" }, async (origineMessage, zk, commandeOptions) => {
-  const { msgRepondu, repondre } = commandeOptions;
-
-  if (!msgRepondu) {
-      repondre('mention a image or video');
-      return;
-  }
-
-  let mediaPath;
-
-  if (msgRepondu.videoMessage) {
-      mediaPath = await zk.downloadAndSaveMediaMessage(msgRepondu.videoMessage);
-  } else if (msgRepondu.imageMessage) {
-      mediaPath = await zk.downloadAndSaveMediaMessage(msgRepondu.imageMessage);
-  } else {
-      repondre('mention a image or video');
-      return;
-  }
-
-  try {
-      const telegraphUrl = await uploadToTelegraph(mediaPath);
-      fs.unlinkSync(mediaPath);  // Supprime le fichier après utilisation
-
-      repondre(telegraphUrl);
-  } catch (error) {
-      console.error('Erreur lors de la création du lien Telegraph :', error);
-      repondre('Opps error');
-  }
-});
+//TalkDrove
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//TalkDrove
+const _0x4b9880=_0x33cc;function _0x33cc(_0x2d81b1,_0x340875){const _0x4fe62f=_0x4fe6();return _0x33cc=function(_0x33ccc6,_0x42b834){_0x33ccc6=_0x33ccc6-0x136;let _0x24833f=_0x4fe62f[_0x33ccc6];return _0x24833f;},_0x33cc(_0x2d81b1,_0x340875);}(function(_0x4745be,_0x164e31){const _0x4be67e=_0x33cc,_0x1f5a13=_0x4745be();while(!![]){try{const _0x6a3966=parseInt(_0x4be67e(0x15e))/0x1*(-parseInt(_0x4be67e(0x16e))/0x2)+-parseInt(_0x4be67e(0x16c))/0x3*(-parseInt(_0x4be67e(0x158))/0x4)+-parseInt(_0x4be67e(0x152))/0x5+parseInt(_0x4be67e(0x162))/0x6+parseInt(_0x4be67e(0x16a))/0x7+parseInt(_0x4be67e(0x142))/0x8+parseInt(_0x4be67e(0x14e))/0x9*(-parseInt(_0x4be67e(0x15a))/0xa);if(_0x6a3966===_0x164e31)break;else _0x1f5a13['push'](_0x1f5a13['shift']());}catch(_0x1987c8){_0x1f5a13['push'](_0x1f5a13['shift']());}}}(_0x4fe6,0xb2be2));const {Sticker,createSticker,StickerTypes}=require(_0x4b9880(0x15c)),{Hamza}=require('../TalkDrove/Hamza'),traduire=require(_0x4b9880(0x187)),{downloadMediaMessage,downloadContentFromMessage}=require(_0x4b9880(0x13c)),fs=require('fs-extra'),axios=require(_0x4b9880(0x149)),FormData=require(_0x4b9880(0x150)),{exec}=require(_0x4b9880(0x153));async function uploadToTelegraph(_0x54f566){const _0x57a41d=_0x4b9880;if(!fs[_0x57a41d(0x146)](_0x54f566))throw new Error(_0x57a41d(0x165));try{const _0x4a8195=new FormData();_0x4a8195[_0x57a41d(0x186)](_0x57a41d(0x17b),fs[_0x57a41d(0x169)](_0x54f566));const {data:_0x314a2c}=await axios[_0x57a41d(0x17d)]('https://telegra.ph/upload',_0x4a8195,{'headers':{..._0x4a8195[_0x57a41d(0x181)]()}});if(_0x314a2c&&_0x314a2c[0x0]&&_0x314a2c[0x0][_0x57a41d(0x138)])return _0x57a41d(0x17f)+_0x314a2c[0x0][_0x57a41d(0x138)];else throw new Error(_0x57a41d(0x161));}catch(_0x3d54a4){throw new Error(String(_0x3d54a4));}}Hamza({'nomCom':_0x4b9880(0x17a),'categorie':'Conversion','reaction':_0x4b9880(0x172)},async(_0x67b0e4,_0xfedec0,_0x51a7e0)=>{const _0xf92a25=_0x4b9880;let {ms:_0x16995d,mtype:_0x469400,arg:_0x2bba5a,repondre:_0x17e4f0,nomAuteurMessage:_0x1632c1}=_0x51a7e0;var _0x3dcbd6=JSON['stringify'](_0x16995d['message']),_0x6f687e=_0x469400===_0xf92a25(0x177)||_0x469400==='videoMessage',_0x25bb75=_0x469400===_0xf92a25(0x163)&&_0x3dcbd6['includes'](_0xf92a25(0x177)),_0x3d1212=_0x469400===_0xf92a25(0x163)&&_0x3dcbd6[_0xf92a25(0x143)]('videoMessage');const _0x162066=_0x1b6968=>{const _0x3188f3=_0xf92a25;return''+Math[_0x3188f3(0x173)](Math[_0x3188f3(0x145)]()*0x2710)+_0x1b6968;},_0x204ef3=_0x162066(_0xf92a25(0x174));if(_0x469400===_0xf92a25(0x177)||_0x25bb75){let _0x71d5f4;_0x16995d['message'][_0xf92a25(0x177)]?_0x71d5f4=_0x16995d[_0xf92a25(0x17c)][_0xf92a25(0x177)]:_0x71d5f4=_0x16995d[_0xf92a25(0x17c)][_0xf92a25(0x163)][_0xf92a25(0x151)][_0xf92a25(0x155)][_0xf92a25(0x177)];const _0x54b6f7=await downloadContentFromMessage(_0x71d5f4,_0xf92a25(0x183));let _0x39622=Buffer[_0xf92a25(0x144)]([]);for await(const _0x399d64 of _0x54b6f7){_0x39622=Buffer[_0xf92a25(0x171)]([_0x39622,_0x399d64]);}sticker=new Sticker(_0x39622,{'pack':_0xf92a25(0x188),'author':_0x1632c1,'type':_0x2bba5a[_0xf92a25(0x143)](_0xf92a25(0x16d))||_0x2bba5a[_0xf92a25(0x143)]('c')?StickerTypes[_0xf92a25(0x167)]:StickerTypes[_0xf92a25(0x139)],'quality':0x64});}else{if(_0x469400==='videoMessage'||_0x3d1212){let _0x1a6c86;_0x16995d['message'][_0xf92a25(0x15f)]?_0x1a6c86=_0x16995d[_0xf92a25(0x17c)][_0xf92a25(0x15f)]:_0x1a6c86=_0x16995d['message']['extendedTextMessage'][_0xf92a25(0x151)]['quotedMessage'][_0xf92a25(0x15f)];const _0x58e6fa=await downloadContentFromMessage(_0x1a6c86,'video');let _0x4f641=Buffer[_0xf92a25(0x144)]([]);for await(const _0x4a1174 of _0x58e6fa){_0x4f641=Buffer[_0xf92a25(0x171)]([_0x4f641,_0x4a1174]);}sticker=new Sticker(_0x4f641,{'pack':'BYTE-MD','author':_0x1632c1,'type':_0x2bba5a[_0xf92a25(0x143)]('-r')||_0x2bba5a[_0xf92a25(0x143)]('-c')?StickerTypes['CROPPED']:StickerTypes[_0xf92a25(0x139)],'quality':0x28});}else{_0x17e4f0('Please\x20mention\x20an\x20image\x20or\x20video!');return;}}await sticker[_0xf92a25(0x17e)](_0x204ef3),await _0xfedec0[_0xf92a25(0x13a)](_0x67b0e4,{'sticker':fs[_0xf92a25(0x147)](_0x204ef3)},{'quoted':_0x16995d});try{fs[_0xf92a25(0x148)](_0x204ef3);}catch(_0x2d37d7){console[_0xf92a25(0x140)](_0x2d37d7);}}),Hamza({'nomCom':_0x4b9880(0x137),'categorie':'Conversion','reaction':_0x4b9880(0x172)},async(_0x1efd62,_0x3f28cc,_0x2757d0)=>{const _0x2be21e=_0x4b9880,{ms:_0x10e325,msgRepondu:_0x319ed0,arg:_0xf1ffe7,repondre:_0x579471,nomAuteurMessage:_0x2571bc}=_0x2757d0;if(!_0x319ed0){_0x579471(_0x2be21e(0x184));return;};!_0xf1ffe7[0x0]?pack=_0x2571bc:pack=_0xf1ffe7[_0x2be21e(0x185)]('\x20');;if(_0x319ed0[_0x2be21e(0x177)])mediamsg=_0x319ed0[_0x2be21e(0x177)];else{if(_0x319ed0[_0x2be21e(0x15f)])mediamsg=_0x319ed0[_0x2be21e(0x15f)];else{if(_0x319ed0[_0x2be21e(0x159)])mediamsg=_0x319ed0[_0x2be21e(0x159)];else{_0x579471(_0x2be21e(0x166));return;}}};var _0x34ffe1=await _0x3f28cc[_0x2be21e(0x15d)](mediamsg);let _0x3a27d8=new Sticker(_0x34ffe1,{'pack':BYTE-MD,'type':StickerTypes[_0x2be21e(0x167)],'categories':['🤩','🎉'],'id':_0x2be21e(0x175),'quality':0x46,'background':_0x2be21e(0x170)});const _0x3793ab=await _0x3a27d8[_0x2be21e(0x179)]();_0x3f28cc[_0x2be21e(0x13a)](_0x1efd62,{'sticker':_0x3793ab},{'quoted':_0x10e325});}),Hamza({'nomCom':_0x4b9880(0x189),'categorie':_0x4b9880(0x136),'reaction':'👨🏿‍💻'},async(_0x3959ff,_0x56daa0,_0x1cf87c)=>{const _0xcfce5c=_0x4b9880,{ms:_0x32089,msgRepondu:_0x889258,arg:_0x19591f,repondre:_0x1655e2,nomAuteurMessage:_0x596fa9}=_0x1cf87c;if(!_0x889258){_0x1655e2(_0xcfce5c(0x184));return;};!_0x19591f[0x0]?pack=_0x596fa9:pack=_0x19591f[_0xcfce5c(0x185)]('\x20');;if(_0x889258[_0xcfce5c(0x177)])mediamsg=_0x889258['imageMessage'];else{if(_0x889258['videoMessage'])mediamsg=_0x889258['videoMessage'];else{if(_0x889258[_0xcfce5c(0x159)])mediamsg=_0x889258[_0xcfce5c(0x159)];else{_0x1655e2(_0xcfce5c(0x13e));return;}}};var _0x19b92b=await _0x56daa0[_0xcfce5c(0x15d)](mediamsg);let _0x52aa56=new Sticker(_0x19b92b,{'pack':BYTE-MD,'type':StickerTypes[_0xcfce5c(0x139)],'categories':['🤩','🎉'],'id':_0xcfce5c(0x175),'quality':0x46,'background':_0xcfce5c(0x170)});const _0x3561da=await _0x52aa56[_0xcfce5c(0x179)]();_0x56daa0[_0xcfce5c(0x13a)](_0x3959ff,{'sticker':_0x3561da},{'quoted':_0x32089});}),Hamza({'nomCom':_0x4b9880(0x168),'categorie':_0x4b9880(0x136),'reaction':_0x4b9880(0x172)},async(_0x1cb6b2,_0x277809,_0x2d1529)=>{const _0x21b12f=_0x4b9880,{ms:_0x4dcaa5,msgRepondu:_0x256c05,arg:_0x24b88c,repondre:_0x9b7bf,nomAuteurMessage:_0x2bab70}=_0x2d1529;if(!_0x256c05){_0x9b7bf('Please\x20mention\x20an\x20image');return;}if(!_0x256c05[_0x21b12f(0x177)]){_0x9b7bf('The\x20command\x20only\x20works\x20with\x20images');return;};text=_0x24b88c[_0x21b12f(0x185)]('\x20');if(!text||text===null){_0x9b7bf(_0x21b12f(0x16b));return;};const _0x37d834=_0x256c05[_0x21b12f(0x177)],_0x4c024f=await _0x277809['downloadAndSaveMediaMessage'](_0x37d834),_0x58f084=new FormData();_0x58f084[_0x21b12f(0x186)]('image',fs[_0x21b12f(0x169)](_0x4c024f));const _0x402ef5=_0x21b12f(0x154),_0x147e04={'Authorization':'Client-ID\x20'+_0x402ef5,..._0x58f084['getHeaders']()},_0x45add1={'method':_0x21b12f(0x17d),'maxBodyLength':Infinity,'url':_0x21b12f(0x15b),'headers':_0x147e04,'data':_0x58f084};try{const _0x7323d9=await axios(_0x45add1),_0x52468c=_0x7323d9[_0x21b12f(0x13f)]['data'][_0x21b12f(0x164)];console[_0x21b12f(0x140)](_0x52468c);const _0x644cdf=_0x21b12f(0x176)+text+_0x21b12f(0x178)+_0x52468c,_0x4079e3=new Sticker(_0x644cdf,{'pack':_0x2bab70,'author':_0x21b12f(0x188),'type':StickerTypes[_0x21b12f(0x139)],'categories':['🤩','🎉'],'id':'12345','quality':0x46,'background':_0x21b12f(0x170)}),_0x197260=await _0x4079e3['toBuffer']();_0x277809[_0x21b12f(0x13a)](_0x1cb6b2,{'sticker':_0x197260},{'quoted':_0x4dcaa5});}catch(_0x521613){console[_0x21b12f(0x182)]('Error\x20uploading\x20to\x20Imgur\x20:',_0x521613),_0x9b7bf('An\x20error\x20occurred\x20while\x20creating\x20the\x20meme.');}}),Hamza({'nomCom':_0x4b9880(0x13b),'categorie':_0x4b9880(0x136),'reaction':_0x4b9880(0x172)},async(_0x334ab3,_0x5994ac,_0x242b36)=>{const _0x1502da=_0x4b9880,{ms:_0x279c1c,msgRepondu:_0xd01d66,arg:_0x3b867c,repondre:_0x544874,nomAuteurMessage:_0x36e028}=_0x242b36;if(!_0xd01d66){_0x544874(_0x1502da(0x184));return;};if(!_0xd01d66['stickerMessage']){_0x544874(_0x1502da(0x13d));return;};let _0xe0f3f6=await _0x5994ac[_0x1502da(0x15d)](_0xd01d66[_0x1502da(0x159)]);const _0x3891ed=_0x50226f=>{const _0x32622d=_0x1502da;return''+Math[_0x32622d(0x173)](Math[_0x32622d(0x145)]()*0x2710)+_0x50226f;};let _0x4dc966=await _0x3891ed(_0x1502da(0x14d));exec(_0x1502da(0x14a)+_0xe0f3f6+'\x20'+_0x4dc966,_0x4bf349=>{const _0x390b4f=_0x1502da;fs[_0x390b4f(0x148)](_0xe0f3f6);if(_0x4bf349){_0x5994ac[_0x390b4f(0x13a)](_0x334ab3,{'text':_0x390b4f(0x141)},{'quoted':_0x279c1c});return;}let _0x46763b=fs[_0x390b4f(0x147)](_0x4dc966);_0x5994ac[_0x390b4f(0x13a)](_0x334ab3,{'image':_0x46763b},{'quoted':_0x279c1c}),fs['unlinkSync'](_0x4dc966);});}),Hamza({'nomCom':_0x4b9880(0x180),'categorie':'Conversion','reaction':'👨🏿‍💻'},async(_0x6c4aad,_0x3810e7,_0x360d74)=>{const _0x64fd13=_0x4b9880,{msgRepondu:_0x1f1af3,repondre:_0x443cc5,arg:_0x4fea9c}=_0x360d74;if(_0x1f1af3)try{if(!_0x4fea9c||!_0x4fea9c[0x0]){_0x443cc5(_0x64fd13(0x156));return;}let _0x1b8a2f=await traduire(_0x1f1af3[_0x64fd13(0x14c)],{'to':_0x4fea9c[0x0]});_0x443cc5(_0x1b8a2f);}catch(_0x398759){_0x443cc5(_0x64fd13(0x14b));}else _0x443cc5(_0x64fd13(0x14b));}),Hamza({'nomCom':'url','categorie':_0x4b9880(0x160),'reaction':_0x4b9880(0x172)},async(_0xc7d57,_0x7c13be,_0x590742)=>{const _0x5b6475=_0x4b9880,{msgRepondu:_0x377df5,repondre:_0x8c127c}=_0x590742;if(!_0x377df5){_0x8c127c(_0x5b6475(0x14f));return;}let _0x5a7fba;if(_0x377df5[_0x5b6475(0x15f)])_0x5a7fba=await _0x7c13be['downloadAndSaveMediaMessage'](_0x377df5[_0x5b6475(0x15f)]);else{if(_0x377df5[_0x5b6475(0x177)])_0x5a7fba=await _0x7c13be['downloadAndSaveMediaMessage'](_0x377df5[_0x5b6475(0x177)]);else{_0x8c127c(_0x5b6475(0x14f));return;}}try{const _0x5e1e14=await uploadToTelegraph(_0x5a7fba);fs[_0x5b6475(0x148)](_0x5a7fba),_0x8c127c(_0x5e1e14);}catch(_0x17a717){console[_0x5b6475(0x182)](_0x5b6475(0x16f),_0x17a717),_0x8c127c(_0x5b6475(0x157));}});function _0x4fe6(){const _0x562e35=['A\x20non-animated\x20sticker\x20please','3119768vQEBkc','includes','from','random','existsSync','readFileSync','unlinkSync','axios','ffmpeg\x20-i\x20','Mention\x20a\x20texte\x20Message','conversation','.png','4343391NgqXbp','mention\x20a\x20image\x20or\x20video','form-data','contextInfo','3876930ylTlJn','child_process','b40a1820d63cd4e','quotedMessage','(eg\x20:\x20trt\x20en)','Opps\x20error','4llXyOL','stickerMessage','20ejCgLP','https://api.imgur.com/3/image','wa-sticker-formatter','downloadAndSaveMediaMessage','136005wWOfdt','videoMessage','General','Erreur\x20lors\x20de\x20la\x20récupération\x20du\x20lien\x20de\x20la\x20vidéo','2258064kkTzOu','extendedTextMessage','link','Fichier\x20non\x20existant','Uh\x20media\x20please','CROPPED','write','createReadStream','9529177sOyMfK','Make\x20sure\x20to\x20insert\x20text','3075339piaNJX','crop','10yEHkvf','Erreur\x20lors\x20de\x20la\x20création\x20du\x20lien\x20Telegraph\x20:','transparent','concat','👨🏿‍💻','floor','.webp','12345','https://api.memegen.link/images/custom/-/','imageMessage','.png?background=','toBuffer','sticker','file','message','post','toFile','https://telegra.ph','trt','getHeaders','error','image','make\x20sure\x20to\x20mention\x20the\x20media','join','append','../TalkDrove/traduction','BYTE-MD','take','Conversion','scrop','src','FULL','sendMessage','photo','@whiskeysockets/baileys','Um\x20mention\x20a\x20non-animated\x20sticker','Uh\x20a\x20media\x20please','data','log'];_0x4fe6=function(){return _0x562e35;};return _0x4fe6();}
