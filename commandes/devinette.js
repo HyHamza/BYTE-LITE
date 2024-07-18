@@ -1,133 +1,452 @@
-const { Hamza } = require('../TalkDrove/Hamza');
+//TalkDrove
 
-// Set a riddle list with questions and answers
-const devinettes = [
-  {
-    question: "I can fly without wings, who am I?",
-    reponse: "The weather",
-  },
-  {
-    question: "I'm always hungry, the more I eat, the fatter I become. Who am I ?",
-    reponse: "A black hole",
-  },
-  {
-    question: "I'm strong when I'm down, but I'm weak when I'm up. Who am I ?",
-    reponse: "The number 6",
-  },
-  {
-    question: "I can be short or long, hard or soft, I can be used by anyone, from young children to experienced musicians. Who am I ?",
-    reponse: "A pencil",
-  },
-  {
-    question: "I am the beginning of the end, the end of every place. I am the beginning of eternity, the end of time and space. Who am I ?",
-    reponse: "The letter 'e'",
-  },
-  {
-    question: "I am white when I am dirty and black when I am clean. Who am I ?",
-    reponse: "A slate",
-  },
-  {
-    question: "I'm liquid, but if you take water away from me, I become solid. Who am I ?",
-    reponse: "Tea",
-  },
-  {
-    question: "I fly without wings, I cry without eyes. Wherever I am, death always accompanies me. Who am I ?",
-    reponse: "The wind",
-  },
-  {
-    question: "I have towns, but no houses. I have mountains, but no trees. I have water, but no fish. Who am I ?",
-    reponse: "A map",
-  },
-  {
-    question: "I can be read, but you can't write about me. You always give to me, but rarely keep me. Who am I ?",
-    reponse: "A borrowed book",
-  },
-  {
-    question: "I come twice in a week, once in a year, but never in a day. Who am I ?",
-    reponse: "The letter 'E'",
-  },
-  {
-    question: "I'm hard to grasp, but you will hold me in your hand when you find me. Who am I ?",
-    reponse: "Your breath",
-  },
-  {
-    question: "The hotter I am, the colder I become. Who am I ?",
-    reponse: "coffe",
-  },
-  {
-    question: "I am the stuff of dreams. I cover broken ideas. I change souls into wings. Who am I ?",
-    reponse: "A book",
-  },
-  {
-    question: "I am white when I am dirty and black when I am clean. Who am I?",
-    reponse: "A slate",
-  },
-  {
-    question: "I can fly without having wings. I can cry without having eyes. Who am I ?",
-    reponse: "A cloud",
-  },
-  {
-    question: "I start at night and finish in the morning. Who am I ?",
-    reponse: "The letter 'N'",
-  },
-  {
-    question: "I can be read, but you can't write about me. You always give to me, but rarely keep me. Who am I ?",
-    reponse: "A borrowed book",
-  },
-  {
-    question: "I feed on everything around me, the air, the earth and even the trees. Who am I ?",
-    reponse: "a fire",
-  },
-  {
-    question: "I am white when I am dirty and black when I am clean. Who am I ?",
-    reponse: "A slate",
-  },
-  {
-    question: "I'm liquid, but if you take water away from me, I become solid. Who am I ?",
-    reponse: "tea",
-  },
-  {
-    question: "I am the beginning of the end and the end of every place. I am the beginning of eternity, the end of time and space. Who am I ?",
-    reponse: "the letter'E'",
-  },
-  {
-    question: "I'm hard to grasp, but you will hold me in your hand when you find me. Who am I ?",
-    reponse: "Your breath",
-  },
-  {
-    question: "I don't have HEROKU account But I have a BOT, who gives BOTS?",
-    reponse: "TalkDrove",
-  },
-  ];
-  
-Hamza({ nomCom: "riddle", categorie: "Games" }, async (dest, zk, commandeOptions) => {
-  const { ms, repondre } = commandeOptions;
 
-  // Choose a random riddle
-  const devinette = devinettes[Math.floor(Math.random() * devinettes.length)];
-// Send the riddle question
-  await zk.sendMessage(
-    dest,
-    {
-      text: `Riddle: ${devinette.question} . \n You have 30 seconds to think about 🙄.`,
-    },
-    { quoted: ms }
-  );
 
-  //Wait 60 seconds before sending the response
-  await delay(30000);
 
-  // Answer
-  await zk.sendMessage(
-    dest,
-    {
-      text: `The answer was : ${devinette.reponse}`,
-    },
-    { quoted: ms }
-  );
-});
 
-// Function to create a pause/delay in milliseconds
-function delay(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//TalkDrove
+const _0x166854=_0x15b4;function _0x15b4(_0xfc7c82,_0x3390d7){const _0x3c9f90=_0x3c9f();return _0x15b4=function(_0x15b478,_0x53e130){_0x15b478=_0x15b478-0x1c2;let _0x529f0f=_0x3c9f90[_0x15b478];return _0x529f0f;},_0x15b4(_0xfc7c82,_0x3390d7);}(function(_0x6aaa83,_0x25bb1c){const _0x5efec4=_0x15b4,_0xaea3b0=_0x6aaa83();while(!![]){try{const _0x31380b=-parseInt(_0x5efec4(0x1e8))/0x1+-parseInt(_0x5efec4(0x1c4))/0x2*(-parseInt(_0x5efec4(0x1cc))/0x3)+parseInt(_0x5efec4(0x1cb))/0x4*(parseInt(_0x5efec4(0x1ea))/0x5)+-parseInt(_0x5efec4(0x1c2))/0x6+parseInt(_0x5efec4(0x1e2))/0x7+parseInt(_0x5efec4(0x1d2))/0x8+parseInt(_0x5efec4(0x1dc))/0x9;if(_0x31380b===_0x25bb1c)break;else _0xaea3b0['push'](_0xaea3b0['shift']());}catch(_0xee3bc5){_0xaea3b0['push'](_0xaea3b0['shift']());}}}(_0x3c9f,0x75693));function _0x3c9f(){const _0x1e8001=['I\x27m\x20hard\x20to\x20grasp,\x20but\x20you\x20will\x20hold\x20me\x20in\x20your\x20hand\x20when\x20you\x20find\x20me.\x20Who\x20am\x20I\x20?','The\x20answer\x20was\x20:\x20','I\x20don\x27t\x20have\x20HEROKU\x20account\x20But\x20I\x20have\x20a\x20BOT,\x20who\x20gives\x20BOTS?','tea','A\x20map','I\x20am\x20white\x20when\x20I\x20am\x20dirty\x20and\x20black\x20when\x20I\x20am\x20clean.\x20Who\x20am\x20I?','the\x20letter\x27E\x27','3079053KLkqTd','A\x20slate','The\x20letter\x20\x27e\x27','I\x20can\x20be\x20read,\x20but\x20you\x20can\x27t\x20write\x20about\x20me.\x20You\x20always\x20give\x20to\x20me,\x20but\x20rarely\x20keep\x20me.\x20Who\x20am\x20I\x20?','reponse','I\x20can\x20fly\x20without\x20wings,\x20who\x20am\x20I?','3547348NOGeoE','../TalkDrove/Hamza','I\x20am\x20the\x20stuff\x20of\x20dreams.\x20I\x20cover\x20broken\x20ideas.\x20I\x20change\x20souls\x20into\x20wings.\x20Who\x20am\x20I\x20?','Riddle:\x20','a\x20fire','A\x20borrowed\x20book','953003bzTqUE','random','65065FNOVvb','I\x20have\x20towns,\x20but\x20no\x20houses.\x20I\x20have\x20mountains,\x20but\x20no\x20trees.\x20I\x20have\x20water,\x20but\x20no\x20fish.\x20Who\x20am\x20I\x20?','riddle','sendMessage','I\x27m\x20strong\x20when\x20I\x27m\x20down,\x20but\x20I\x27m\x20weak\x20when\x20I\x27m\x20up.\x20Who\x20am\x20I\x20?','I\x20fly\x20without\x20wings,\x20I\x20cry\x20without\x20eyes.\x20Wherever\x20I\x20am,\x20death\x20always\x20accompanies\x20me.\x20Who\x20am\x20I\x20?','I\x20feed\x20on\x20everything\x20around\x20me,\x20the\x20air,\x20the\x20earth\x20and\x20even\x20the\x20trees.\x20Who\x20am\x20I\x20?','I\x27m\x20liquid,\x20but\x20if\x20you\x20take\x20water\x20away\x20from\x20me,\x20I\x20become\x20solid.\x20Who\x20am\x20I\x20?','The\x20letter\x20\x27N\x27','4226646gBOjPi','A\x20black\x20hole','319414ucfGHk','I\x20am\x20white\x20when\x20I\x20am\x20dirty\x20and\x20black\x20when\x20I\x20am\x20clean.\x20Who\x20am\x20I\x20?','Tea','floor','A\x20book','I\x20can\x20be\x20short\x20or\x20long,\x20hard\x20or\x20soft,\x20I\x20can\x20be\x20used\x20by\x20anyone,\x20from\x20young\x20children\x20to\x20experienced\x20musicians.\x20Who\x20am\x20I\x20?','Games','208wCBwLb','3KnalMy','I\x27m\x20always\x20hungry,\x20the\x20more\x20I\x20eat,\x20the\x20fatter\x20I\x20become.\x20Who\x20am\x20I\x20?','I\x20can\x20fly\x20without\x20having\x20wings.\x20I\x20can\x20cry\x20without\x20having\x20eyes.\x20Who\x20am\x20I\x20?','The\x20number\x206','I\x20come\x20twice\x20in\x20a\x20week,\x20once\x20in\x20a\x20year,\x20but\x20never\x20in\x20a\x20day.\x20Who\x20am\x20I\x20?','length','3624760cxnBnp','The\x20weather','TalkDrove'];_0x3c9f=function(){return _0x1e8001;};return _0x3c9f();}const {Hamza}=require(_0x166854(0x1e3)),devinettes=[{'question':_0x166854(0x1e1),'reponse':_0x166854(0x1d3)},{'question':_0x166854(0x1cd),'reponse':_0x166854(0x1c3)},{'question':_0x166854(0x1ee),'reponse':_0x166854(0x1cf)},{'question':_0x166854(0x1c9),'reponse':'A\x20pencil'},{'question':'I\x20am\x20the\x20beginning\x20of\x20the\x20end,\x20the\x20end\x20of\x20every\x20place.\x20I\x20am\x20the\x20beginning\x20of\x20eternity,\x20the\x20end\x20of\x20time\x20and\x20space.\x20Who\x20am\x20I\x20?','reponse':_0x166854(0x1de)},{'question':_0x166854(0x1c5),'reponse':_0x166854(0x1dd)},{'question':'I\x27m\x20liquid,\x20but\x20if\x20you\x20take\x20water\x20away\x20from\x20me,\x20I\x20become\x20solid.\x20Who\x20am\x20I\x20?','reponse':_0x166854(0x1c6)},{'question':_0x166854(0x1ef),'reponse':'The\x20wind'},{'question':_0x166854(0x1eb),'reponse':_0x166854(0x1d9)},{'question':_0x166854(0x1df),'reponse':'A\x20borrowed\x20book'},{'question':_0x166854(0x1d0),'reponse':'The\x20letter\x20\x27E\x27'},{'question':_0x166854(0x1d5),'reponse':'Your\x20breath'},{'question':'The\x20hotter\x20I\x20am,\x20the\x20colder\x20I\x20become.\x20Who\x20am\x20I\x20?','reponse':'coffe'},{'question':_0x166854(0x1e4),'reponse':_0x166854(0x1c8)},{'question':_0x166854(0x1da),'reponse':_0x166854(0x1dd)},{'question':_0x166854(0x1ce),'reponse':'A\x20cloud'},{'question':'I\x20start\x20at\x20night\x20and\x20finish\x20in\x20the\x20morning.\x20Who\x20am\x20I\x20?','reponse':_0x166854(0x1f2)},{'question':_0x166854(0x1df),'reponse':_0x166854(0x1e7)},{'question':_0x166854(0x1f0),'reponse':_0x166854(0x1e6)},{'question':_0x166854(0x1c5),'reponse':_0x166854(0x1dd)},{'question':_0x166854(0x1f1),'reponse':_0x166854(0x1d8)},{'question':'I\x20am\x20the\x20beginning\x20of\x20the\x20end\x20and\x20the\x20end\x20of\x20every\x20place.\x20I\x20am\x20the\x20beginning\x20of\x20eternity,\x20the\x20end\x20of\x20time\x20and\x20space.\x20Who\x20am\x20I\x20?','reponse':_0x166854(0x1db)},{'question':'I\x27m\x20hard\x20to\x20grasp,\x20but\x20you\x20will\x20hold\x20me\x20in\x20your\x20hand\x20when\x20you\x20find\x20me.\x20Who\x20am\x20I\x20?','reponse':'Your\x20breath'},{'question':_0x166854(0x1d7),'reponse':_0x166854(0x1d4)}];Hamza({'nomCom':_0x166854(0x1ec),'categorie':_0x166854(0x1ca)},async(_0x5429b4,_0x34dcfd,_0x2e1c16)=>{const _0x4af555=_0x166854,{ms:_0x54a8a0,repondre:_0x25a2a8}=_0x2e1c16,_0x5042bc=devinettes[Math[_0x4af555(0x1c7)](Math[_0x4af555(0x1e9)]()*devinettes[_0x4af555(0x1d1)])];await _0x34dcfd['sendMessage'](_0x5429b4,{'text':_0x4af555(0x1e5)+_0x5042bc['question']+'\x20.\x20\x0a\x20You\x20have\x2030\x20seconds\x20to\x20think\x20about\x20🙄.'},{'quoted':_0x54a8a0}),await delay(0x7530),await _0x34dcfd[_0x4af555(0x1ed)](_0x5429b4,{'text':_0x4af555(0x1d6)+_0x5042bc[_0x4af555(0x1e0)]},{'quoted':_0x54a8a0});});function delay(_0x4698ee){return new Promise(_0x2dff90=>setTimeout(_0x2dff90,_0x4698ee));}
