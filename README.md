@@ -1,5 +1,5 @@
 
-## <p align="center"> BYTE-MD-LITE WHATSAPP BOT
+## <p align="center"> BYTE-V.LITE WHATSAPP BOT
 <br>
 <strong>Looking for the BYTE-MD? then</strong>
 <a href="https://github.com/HyHamza/BYTE-MD">Click Here</a>
