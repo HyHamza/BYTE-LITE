@@ -1,39 +1,43 @@
-const yts = require('yt-search');
-const { ytdown } = require('nayan-media-downloader');
+const yts =  require('yt-search');
+const ytdl = require('ytdl-core');
 const fs = require('fs');
 
-/* Function to get YouTube video data */
 
-async function getYoutubeLink(key) {
+/* fonction pour avoir les données d'une recherche*/
+
+async function getytlink(key) {
   try {
-    const result = await yts(key);
-    const videos = result.videos;
-    const choice = videos[0];
+    const resultat = await yts(key);
+    const videos = resultat.videos;
+    const choix = videos[0];
     return {
-      link: choice.url,
-      thumbnail: choice.thumbnail,
-      title: choice.title,
-      duration: choice.timestamp,
-      id: choice.videoId,
-    };
-  } catch (error) {
-    console.error('Error searching YouTube:', error);
+        lien : choix.url ,
+       affiche : choix.thumbnail,
+      titre : choix.title,
+      duree : choix.timestamp,
+      id : choix.videoId,
+    }  ;
+  } catch (erreur) {
+    console.error('Erreur lors de la recherche YouTube :', erreur);
     return null;
   }
 }
 
-module.exports = { getYoutubeLink };
+module.exports = getytlink;
 
-/* Function to download videos */
+/* fonction pour télécharger les videos avec ytdl-core*/
 
-async function downloadYoutubeVideo(url) {
-  try {
-    const videoUrl = await ytdown(url);
-    return videoUrl;
-  } catch (error) {
-    console.error('Error downloading video:', error);
-    throw new Error('An error occurred while downloading the video.');
-  }
+
+
+
+
+async function ytdwn(url) {
+  const info = await ytdl.getInfo(url);
+  const format = ytdl.chooseFormat(info.formats, { quality: '18' });
+  const video = ytdl.downloadFromInfo(info, format)
+
+    return  video ;
+  
 }
 
-module.exports = { downloadYoutubeVideo };
+module.exports = ytdwn;
