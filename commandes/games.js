@@ -1,216 +1,452 @@
-const { Hamza } = require("../TalkDrove/Hamza");
-const axios = require('axios');
-const translate = require('../TalkDrove/translation');
+//TalkDrove
 
-Hamza({
-    commandName: "chifumi",
-    category: "Games",
-    reaction: "📺"
-},
-async (sourceMessage, zk, commandOptions) => {
-    const { reply, ms, messageAuthor, repliedMessageAuthor, repliedMessage, arg, botId } = commandOptions;
 
-    if (repliedMessage) {
-        zk.sendMessage(sourceMessage, {
-            text: `@${messageAuthor.split('@')[0]} invites @${repliedMessageAuthor.split('@')[0]} to play the rock-paper-scissors game; To accept the challenge, type yes`,
-            mentions: [messageAuthor, repliedMessageAuthor]
-        });
 
-        try {
-            const replyInvite = await zk.awaitForMessage({
-                sender: repliedMessageAuthor,
-                chatJid: sourceMessage,
-                timeout: 30000 // 30 seconds
-            });
-            console.log(replyInvite);
 
-            if (replyInvite.message.conversation.toLowerCase() === 'yes' || replyInvite.message.extendedTextMessage.text.toLowerCase() === 'yes') {
 
-                let msg1 = `*Player 1:* @${repliedMessageAuthor.split('@')[0]}
-*Player 2:* @${messageAuthor.split('@')[0]}
 
-*Rules:* The game will start soon; you have a maximum of 1 minute each to make a choice in our private chat;`;
 
-                zk.sendMessage(sourceMessage, { text: msg1, mentions: [messageAuthor, repliedMessageAuthor] });
 
-                let msg2 = `You have 3 choices:
 
-                rock
-                paper
-                scissors
 
-                Please send your choice`;
-                let players = [messageAuthor, repliedMessageAuthor];
-                let choices = [];
 
-                try {
 
-                    for (const player of players) {
 
-                        zk.sendMessage(sourceMessage, {
-                            text: `@${player.split("@")[0]} Please go to this chat to make a choice https://wa.me/${botId.split('@')[0]} `,
-                            mentions: [player]
-                        });
-                        zk.sendMessage(player, { text: msg2 });
 
-                        const receivedMsg = await zk.awaitForMessage({
-                            sender: player,
-                            chatJid: player,
-                            timeout: 30000 // 30 seconds
-                        });
-                        console.log('Here is the message from' + ' ' + player);
-                        console.log(receivedMsg);
 
-                        choices.push(receivedMsg.message.extendedTextMessage.text.toLowerCase());
-                    }
 
-                    console.log(choices);
-                    const possibleChoices = ["rock", "paper", "scissors"];
 
-                    const player1Choice = choices[0];
-                    const player2Choice = choices[1];
 
-                    if (!possibleChoices.includes(player1Choice) || !possibleChoices.includes(player2Choice)) {
-                        // Handle case where choices are not valid
-                        zk.sendMessage(sourceMessage, {
-                            text: `*Player 1:* @${repliedMessageAuthor.split('@')[0]}
-*Player 2:* @${messageAuthor.split('@')[0]}
 
-*Result:* One or both choices are not valid.`,
-                            mentions: [messageAuthor, repliedMessageAuthor]
-                        });
 
-                    } else if (player1Choice === player2Choice) {
-                        // It's a tie
-                        zk.sendMessage(sourceMessage, {
-                            text: `*Player 1:* @${repliedMessageAuthor.split('@')[0]} chose *${player2Choice}* 
-*Player 2:* @${messageAuthor.split('@')[0]} chose *${player1Choice}*
 
-Result: It's a tie`,
-                            mentions: [messageAuthor, repliedMessageAuthor]
-                        });
-                    } else if (
-                        (player1Choice === "rock" && player2Choice === "scissors") ||
-                        (player1Choice === "paper" && player2Choice === "rock") ||
-                        (player1Choice === "scissors" && player2Choice === "paper")
-                    ) {
-                        // Player 1 wins
-                        zk.sendMessage(sourceMessage, {
-                            text: `*Player 1:* @${repliedMessageAuthor.split('@')[0]} chose *${player2Choice}* 
-*Player 2:* @${messageAuthor.split('@')[0]} chose *${player1Choice}*
 
-*Result:* @${messageAuthor.split('@')[0]} wins`,
-                            mentions: [messageAuthor, repliedMessageAuthor]
-                        });
-                    } else {
-                        // Player 2 wins
-                        zk.sendMessage(sourceMessage, {
-                            text: `*Player 1:* @${repliedMessageAuthor.split('@')[0]} chose *${player2Choice}* 
-*Player 2:* @${messageAuthor.split('@')[0]} chose *${player1Choice}*
 
-*Result:* @${repliedMessageAuthor.split('@')[0]} wins`,
-                            mentions: [messageAuthor, repliedMessageAuthor]
-                        });
-                    }
 
-                } catch (error) {
-                    if (error.message === 'Timeout') {
-                        // Timeout
-                        zk.sendMessage(sourceMessage, {
-                            text: `*Player 1:* @${repliedMessageAuthor.split('@')[0]}
-*Player 2:* @${messageAuthor.split('@')[0]}
 
-*Result:* Our players took too long to decide; Therefore, the game is canceled`,
-                            mentions: [messageAuthor, repliedMessageAuthor]
-                        });
-                    } else {
-                        // Handle other errors if necessary
-                        console.error(error);
-                    }
-                }
 
-            } else {
-                reply('Invitation refused');
-            }
 
-        } catch (error) {
-            if (error.message === 'Timeout') {
-                // Timeout
-                zk.sendMessage(sourceMessage, {
-                    text: `@${repliedMessageAuthor.split('@')[0]} took too long to respond to the invitation from @${messageAuthor.split('@')[0]}; Therefore, the game is canceled`,
-                    mentions: [messageAuthor, repliedMessageAuthor]
-                });
-            } else {
-                // Handle other errors if necessary
-                console.error(error);
-            }
-        }
-    } else {
-        reply('Chifumi is a rock-paper-scissors game; you need a friend to play. Mention their message when sending chifumi to invite them');
-    }
-});
 
-Hamza(
-    { commandName: "quiz", category: "Games", reaction: "👨🏿‍💻" },
-    async (sourceMessage, zk, commandOptions) => {
-        const { reply, messageAuthor } = commandOptions;
 
-        try {
-            let quiz = await axios.get("https://quizapi.jomoreschi.fr/api/v1/quiz?limit=1&difficulty=easy");
 
-            let msg = `     BYTE-MD-Quiz-Games
 
-*Category:* ${await translate(quiz.data.quizzes[0].category, { to: 'en' })}
-*Question:* ${await translate(quiz.data.quizzes[0].question, { to: 'en' })}\n\n*Answers:*\n`;
 
-            let Answers = [];
-            for (const answer of quiz.data.quizzes[0].badAnswers) {
-                Answers.push(answer);
-            }
 
-            Answers.push(quiz.data.quizzes[0].answer);
 
-            async function shuffleArray(array) {
-                const shuffledArray = array.slice();
 
-                for (let i = shuffledArray.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
-                }
 
-                return shuffledArray;
-            }
 
-            let choices = await shuffleArray(Answers);
 
-            for (let i = 0; i < choices.length; i++) {
-                msg += `*${i + 1}:* ${choices[i]}\n`;
-            }
 
-            msg += `\nSend the number of the right answer`;
 
-            reply(msg);
 
-            let response = await zk.awaitForMessage({
-                sender: messageAuthor,
-                chatJid: sourceMessage,
-                timeout: 15000 // 30 seconds
-            });
-            let responseText;
-            try {
-                responseText = response.message.extendedTextMessage.text;
-            } catch {
-                responseText = response.message.conversation;
-            }
 
-            if (choices[responseText - 1] === quiz.data.quizzes[0].answer) {
-                reply("Great, good answer!");
-            } else {
-                reply("Bad answer");
-            }
 
-        } catch (error) {
-            console.log(error);
-        }
-    }
-);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//TalkDrove
+function _0x56ca(){const _0x120b5b=['\x20took\x20too\x20long\x20to\x20respond\x20to\x20the\x20invitation\x20from\x20@','awaitForMessage','../TalkDrove/translation','Chifumi\x20is\x20a\x20rock-paper-scissors\x20game;\x20you\x20need\x20a\x20friend\x20to\x20play.\x20Mention\x20their\x20message\x20when\x20sending\x20chifumi\x20to\x20invite\x20them','../TalkDrove/Hamza','\x0a\x0a*Result:*\x20One\x20or\x20both\x20choices\x20are\x20not\x20valid.','yes','text',';\x20Therefore,\x20the\x20game\x20is\x20canceled','conversation','\x0a*Question:*\x20','push','\x20chose\x20*','badAnswers','*\x0a\x0a*Result:*\x20@','148156zQaYjL','scissors','log','length','\x20\x20\x20\x20\x20BYTE-MD-Quiz-Games\x0a\x0a*Category:*\x20','split','1KMLIpG','\x20wins','paper',':*\x20','47120XukNGK','axios','103887WTZitk','category','Invitation\x20refused','sendMessage','*\x20\x0a*Player\x202:*\x20@','\x0a*Player\x202:*\x20@','\x20Please\x20go\x20to\x20this\x20chat\x20to\x20make\x20a\x20choice\x20https://wa.me/','get','data','\x0a\x0a*Result:*\x20Our\x20players\x20took\x20too\x20long\x20to\x20decide;\x20Therefore,\x20the\x20game\x20is\x20canceled','1063538UhhzAk','rock','\x20invites\x20@','*Player\x201:*\x20@','toLowerCase','Games','extendedTextMessage','message','answer','Great,\x20good\x20answer!','quizzes','chifumi','\x0a\x0a*Rules:*\x20The\x20game\x20will\x20start\x20soon;\x20you\x20have\x20a\x20maximum\x20of\x201\x20minute\x20each\x20to\x20make\x20a\x20choice\x20in\x20our\x20private\x20chat;','https://quizapi.jomoreschi.fr/api/v1/quiz?limit=1&difficulty=easy','random','floor','32997XDzfhr','question','Timeout','470154gzoDJs','300MtaqAH','👨🏿‍💻','45690NmsWKO','error','You\x20have\x203\x20choices:\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20rock\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20paper\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20scissors\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20Please\x20send\x20your\x20choice','Bad\x20answer','95fTcAFv'];_0x56ca=function(){return _0x120b5b;};return _0x56ca();}const _0x2de4f1=_0x2c1d;(function(_0x15703b,_0x26410a){const _0x207961=_0x2c1d,_0x47fe49=_0x15703b();while(!![]){try{const _0x3b1969=-parseInt(_0x207961(0x13c))/0x1*(parseInt(_0x207961(0x11f))/0x2)+-parseInt(_0x207961(0x11c))/0x3+parseInt(_0x207961(0x136))/0x4+-parseInt(_0x207961(0x126))/0x5*(-parseInt(_0x207961(0x122))/0x6)+-parseInt(_0x207961(0x14c))/0x7+parseInt(_0x207961(0x140))/0x8+parseInt(_0x207961(0x142))/0x9*(parseInt(_0x207961(0x120))/0xa);if(_0x3b1969===_0x26410a)break;else _0x47fe49['push'](_0x47fe49['shift']());}catch(_0x1a76d2){_0x47fe49['push'](_0x47fe49['shift']());}}}(_0x56ca,0x212d6));function _0x2c1d(_0xdb5685,_0x1962b7){const _0x56ca91=_0x56ca();return _0x2c1d=function(_0x2c1df4,_0x44ed74){_0x2c1df4=_0x2c1df4-0x119;let _0x361165=_0x56ca91[_0x2c1df4];return _0x361165;},_0x2c1d(_0xdb5685,_0x1962b7);}const {Hamza}=require(_0x2de4f1(0x12b)),axios=require(_0x2de4f1(0x141)),translate=require(_0x2de4f1(0x129));Hamza({'commandName':_0x2de4f1(0x157),'category':_0x2de4f1(0x151),'reaction':'📺'},async(_0x12f8e8,_0x4ed51d,_0x5b922f)=>{const _0x1d4b80=_0x2de4f1,{reply:_0x3e2e1d,ms:_0x2c47a0,messageAuthor:_0x19f05e,repliedMessageAuthor:_0x5b2291,repliedMessage:_0x50398c,arg:_0x239277,botId:_0xb72d9}=_0x5b922f;if(_0x50398c){_0x4ed51d[_0x1d4b80(0x145)](_0x12f8e8,{'text':'@'+_0x19f05e[_0x1d4b80(0x13b)]('@')[0x0]+_0x1d4b80(0x14e)+_0x5b2291[_0x1d4b80(0x13b)]('@')[0x0]+'\x20to\x20play\x20the\x20rock-paper-scissors\x20game;\x20To\x20accept\x20the\x20challenge,\x20type\x20yes','mentions':[_0x19f05e,_0x5b2291]});try{const _0x326fc4=await _0x4ed51d[_0x1d4b80(0x128)]({'sender':_0x5b2291,'chatJid':_0x12f8e8,'timeout':0x7530});console[_0x1d4b80(0x138)](_0x326fc4);if(_0x326fc4[_0x1d4b80(0x153)][_0x1d4b80(0x130)][_0x1d4b80(0x150)]()===_0x1d4b80(0x12d)||_0x326fc4[_0x1d4b80(0x153)]['extendedTextMessage'][_0x1d4b80(0x12e)][_0x1d4b80(0x150)]()==='yes'){let _0x46543f=_0x1d4b80(0x14f)+_0x5b2291[_0x1d4b80(0x13b)]('@')[0x0]+_0x1d4b80(0x147)+_0x19f05e[_0x1d4b80(0x13b)]('@')[0x0]+_0x1d4b80(0x158);_0x4ed51d[_0x1d4b80(0x145)](_0x12f8e8,{'text':_0x46543f,'mentions':[_0x19f05e,_0x5b2291]});let _0x268546=_0x1d4b80(0x124),_0x2f9723=[_0x19f05e,_0x5b2291],_0x130cda=[];try{for(const _0x2874bc of _0x2f9723){_0x4ed51d[_0x1d4b80(0x145)](_0x12f8e8,{'text':'@'+_0x2874bc[_0x1d4b80(0x13b)]('@')[0x0]+_0x1d4b80(0x148)+_0xb72d9[_0x1d4b80(0x13b)]('@')[0x0]+'\x20','mentions':[_0x2874bc]}),_0x4ed51d[_0x1d4b80(0x145)](_0x2874bc,{'text':_0x268546});const _0x57d15d=await _0x4ed51d[_0x1d4b80(0x128)]({'sender':_0x2874bc,'chatJid':_0x2874bc,'timeout':0x7530});console['log']('Here\x20is\x20the\x20message\x20from'+'\x20'+_0x2874bc),console['log'](_0x57d15d),_0x130cda[_0x1d4b80(0x132)](_0x57d15d['message'][_0x1d4b80(0x152)][_0x1d4b80(0x12e)][_0x1d4b80(0x150)]());}console[_0x1d4b80(0x138)](_0x130cda);const _0xfab5c5=['rock',_0x1d4b80(0x13e),_0x1d4b80(0x137)],_0x587734=_0x130cda[0x0],_0x37214a=_0x130cda[0x1];if(!_0xfab5c5['includes'](_0x587734)||!_0xfab5c5['includes'](_0x37214a))_0x4ed51d[_0x1d4b80(0x145)](_0x12f8e8,{'text':_0x1d4b80(0x14f)+_0x5b2291[_0x1d4b80(0x13b)]('@')[0x0]+_0x1d4b80(0x147)+_0x19f05e[_0x1d4b80(0x13b)]('@')[0x0]+_0x1d4b80(0x12c),'mentions':[_0x19f05e,_0x5b2291]});else{if(_0x587734===_0x37214a)_0x4ed51d[_0x1d4b80(0x145)](_0x12f8e8,{'text':_0x1d4b80(0x14f)+_0x5b2291[_0x1d4b80(0x13b)]('@')[0x0]+'\x20chose\x20*'+_0x37214a+_0x1d4b80(0x146)+_0x19f05e[_0x1d4b80(0x13b)]('@')[0x0]+'\x20chose\x20*'+_0x587734+'*\x0a\x0aResult:\x20It\x27s\x20a\x20tie','mentions':[_0x19f05e,_0x5b2291]});else _0x587734===_0x1d4b80(0x14d)&&_0x37214a===_0x1d4b80(0x137)||_0x587734===_0x1d4b80(0x13e)&&_0x37214a==='rock'||_0x587734===_0x1d4b80(0x137)&&_0x37214a==='paper'?_0x4ed51d[_0x1d4b80(0x145)](_0x12f8e8,{'text':_0x1d4b80(0x14f)+_0x5b2291[_0x1d4b80(0x13b)]('@')[0x0]+_0x1d4b80(0x133)+_0x37214a+_0x1d4b80(0x146)+_0x19f05e[_0x1d4b80(0x13b)]('@')[0x0]+_0x1d4b80(0x133)+_0x587734+_0x1d4b80(0x135)+_0x19f05e[_0x1d4b80(0x13b)]('@')[0x0]+_0x1d4b80(0x13d),'mentions':[_0x19f05e,_0x5b2291]}):_0x4ed51d[_0x1d4b80(0x145)](_0x12f8e8,{'text':_0x1d4b80(0x14f)+_0x5b2291['split']('@')[0x0]+_0x1d4b80(0x133)+_0x37214a+_0x1d4b80(0x146)+_0x19f05e[_0x1d4b80(0x13b)]('@')[0x0]+_0x1d4b80(0x133)+_0x587734+_0x1d4b80(0x135)+_0x5b2291[_0x1d4b80(0x13b)]('@')[0x0]+_0x1d4b80(0x13d),'mentions':[_0x19f05e,_0x5b2291]});}}catch(_0x3d4306){_0x3d4306[_0x1d4b80(0x153)]===_0x1d4b80(0x11e)?_0x4ed51d[_0x1d4b80(0x145)](_0x12f8e8,{'text':'*Player\x201:*\x20@'+_0x5b2291[_0x1d4b80(0x13b)]('@')[0x0]+'\x0a*Player\x202:*\x20@'+_0x19f05e['split']('@')[0x0]+_0x1d4b80(0x14b),'mentions':[_0x19f05e,_0x5b2291]}):console[_0x1d4b80(0x123)](_0x3d4306);}}else _0x3e2e1d(_0x1d4b80(0x144));}catch(_0x1fc582){_0x1fc582['message']===_0x1d4b80(0x11e)?_0x4ed51d['sendMessage'](_0x12f8e8,{'text':'@'+_0x5b2291['split']('@')[0x0]+_0x1d4b80(0x127)+_0x19f05e[_0x1d4b80(0x13b)]('@')[0x0]+_0x1d4b80(0x12f),'mentions':[_0x19f05e,_0x5b2291]}):console[_0x1d4b80(0x123)](_0x1fc582);}}else _0x3e2e1d(_0x1d4b80(0x12a));}),Hamza({'commandName':'quiz','category':_0x2de4f1(0x151),'reaction':_0x2de4f1(0x121)},async(_0x4a1235,_0x1035a6,_0x83917d)=>{const _0x4d43b0=_0x2de4f1,{reply:_0x31bd04,messageAuthor:_0x3777bc}=_0x83917d;try{let _0x21ceeb=await axios[_0x4d43b0(0x149)](_0x4d43b0(0x119)),_0x32774a=_0x4d43b0(0x13a)+await translate(_0x21ceeb[_0x4d43b0(0x14a)][_0x4d43b0(0x156)][0x0][_0x4d43b0(0x143)],{'to':'en'})+_0x4d43b0(0x131)+await translate(_0x21ceeb[_0x4d43b0(0x14a)][_0x4d43b0(0x156)][0x0][_0x4d43b0(0x11d)],{'to':'en'})+'\x0a\x0a*Answers:*\x0a',_0xe1d397=[];for(const _0x282379 of _0x21ceeb[_0x4d43b0(0x14a)]['quizzes'][0x0][_0x4d43b0(0x134)]){_0xe1d397['push'](_0x282379);}_0xe1d397['push'](_0x21ceeb[_0x4d43b0(0x14a)][_0x4d43b0(0x156)][0x0][_0x4d43b0(0x154)]);async function _0x21723a(_0xc7c7d8){const _0x289d39=_0x4d43b0,_0x108470=_0xc7c7d8['slice']();for(let _0x45677f=_0x108470[_0x289d39(0x139)]-0x1;_0x45677f>0x0;_0x45677f--){const _0x4ecf6e=Math[_0x289d39(0x11b)](Math[_0x289d39(0x11a)]()*(_0x45677f+0x1));[_0x108470[_0x45677f],_0x108470[_0x4ecf6e]]=[_0x108470[_0x4ecf6e],_0x108470[_0x45677f]];}return _0x108470;}let _0x556392=await _0x21723a(_0xe1d397);for(let _0x3b2df1=0x0;_0x3b2df1<_0x556392[_0x4d43b0(0x139)];_0x3b2df1++){_0x32774a+='*'+(_0x3b2df1+0x1)+_0x4d43b0(0x13f)+_0x556392[_0x3b2df1]+'\x0a';}_0x32774a+='\x0aSend\x20the\x20number\x20of\x20the\x20right\x20answer',_0x31bd04(_0x32774a);let _0x4c0046=await _0x1035a6[_0x4d43b0(0x128)]({'sender':_0x3777bc,'chatJid':_0x4a1235,'timeout':0x3a98}),_0x35600d;try{_0x35600d=_0x4c0046[_0x4d43b0(0x153)][_0x4d43b0(0x152)][_0x4d43b0(0x12e)];}catch{_0x35600d=_0x4c0046[_0x4d43b0(0x153)][_0x4d43b0(0x130)];}_0x556392[_0x35600d-0x1]===_0x21ceeb[_0x4d43b0(0x14a)][_0x4d43b0(0x156)][0x0][_0x4d43b0(0x154)]?_0x31bd04(_0x4d43b0(0x155)):_0x31bd04(_0x4d43b0(0x125));}catch(_0x256e01){console[_0x4d43b0(0x138)](_0x256e01);}});
