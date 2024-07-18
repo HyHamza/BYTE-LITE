@@ -1,100 +1,452 @@
-const { Hamza } = require('../TalkDrove/Hamza');
-const traduire = require("../TalkDrove/traduction");
-const { default: axios } = require('axios');
-//const conf = require('../set');
+//TalkDrove
 
 
 
 
-Hamza({ nomCom: "bot", reaction: "👻", categorie: "AI" }, async (dest, zk, commandeOptions) => {
-
-  const { repondre, ms, arg } = commandeOptions;
-
-  if (!arg || !arg[0]) { return repondre("Hii, How are you?") }
-  //var quest = arg.join(' ');
-  try {
-
-
-    const message = await traduire(arg.join(' '), { to: 'en' });
-    console.log(message)
-    fetch(`http://api.brainshop.ai/get?bid=177607&key=NwzhALqeO1kubFVD&uid=[uid]&msg=${message}`)
-      .then(response => response.json())
-      .then(data => {
-        const botResponse = data.cnt;
-        console.log(botResponse);
-
-        traduire(botResponse, { to: 'en' })
-          .then(translatedResponse => {
-            repondre(translatedResponse);
-          })
-          .catch(error => {
-            console.error('Error when translating into French :', error);
-            repondre('Error when translating into French');
-          });
-      })
-      .catch(error => {
-        console.error('Error requesting BrainShop :', error);
-        repondre('Error requesting BrainShop');
-      });
-
-  } catch (e) { repondre("oops an error : " + e) }
-
-
-});
 
 
 
-Hamza({ nomCom: "dalle", reaction: "🤡", categorie: "AI" }, async (dest, zk, commandeOptions) => {
-  const { repondre, arg, ms } = commandeOptions;
-
-  try {
-    if (!arg || arg.length === 0) {
-      return repondre(`Please enter the necessary information to generate the image.`);
-    }
-
-    // Regrouper les arguments en une seule chaîne séparée par "-"
-    const image = arg.join(' ');
-    const response = await axios.get(`https://vihangayt.me/tools/photoleap?q=${image}`);
-
-    const data = response.data;
-    let caption = '*powered by TALKDROVE*';
-
-    if (data.status && data.owner && data.data) {
-      // Utiliser les données retournées par le service
-      const imageUrl = data.data;
-      zk.sendMessage(dest, { image: { url: imageUrl }, caption: caption }, { quoted: ms });
-    } else {
-      repondre("Error during image generation.");
-    }
-  } catch (error) {
-    console.error('Erreur:', error.message || 'Une erreur s\'est produite');
-    repondre("Oops, an error occurred while processing your request");
-  }
-});
-
-Hamza({ nomCom: "gpt", reaction: "🎃", categorie: "AI" }, async (dest, zk, commandeOptions) => {
-  const { repondre, arg, ms } = commandeOptions;
-
-  try {
-    if (!arg || arg.length === 0) {
-      return repondre(`Please ask a question.`);
-    }
-
-    // Regrouper les arguments en une seule chaîne séparée par "-"
-    const question = arg.join(' ');
-    const response = `https://ultimetron.guruapi.tech/gpt3?prompt=${question}`;
-
-    const data = response.data;
-    if (data) {
-      repondre(data.data);
-    } else {
-      repondre("Error during response generation.");
-    }
-  } catch (error) {
-    console.error('Erreur:', error.message || 'Une erreur s\'est produite');
-    repondre("Oops, an error occurred while processing your request.");
-  }
-});
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//TalkDrove
+function _0x1a6e(_0x194919,_0x2f22dd){const _0x4e5700=_0x4e57();return _0x1a6e=function(_0x1a6e90,_0x44a81d){_0x1a6e90=_0x1a6e90-0x64;let _0x3037a4=_0x4e5700[_0x1a6e90];return _0x3037a4;},_0x1a6e(_0x194919,_0x2f22dd);}function _0x4e57(){const _0x1318ef=['https://ultimetron.guruapi.tech/gpt3?prompt=','catch','Une\x20erreur\x20s\x27est\x20produite','error','5629183ZrlwWc','45oKeXLf','Error\x20requesting\x20BrainShop','Oops,\x20an\x20error\x20occurred\x20while\x20processing\x20your\x20request','owner','../TalkDrove/Hamza','3516130ymudHo','https://vihangayt.me/tools/photoleap?q=','Erreur:','join','Please\x20ask\x20a\x20question.','20iybwYv','Error\x20requesting\x20BrainShop\x20:','Hii,\x20How\x20are\x20you?','sendMessage','Please\x20enter\x20the\x20necessary\x20information\x20to\x20generate\x20the\x20image.','1233684qNPVGS','5425976pSVdOG','oops\x20an\x20error\x20:\x20','then','length','gpt','*powered\x20by\x20TALKDROVE*','Error\x20when\x20translating\x20into\x20French','message','http://api.brainshop.ai/get?bid=177607&key=NwzhALqeO1kubFVD&uid=[uid]&msg=','1057605qdpbZO','1944228wnCYuz','json','log','41486oMLdNt','14XsHmjC','get','data','bot','Error\x20during\x20image\x20generation.','axios'];_0x4e57=function(){return _0x1318ef;};return _0x4e57();}const _0x5c95e0=_0x1a6e;(function(_0xbfd2ae,_0x50ff79){const _0x18404e=_0x1a6e,_0x104e2a=_0xbfd2ae();while(!![]){try{const _0xb8eb6c=parseInt(_0x18404e(0x7a))/0x1*(parseInt(_0x18404e(0x79))/0x2)+-parseInt(_0x18404e(0x75))/0x3+-parseInt(_0x18404e(0x6b))/0x4+parseInt(_0x18404e(0x66))/0x5*(parseInt(_0x18404e(0x76))/0x6)+parseInt(_0x18404e(0x84))/0x7+parseInt(_0x18404e(0x6c))/0x8+-parseInt(_0x18404e(0x85))/0x9*(parseInt(_0x18404e(0x8a))/0xa);if(_0xb8eb6c===_0x50ff79)break;else _0x104e2a['push'](_0x104e2a['shift']());}catch(_0x9d77fe){_0x104e2a['push'](_0x104e2a['shift']());}}}(_0x4e57,0x9eadd));const {Hamza}=require(_0x5c95e0(0x89)),traduire=require('../TalkDrove/traduction'),{default:axios}=require(_0x5c95e0(0x7f));Hamza({'nomCom':_0x5c95e0(0x7d),'reaction':'👻','categorie':'AI'},async(_0x551f98,_0x13d4f3,_0x45dc6a)=>{const _0x415a65=_0x5c95e0,{repondre:_0x559c5a,ms:_0x42e758,arg:_0x13678d}=_0x45dc6a;if(!_0x13678d||!_0x13678d[0x0])return _0x559c5a(_0x415a65(0x68));try{const _0x526e2f=await traduire(_0x13678d['join']('\x20'),{'to':'en'});console[_0x415a65(0x78)](_0x526e2f),fetch(_0x415a65(0x74)+_0x526e2f)['then'](_0xe73ed8=>_0xe73ed8[_0x415a65(0x77)]())[_0x415a65(0x6e)](_0x13396d=>{const _0x8ba114=_0x415a65,_0x4ba9ad=_0x13396d['cnt'];console[_0x8ba114(0x78)](_0x4ba9ad),traduire(_0x4ba9ad,{'to':'en'})[_0x8ba114(0x6e)](_0x2663f2=>{_0x559c5a(_0x2663f2);})[_0x8ba114(0x81)](_0x5ce2ee=>{const _0x378033=_0x8ba114;console[_0x378033(0x83)]('Error\x20when\x20translating\x20into\x20French\x20:',_0x5ce2ee),_0x559c5a(_0x378033(0x72));});})['catch'](_0x2fdc75=>{const _0x27010c=_0x415a65;console[_0x27010c(0x83)](_0x27010c(0x67),_0x2fdc75),_0x559c5a(_0x27010c(0x86));});}catch(_0xdf510b){_0x559c5a(_0x415a65(0x6d)+_0xdf510b);}}),Hamza({'nomCom':'dalle','reaction':'🤡','categorie':'AI'},async(_0x1016c6,_0x454458,_0x346531)=>{const _0x4afbe0=_0x5c95e0,{repondre:_0x59b3cb,arg:_0x1999b7,ms:_0x159e4f}=_0x346531;try{if(!_0x1999b7||_0x1999b7[_0x4afbe0(0x6f)]===0x0)return _0x59b3cb(_0x4afbe0(0x6a));const _0x5311fb=_0x1999b7[_0x4afbe0(0x64)]('\x20'),_0x123565=await axios[_0x4afbe0(0x7b)](_0x4afbe0(0x8b)+_0x5311fb),_0xd24ada=_0x123565[_0x4afbe0(0x7c)];let _0x474b72=_0x4afbe0(0x71);if(_0xd24ada['status']&&_0xd24ada[_0x4afbe0(0x88)]&&_0xd24ada[_0x4afbe0(0x7c)]){const _0x593fc2=_0xd24ada[_0x4afbe0(0x7c)];_0x454458[_0x4afbe0(0x69)](_0x1016c6,{'image':{'url':_0x593fc2},'caption':_0x474b72},{'quoted':_0x159e4f});}else _0x59b3cb(_0x4afbe0(0x7e));}catch(_0x4e65ae){console['error'](_0x4afbe0(0x8c),_0x4e65ae[_0x4afbe0(0x73)]||_0x4afbe0(0x82)),_0x59b3cb(_0x4afbe0(0x87));}}),Hamza({'nomCom':_0x5c95e0(0x70),'reaction':'🎃','categorie':'AI'},async(_0x13d017,_0x11b93c,_0x3c0eaf)=>{const _0x4bcd13=_0x5c95e0,{repondre:_0x42f6d0,arg:_0x792e02,ms:_0x27c976}=_0x3c0eaf;try{if(!_0x792e02||_0x792e02['length']===0x0)return _0x42f6d0(_0x4bcd13(0x65));const _0x266b70=_0x792e02[_0x4bcd13(0x64)]('\x20'),_0x60561f=_0x4bcd13(0x80)+_0x266b70,_0x5cee63=_0x60561f[_0x4bcd13(0x7c)];_0x5cee63?_0x42f6d0(_0x5cee63[_0x4bcd13(0x7c)]):_0x42f6d0('Error\x20during\x20response\x20generation.');}catch(_0x508fbe){console[_0x4bcd13(0x83)](_0x4bcd13(0x8c),_0x508fbe[_0x4bcd13(0x73)]||_0x4bcd13(0x82)),_0x42f6d0('Oops,\x20an\x20error\x20occurred\x20while\x20processing\x20your\x20request.');}});
