@@ -1,877 +1,452 @@
-module.exports = new StyleText();
-function StyleText() {
-  this.tools = {
-    flip: {
-      init: function () {
-        for (i in this.map) {
-          this.map[this.map[i]] = i;
-        }
-      },
-
-      encode: function (text) {
-        var ret = [],
-          ch;
-
-        for (var i = 0, len = text.length; i < len; i++) {
-          ch = text.charAt(i);
-          if (
-            i > 0 &&
-            (ch == "\u0324" ||
-              ch == "\u0317" ||
-              ch == "\u0316" ||
-              ch == "\u032e")
-          ) {
-            ch = this.map[text.charAt(i - 1) + ch];
-            ret.pop();
-          } else {
-            ch = this.map[ch];
-            if (typeof ch == "undefined") {
-              ch = text.charAt(i);
-            }
-          }
-
-          ret.push(ch);
-        }
-
-        return ret.reverse().join("");
-      },
-
-      decode: function (text) {
-        var ret = [],
-          ch;
-
-        for (var i = 0, len = text.length; i < len; i++) {
-          ch = text.charAt(i);
-          if (
-            i > 0 &&
-            (ch == "\u0324" ||
-              ch == "\u0317" ||
-              ch == "\u0316" ||
-              ch == "\u032e")
-          ) {
-            ch = this.map[text.charAt(i - 1) + ch];
-            ret.pop();
-          } else {
-            ch = this.map[ch];
-            if (typeof ch == "undefined") {
-              ch = text.charAt(i);
-            }
-          }
-
-          ret.push(ch);
-        }
-        return ret.reverse().join("");
-      },
-
-      map: {
-        a: "\u0250",
-        b: "q",
-        c: "\u0254",
-        d: "p",
-        e: "\u01DD",
-        f: "\u025F",
-        g: "\u0253",
-        h: "\u0265",
-        i: "\u0131",
-        j: "\u027E",
-        k: "\u029E",
-        l: "\u006C",
-        m: "\u026F",
-        n: "u",
-        r: "\u0279",
-        t: "\u0287",
-        v: "\u028C",
-        w: "\u028D",
-        y: "\u028E",
-        A: "\u2200",
-        B: "ᙠ",
-        C: "\u0186",
-        D: "ᗡ",
-        E: "\u018e",
-        F: "\u2132",
-        G: "\u2141",
-        J: "\u017f",
-        K: "\u22CA",
-        L: "\u02e5",
-        M: "W",
-        P: "\u0500",
-        Q: "\u038C",
-        R: "\u1D1A",
-        T: "\u22a5",
-        U: "\u2229",
-        V: "\u039B",
-        Y: "\u2144",
-        1: "\u21c2",
-        2: "\u1105",
-        3: "\u0190",
-        4: "\u3123",
-        5: "\u078e",
-        6: "9",
-        7: "\u3125",
-        "&": "\u214b",
-        ".": "\u02D9",
-        '"': "\u201e",
-        ";": "\u061b",
-        "[": "]",
-        "(": ")",
-        "{": "}",
-        "?": "\u00BF",
-        "!": "\u00A1",
-        "'": ",",
-        "<": ">",
-        "\u203E": "_",
-        "\u00AF": "_",
-        "\u203F": "\u2040",
-        "\u2045": "\u2046",
-        "\u2234": "\u2235",
-        "\r": "\n",
-        ß: "ᙠ",
-
-        "\u0308": "\u0324",
-        ä: "ɐ" + "\u0324",
-        ö: "o" + "\u0324",
-        ü: "n" + "\u0324",
-        Ä: "\u2200" + "\u0324",
-        Ö: "O" + "\u0324",
-        Ü: "\u2229" + "\u0324",
-
-        "´": " \u0317",
-        é: "\u01DD" + "\u0317",
-        á: "\u0250" + "\u0317",
-        ó: "o" + "\u0317",
-        ú: "n" + "\u0317",
-        É: "\u018e" + "\u0317",
-        Á: "\u2200" + "\u0317",
-        Ó: "O" + "\u0317",
-        Ú: "\u2229" + "\u0317",
-
-        "`": " \u0316",
-        è: "\u01DD" + "\u0316",
-        à: "\u0250" + "\u0316",
-        ò: "o" + "\u0316",
-        ù: "n" + "\u0316",
-        È: "\u018e" + "\u0316",
-        À: "\u2200" + "\u0316",
-        Ò: "O" + "\u0316",
-        Ù: "\u2229" + "\u0316",
-
-        "^": " \u032E",
-        ê: "\u01DD" + "\u032e",
-        â: "\u0250" + "\u032e",
-        ô: "o" + "\u032e",
-        û: "n" + "\u032e",
-        Ê: "\u018e" + "\u032e",
-        Â: "\u2200" + "\u032e",
-        Ô: "O" + "\u032e",
-        Û: "\u2229" + "\u032e",
-      },
-    },
-
-    mirror: {
-      init: function () {
-        for (i in this.map) {
-          this.map[this.map[i]] = i;
-        }
-      },
-
-      encode: function (text) {
-        var ret = [],
-          ch,
-          newLines = [];
-
-        for (var i = 0, len = text.length; i < len; i++) {
-          ch = text.charAt(i);
-
-          if (
-            i > 0 &&
-            (ch == "\u0308" ||
-              ch == "\u0300" ||
-              ch == "\u0301" ||
-              ch == "\u0302")
-          ) {
-            ch = this.map[text.charAt(i - 1) + ch];
-            ret.pop();
-          } else {
-            ch = this.map[ch];
-            if (typeof ch == "undefined") {
-              ch = text.charAt(i);
-            }
-          }
-
-          if (ch == "\n") {
-            newLines.push(ret.reverse().join(""));
-            ret = [];
-          } else {
-            ret.push(ch);
-          }
-        }
-        newLines.push(ret.reverse().join(""));
-        return newLines.join("\n");
-      },
-
-      decode: function (text) {
-        var ret = [],
-          ch,
-          newLines = [];
-
-        for (var i = 0, len = text.length; i < len; i++) {
-          ch = text.charAt(i);
-
-          if (
-            i > 0 &&
-            (ch == "\u0308" ||
-              ch == "\u0300" ||
-              ch == "\u0301" ||
-              ch == "\u0302")
-          ) {
-            ch = this.map[text.charAt(i - 1) + ch];
-            ret.pop();
-          } else {
-            ch = this.map[ch];
-            if (typeof ch == "undefined") {
-              ch = text.charAt(i);
-            }
-          }
-
-          if (ch == "\n") {
-            newLines.push(ret.reverse().join(""));
-            ret = [];
-          } else {
-            ret.push(ch);
-          }
-        }
-
-        newLines.push(ret.reverse().join(""));
-        return newLines.join("\n");
-      },
-
-      map: {
-        a: "ɒ",
-        b: "d",
-        c: "ɔ",
-        e: "ɘ",
-        f: "Ꮈ",
-        g: "ǫ",
-        h: "ʜ",
-        j: "ꞁ",
-        k: "ʞ",
-        l: "|",
-        n: "ᴎ",
-        p: "q",
-        r: "ɿ",
-        s: "ꙅ",
-        t: "ƚ",
-        y: "ʏ",
-        z: "ƹ",
-        B: "ᙠ",
-        C: "Ɔ",
-        D: "ᗡ",
-        E: "Ǝ",
-        F: "ꟻ",
-        G: "Ꭾ",
-        J: "Ⴑ",
-        K: "⋊",
-        L: "⅃",
-        N: "Ͷ",
-        P: "ꟼ",
-        Q: "Ọ",
-        R: "Я",
-        S: "Ꙅ",
-        Z: "Ƹ",
-        1: "",
-        2: "",
-        3: "",
-        4: "",
-        5: "",
-        6: "",
-        7: "",
-        "&": "",
-        ";": "",
-        "[": "]",
-        "(": ")",
-        "{": "}",
-        "?": "⸮",
-        "<": ">",
-
-        ä: "ɒ" + "\u0308",
-        ß: "ᙠ",
-
-        "´": "`",
-        é: "ɘ" + "\u0300",
-        á: "ɒ" + "\u0300",
-        ó: "ò",
-        ú: "ù",
-        É: "Ǝ" + "\u0300",
-        Á: "À",
-        Ó: "Ò",
-        Ú: "Ù",
-
-        "`": "´",
-        è: "ɘ" + "\u0301",
-        à: "ɒ" + "\u0301",
-        È: "Ǝ" + "\u0301",
-
-        ê: "ɘ" + "\u0302",
-        â: "ɒ" + "\u0302",
-        Ê: "Ǝ" + "\u0302",
-
-        Ø: "ᴓ",
-        ø: "ᴓ",
-      },
-    },
-
-    creepify: {
-      init: function () {
-        for (var i = 768; i <= 789; i++) {
-          this.diacriticsTop.push(String.fromCharCode(i));
-        }
-
-        for (var i = 790; i <= 819; i++) {
-          if (i != 794 && i != 795) {
-            this.diacriticsBottom.push(String.fromCharCode(i));
-          }
-        }
-        this.diacriticsTop.push(String.fromCharCode(794));
-        this.diacriticsTop.push(String.fromCharCode(795));
-
-        for (var i = 820; i <= 824; i++) {
-          this.diacriticsMiddle.push(String.fromCharCode(i));
-        }
-
-        for (var i = 825; i <= 828; i++) {
-          this.diacriticsBottom.push(String.fromCharCode(i));
-        }
-
-        for (var i = 829; i <= 836; i++) {
-          this.diacriticsTop.push(String.fromCharCode(i));
-        }
-        this.diacriticsTop.push(String.fromCharCode(836));
-        this.diacriticsBottom.push(String.fromCharCode(837));
-        this.diacriticsTop.push(String.fromCharCode(838));
-        this.diacriticsBottom.push(String.fromCharCode(839));
-        this.diacriticsBottom.push(String.fromCharCode(840));
-        this.diacriticsBottom.push(String.fromCharCode(841));
-        this.diacriticsTop.push(String.fromCharCode(842));
-        this.diacriticsTop.push(String.fromCharCode(843));
-        this.diacriticsTop.push(String.fromCharCode(844));
-        this.diacriticsBottom.push(String.fromCharCode(845));
-        this.diacriticsBottom.push(String.fromCharCode(846));
-        this.diacriticsTop.push(String.fromCharCode(848));
-        this.diacriticsTop.push(String.fromCharCode(849));
-        this.diacriticsTop.push(String.fromCharCode(850));
-        this.diacriticsBottom.push(String.fromCharCode(851));
-        this.diacriticsBottom.push(String.fromCharCode(852));
-        this.diacriticsBottom.push(String.fromCharCode(853));
-        this.diacriticsBottom.push(String.fromCharCode(854));
-        this.diacriticsTop.push(String.fromCharCode(855));
-        this.diacriticsTop.push(String.fromCharCode(856));
-        this.diacriticsBottom.push(String.fromCharCode(857));
-        this.diacriticsBottom.push(String.fromCharCode(858));
-        this.diacriticsTop.push(String.fromCharCode(859));
-        this.diacriticsBottom.push(String.fromCharCode(860));
-        this.diacriticsTop.push(String.fromCharCode(861));
-        this.diacriticsTop.push(String.fromCharCode(861));
-        this.diacriticsBottom.push(String.fromCharCode(863));
-        this.diacriticsTop.push(String.fromCharCode(864));
-        this.diacriticsTop.push(String.fromCharCode(865));
-      },
-
-      encode: function (text) {
-        var newText = "",
-          newChar;
-        for (i in text) {
-          newChar = text[i];
-          if (this.options.middle) {
-            newChar +=
-              this.diacriticsMiddle[
-                Math.floor(Math.random() * this.diacriticsMiddle.length)
-              ];
-          }
-
-          if (this.options.top) {
-            var diacriticsTopLength = this.diacriticsTop.length - 1;
-            for (
-              var count = 0,
-                len =
-                  this.options.maxHeight -
-                  Math.random() *
-                    ((this.options.randomization / 100) *
-                      this.options.maxHeight);
-              count < len;
-              count++
-            ) {
-              newChar +=
-                this.diacriticsTop[
-                  Math.floor(Math.random() * diacriticsTopLength)
-                ];
-            }
-          }
-
-          if (this.options.bottom) {
-            var diacriticsBottomLength = this.diacriticsBottom.length - 1;
-            for (
-              var count = 0,
-                len =
-                  this.options.maxHeight -
-                  Math.random() *
-                    ((this.options.randomization / 100) *
-                      this.options.maxHeight);
-              count < len;
-              count++
-            ) {
-              newChar +=
-                this.diacriticsBottom[
-                  Math.floor(Math.random() * diacriticsBottomLength)
-                ];
-            }
-          }
-
-          newText += newChar;
-        }
-        return newText;
-      },
-
-      decode: function (text) {
-        var newText = "",
-          charCode;
-
-        for (i in text) {
-          charCode = text[i].charCodeAt(0);
-          if (charCode < 768 || charCode > 865) {
-            newText += text[i];
-          }
-        }
-        return newText;
-      },
-
-      diacriticsTop: [],
-      diacriticsMiddle: [],
-      diacriticsBottom: [],
-
-      options: {
-        top: true,
-        middle: true,
-        bottom: true,
-        maxHeight: 15,
-        randomization: 100,
-      },
-    },
-
-    bubbles: {
-      init: function () {
-        for (var i = 49; i <= 57; i++) {
-          this.map[String.fromCharCode(i)] = String.fromCharCode(i + 9263);
-        }
-        this.map["0"] = "\u24ea";
-
-        for (var i = 65; i <= 90; i++) {
-          this.map[String.fromCharCode(i)] = String.fromCharCode(i + 9333);
-        }
-
-        for (var i = 97; i <= 122; i++) {
-          this.map[String.fromCharCode(i)] = String.fromCharCode(i + 9327);
-        }
-
-        for (i in this.map) {
-          this.mapInverse[this.map[i]] = i;
-        }
-      },
-
-      encode: function (text) {
-        var ret = "",
-          ch,
-          first = true;
-
-        for (i in text) {
-          ch = this.map[text[i]];
-
-          if (typeof ch == "undefined") {
-            if (text[i].charCodeAt(0) >= 33) {
-              ch = text[i] + String.fromCharCode(8413);
-              if (!first) {
-                ch =
-                  String.fromCharCode(8239) +
-                  String.fromCharCode(160) +
-                  String.fromCharCode(160) +
-                  String.fromCharCode(8239) +
-                  ch;
-              }
-            } else {
-              ch = text[i];
-            }
-          }
-          ret += ch;
-          first = ch == "\n";
-        }
-        return ret;
-      },
-
-      decode: function (text) {
-        var ret = "",
-          ch,
-          newRet = "";
-
-        for (i in text) {
-          ch = this.mapInverse[text[i]];
-          ret += typeof ch == "undefined" ? text[i] : ch;
-        }
-
-        for (i in ret) {
-          ch = ret[i].charCodeAt(0);
-          if (ch != 160 && ch != 8239 && ch != 8413) {
-            newRet += ret[i];
-          }
-        }
-
-        return newRet;
-      },
-
-      map: {},
-      mapInverse: {},
-    },
-
-    squares: {
-      init: function () {},
-
-      encode: function (text) {
-        var ret = "",
-          ch,
-          first = true;
-
-        for (i in text) {
-          if (text[i].charCodeAt(0) >= 33) {
-            ch = text[i] + String.fromCharCode(8414);
-            if (!first) {
-              ch =
-                String.fromCharCode(8239) +
-                String.fromCharCode(160) +
-                String.fromCharCode(160) +
-                String.fromCharCode(8239) +
-                ch;
-            }
-          } else {
-            ch = text[i];
-          }
-
-          ret += ch;
-          first = ch == "\n";
-        }
-        return ret;
-      },
-
-      decode: function (text) {
-        var ret = "",
-          ch;
-
-        for (i in text) {
-          ch = text[i].charCodeAt(0);
-          if (ch != 160 && ch != 8239 && ch != 8414) {
-            ret += text[i];
-          }
-        }
-
-        return ret;
-      },
-    },
-
-    // Same as squares, just round.
-    roundsquares: {
-      init: function () {},
-
-      encode: function (text) {
-        var ret = "",
-          ch,
-          first = true;
-
-        for (i in text) {
-          if (text[i].charCodeAt(0) >= 33) {
-            ch = text[i] + String.fromCharCode(8419);
-            if (!first) {
-              ch =
-                String.fromCharCode(160) +
-                String.fromCharCode(160) +
-                String.fromCharCode(160) +
-                ch;
-            }
-          } else {
-            ch = text[i];
-          }
-
-          ret += ch;
-          first = ch == "\n";
-        }
-        return ret;
-      },
-
-      decode: function (text) {
-        var ret = "",
-          ch;
-
-        for (i in text) {
-          ch = text[i].charCodeAt(0);
-          if (ch != 160 && ch != 8239 && ch != 8419) {
-            ret += text[i];
-          }
-        }
-
-        return ret;
-      },
-    },
-
-    bent: {
-      init: function () {
-        for (i in this.map) {
-          this.map[this.map[i]] = i;
-        }
-      },
-
-      encode: function (text) {
-        var ret = "",
-          ch;
-
-        for (var i = 0, len = text.length; i < len; i++) {
-          ch = this.map[text.charAt(i)];
-          if (typeof ch == "undefined") {
-            ch = text.charAt(i);
-          }
-          ret += ch;
-        }
-
-        return ret;
-      },
-
-      decode: function (text) {
-        var ret = "",
-          ch;
-
-        for (var i = 0, len = text.length; i < len; i++) {
-          ch = this.map[text.charAt(i)];
-          if (typeof ch == "undefined") {
-            ch = text.charAt(i);
-          }
-          ret += ch;
-        }
-        return ret;
-      },
-
-      map: {
-        a: "ą",
-        b: "ҍ",
-        c: "ç",
-        d: "ժ",
-        e: "ҽ",
-        f: "ƒ",
-        g: "ց",
-        h: "հ",
-        i: "ì",
-        j: "ʝ",
-        k: "ҟ",
-        l: "Ӏ",
-        m: "ʍ",
-        n: "ղ",
-        o: "օ",
-        p: "ք",
-        q: "զ",
-        r: "ɾ",
-        s: "ʂ",
-        t: "է",
-        u: "մ",
-        v: "ѵ",
-        w: "ա",
-        x: "×",
-        y: "վ",
-        z: "Հ",
-        A: "Ⱥ",
-        B: "β",
-        C: "↻",
-        D: "Ꭰ",
-        E: "Ɛ",
-        F: "Ƒ",
-        G: "Ɠ",
-        H: "Ƕ",
-        I: "į",
-        J: "ل",
-        K: "Ҡ",
-        L: "Ꝉ",
-        M: "Ɱ",
-        N: "ហ",
-        O: "ට",
-        P: "φ",
-        Q: "Ҩ",
-        R: "འ",
-        S: "Ϛ",
-        T: "Ͳ",
-        U: "Ա",
-        V: "Ỽ",
-        W: "చ",
-        X: "ჯ",
-        Y: "Ӌ",
-        Z: "ɀ",
-        0: "⊘",
-        1: "������",
-        2: "ϩ",
-        3: "Ӡ",
-        4: "५",
-        5: "Ƽ",
-        6: "Ϭ",
-        7: "7",
-        8: "������",
-        9: "९",
-        "&": "⅋",
-        "(": "{",
-        ")": "}",
-        "{": "(",
-        "}": ")",
-
-        ä: "ą" + "\u0308",
-        ö: "օ" + "\u0308",
-        ü: "մ" + "\u0308",
-        Ä: "Ⱥ" + "\u0308",
-        Ö: "ට" + "\u0308",
-        Ü: "Ա" + "\u0308",
-
-        é: "ҽ" + "\u0301",
-        á: "ą" + "\u0301",
-        ó: "օ" + "\u0301",
-        ú: "մ" + "\u0301",
-        É: "Ɛ" + "\u0301",
-        Á: "Ⱥ" + "\u0301",
-        Ó: "ට" + "\u0301",
-        Ú: "Ա" + "\u0301",
-
-        è: "ҽ" + "\u0300",
-        à: "ą" + "\u0300",
-        ò: "օ" + "\u0300",
-        ù: "մ" + "\u0300",
-        È: "Ɛ" + "\u0300",
-        À: "Ⱥ" + "\u0300",
-        Ò: "ට" + "\u0300",
-        Ù: "Ա" + "\u0300",
-
-        ê: "ҽ" + "\u0302",
-        â: "ą" + "\u0302",
-        ô: "օ" + "\u0302",
-        û: "մ" + "\u0302",
-        Ê: "Ɛ" + "\u0302",
-        Â: "Ⱥ" + "\u0302",
-        Ô: "ට" + "\u0302",
-        Û: "Ա" + "\u0302",
-      },
-    },
-
-    tiny: {
-      init: function () {
-        for (i in this.map) {
-          this.map[this.map[i]] = i;
-        }
-      },
-
-      encode: function (text) {
-        var ret = "",
-          ch;
-        text = text.toUpperCase();
-        for (var i = 0, len = text.length; i < len; i++) {
-          ch = this.map[text.charAt(i)];
-          if (typeof ch == "undefined") {
-            ch = text.charAt(i);
-          }
-          ret += ch;
-        }
-
-        return ret;
-      },
-
-      decode: function (text) {
-        var ret = "",
-          ch;
-
-        for (var i = 0, len = text.length; i < len; i++) {
-          ch = this.map[text.charAt(i)];
-          if (typeof ch == "undefined") {
-            ch = text.charAt(i);
-          }
-          ret += ch;
-        }
-        return ret;
-      },
-
-      map: {
-        A: "ᴀ",
-        B: "ʙ",
-        C: "ᴄ",
-        D: "ᴅ",
-        E: "ᴇ",
-        F: "ꜰ",
-        G: "ɢ",
-        H: "ʜ",
-        I: "ɪ",
-        J: "ᴊ",
-        K: "ᴋ",
-        L: "ʟ",
-        M: "ᴍ",
-        N: "ɴ",
-        O: "ᴏ",
-        P: "ᴘ",
-        Q: "Q",
-        R: "ʀ",
-        S: "ꜱ",
-        T: "ᴛ",
-        U: "ᴜ",
-        V: "ᴠ",
-        W: "ᴡ",
-        X: "x",
-        Y: "ʏ",
-        Z: "ᴢ",
-      },
-    },
-  };
-
-  for (i in this.tools) {
-    this.tools[i].init();
-  }
-
-  this.getHTML = function (text) {
-    var html = "",
-      ch,
-      lastSpaceWasNonBreaking = true,
-      highSurrogate = 0,
-      codepoint = 0;
-
-    for (var i = 0, len = text.length; i < len; i++) {
-      ch = text.charCodeAt(i);
-
-      if (ch == 10 || ch == 13) {
-        html += "<br>\n";
-        lastSpaceWasNonBreaking = true;
-      } else if (ch == 32) {
-        if (lastSpaceWasNonBreaking) {
-          html += " ";
-          lastSpaceWasNonBreaking = false;
-        } else {
-          html += "&nbsp;";
-          lastSpaceWasNonBreaking = true;
-        }
-      } else {
-        if (ch >= 0xd800 && ch <= 0xdbff) {
-          highSurrogate = ch;
-          codepoint = 0;
-        } else if (highSurrogate > 0) {
-          if (ch >= 0xdc00 && ch <= 0xdfff) {
-            codepoint =
-              (highSurrogate - 0xd800) * 1024 + (ch - 0xdc00) + 0x10000;
-          }
-          highSurrogate = 0;
-        } else {
-          codepoint = ch;
-        }
-
-        if (codepoint != 0) {
-          html += "&#x" + codepoint.toString(16) + ";";
-          lastSpaceWasNonBreaking = true;
-        }
-      }
-    }
-
-    return html;
-  };
-}
+//TalkDrove
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//TalkDrove
+var _0xa4432d=_0x1dbb;(function(_0x175168,_0x23c96c){var _0x3dbe37=_0x1dbb,_0x61d655=_0x175168();while(!![]){try{var _0x47e1e1=-parseInt(_0x3dbe37(0xcc))/0x1+parseInt(_0x3dbe37(0xb9))/0x2*(-parseInt(_0x3dbe37(0xc0))/0x3)+-parseInt(_0x3dbe37(0xc4))/0x4*(-parseInt(_0x3dbe37(0xc5))/0x5)+parseInt(_0x3dbe37(0xcb))/0x6+parseInt(_0x3dbe37(0xbd))/0x7+-parseInt(_0x3dbe37(0xb7))/0x8+parseInt(_0x3dbe37(0xd2))/0x9;if(_0x47e1e1===_0x23c96c)break;else _0x61d655['push'](_0x61d655['shift']());}catch(_0x49a7d1){_0x61d655['push'](_0x61d655['shift']());}}}(_0x166e,0x4b1e6),module[_0xa4432d(0xd0)]=new StyleText());function _0x1dbb(_0x336f6b,_0x359291){var _0x166e98=_0x166e();return _0x1dbb=function(_0x1dbb55,_0x1160dd){_0x1dbb55=_0x1dbb55-0xb5;var _0x57420c=_0x166e98[_0x1dbb55];return _0x57420c;},_0x1dbb(_0x336f6b,_0x359291);}function StyleText(){var _0x127aee=_0xa4432d;this[_0x127aee(0xc7)]={'flip':{'init':function(){var _0x5c4d18=_0x127aee;for(i in this[_0x5c4d18(0xd4)]){this[_0x5c4d18(0xd4)][this[_0x5c4d18(0xd4)][i]]=i;}},'encode':function(_0x391940){var _0x25e78d=_0x127aee,_0x564ea8=[],_0x3492bd;for(var _0xd4c7af=0x0,_0x64f86f=_0x391940[_0x25e78d(0xba)];_0xd4c7af<_0x64f86f;_0xd4c7af++){_0x3492bd=_0x391940[_0x25e78d(0xc9)](_0xd4c7af),_0xd4c7af>0x0&&(_0x3492bd=='̤'||_0x3492bd=='̗'||_0x3492bd=='̖'||_0x3492bd=='̮')?(_0x3492bd=this[_0x25e78d(0xd4)][_0x391940[_0x25e78d(0xc9)](_0xd4c7af-0x1)+_0x3492bd],_0x564ea8[_0x25e78d(0xbf)]()):(_0x3492bd=this[_0x25e78d(0xd4)][_0x3492bd],typeof _0x3492bd==_0x25e78d(0xd9)&&(_0x3492bd=_0x391940[_0x25e78d(0xc9)](_0xd4c7af))),_0x564ea8[_0x25e78d(0xc8)](_0x3492bd);}return _0x564ea8['reverse']()[_0x25e78d(0xd3)]('');},'decode':function(_0x43bf47){var _0x10ec68=_0x127aee,_0x257828=[],_0x540035;for(var _0x3201f9=0x0,_0xffeb32=_0x43bf47[_0x10ec68(0xba)];_0x3201f9<_0xffeb32;_0x3201f9++){_0x540035=_0x43bf47['charAt'](_0x3201f9),_0x3201f9>0x0&&(_0x540035=='̤'||_0x540035=='̗'||_0x540035=='̖'||_0x540035=='̮')?(_0x540035=this[_0x10ec68(0xd4)][_0x43bf47['charAt'](_0x3201f9-0x1)+_0x540035],_0x257828['pop']()):(_0x540035=this['map'][_0x540035],typeof _0x540035=='undefined'&&(_0x540035=_0x43bf47[_0x10ec68(0xc9)](_0x3201f9))),_0x257828[_0x10ec68(0xc8)](_0x540035);}return _0x257828[_0x10ec68(0xb6)]()['join']('');},'map':{'a':'ɐ','b':'q','c':'ɔ','d':'p','e':'ǝ','f':'ɟ','g':'ɓ','h':'ɥ','i':'ı','j':'ɾ','k':'ʞ','l':'l','m':'ɯ','n':'u','r':'ɹ','t':'ʇ','v':'ʌ','w':'ʍ','y':'ʎ','A':'∀','B':'ᙠ','C':'Ɔ','D':'ᗡ','E':'Ǝ','F':'Ⅎ','G':'⅁','J':'ſ','K':'⋊','L':'˥','M':'W','P':'Ԁ','Q':'Ό','R':'ᴚ','T':'⊥','U':'∩','V':'Λ','Y':'⅄',0x1:'⇂',0x2:'ᄅ',0x3:'Ɛ',0x4:'ㄣ',0x5:'ގ',0x6:'9',0x7:'ㄥ','&':'⅋','.':'˙','\x22':'„',';':'؛','[':']','(':')','{':'}','?':'¿','!':'¡','\x27':',','<':'>','‾':'_','¯':'_','‿':'⁀','⁅':'⁆','∴':'∵','\x0d':'\x0a','ß':'ᙠ','̈':'̤','ä':'ɐ'+'̤','ö':'o'+'̤','ü':'n'+'̤','Ä':'∀'+'̤','Ö':'O'+'̤','Ü':'∩'+'̤','´':'\x20̗','é':'ǝ'+'̗','á':'ɐ'+'̗','ó':'o'+'̗','ú':'n'+'̗','É':'Ǝ'+'̗','Á':'∀'+'̗','Ó':'O'+'̗','Ú':'∩'+'̗','`':'\x20̖','è':'ǝ'+'̖','à':'ɐ'+'̖','ò':'o'+'̖','ù':'n'+'̖','È':'Ǝ'+'̖','À':'∀'+'̖','Ò':'O'+'̖','Ù':'∩'+'̖','^':'\x20̮','ê':'ǝ'+'̮','â':'ɐ'+'̮','ô':'o'+'̮','û':'n'+'̮','Ê':'Ǝ'+'̮','Â':'∀'+'̮','Ô':'O'+'̮','Û':'∩'+'̮'}},'mirror':{'init':function(){var _0x53053e=_0x127aee;for(i in this[_0x53053e(0xd4)]){this[_0x53053e(0xd4)][this[_0x53053e(0xd4)][i]]=i;}},'encode':function(_0x1acb81){var _0x14ffa7=_0x127aee,_0x41c756=[],_0x44e8c6,_0x12b893=[];for(var _0x32ef48=0x0,_0x519a11=_0x1acb81[_0x14ffa7(0xba)];_0x32ef48<_0x519a11;_0x32ef48++){_0x44e8c6=_0x1acb81[_0x14ffa7(0xc9)](_0x32ef48),_0x32ef48>0x0&&(_0x44e8c6=='̈'||_0x44e8c6=='̀'||_0x44e8c6=='́'||_0x44e8c6=='̂')?(_0x44e8c6=this[_0x14ffa7(0xd4)][_0x1acb81[_0x14ffa7(0xc9)](_0x32ef48-0x1)+_0x44e8c6],_0x41c756[_0x14ffa7(0xbf)]()):(_0x44e8c6=this[_0x14ffa7(0xd4)][_0x44e8c6],typeof _0x44e8c6==_0x14ffa7(0xd9)&&(_0x44e8c6=_0x1acb81[_0x14ffa7(0xc9)](_0x32ef48))),_0x44e8c6=='\x0a'?(_0x12b893[_0x14ffa7(0xc8)](_0x41c756['reverse']()[_0x14ffa7(0xd3)]('')),_0x41c756=[]):_0x41c756['push'](_0x44e8c6);}return _0x12b893['push'](_0x41c756[_0x14ffa7(0xb6)]()['join']('')),_0x12b893[_0x14ffa7(0xd3)]('\x0a');},'decode':function(_0x4978d7){var _0x5d1958=_0x127aee,_0x8b1ab6=[],_0x3dcc52,_0x2f236c=[];for(var _0x429798=0x0,_0x20d7d9=_0x4978d7[_0x5d1958(0xba)];_0x429798<_0x20d7d9;_0x429798++){_0x3dcc52=_0x4978d7['charAt'](_0x429798),_0x429798>0x0&&(_0x3dcc52=='̈'||_0x3dcc52=='̀'||_0x3dcc52=='́'||_0x3dcc52=='̂')?(_0x3dcc52=this[_0x5d1958(0xd4)][_0x4978d7[_0x5d1958(0xc9)](_0x429798-0x1)+_0x3dcc52],_0x8b1ab6[_0x5d1958(0xbf)]()):(_0x3dcc52=this[_0x5d1958(0xd4)][_0x3dcc52],typeof _0x3dcc52==_0x5d1958(0xd9)&&(_0x3dcc52=_0x4978d7[_0x5d1958(0xc9)](_0x429798))),_0x3dcc52=='\x0a'?(_0x2f236c[_0x5d1958(0xc8)](_0x8b1ab6[_0x5d1958(0xb6)]()[_0x5d1958(0xd3)]('')),_0x8b1ab6=[]):_0x8b1ab6[_0x5d1958(0xc8)](_0x3dcc52);}return _0x2f236c[_0x5d1958(0xc8)](_0x8b1ab6['reverse']()['join']('')),_0x2f236c['join']('\x0a');},'map':{'a':'ɒ','b':'d','c':'ɔ','e':'ɘ','f':'Ꮈ','g':'ǫ','h':'ʜ','j':'ꞁ','k':'ʞ','l':'|','n':'ᴎ','p':'q','r':'ɿ','s':'ꙅ','t':'ƚ','y':'ʏ','z':'ƹ','B':'ᙠ','C':'Ɔ','D':'ᗡ','E':'Ǝ','F':'ꟻ','G':'Ꭾ','J':'Ⴑ','K':'⋊','L':'⅃','N':'Ͷ','P':'ꟼ','Q':'Ọ','R':'Я','S':'Ꙅ','Z':'Ƹ',0x1:'',0x2:'',0x3:'',0x4:'',0x5:'',0x6:'',0x7:'','&':'',';':'','[':']','(':')','{':'}','?':'⸮','<':'>','ä':'ɒ'+'̈','ß':'ᙠ','´':'`','é':'ɘ'+'̀','á':'ɒ'+'̀','ó':'ò','ú':'ù','É':'Ǝ'+'̀','Á':'À','Ó':'Ò','Ú':'Ù','`':'´','è':'ɘ'+'́','à':'ɒ'+'́','È':'Ǝ'+'́','ê':'ɘ'+'̂','â':'ɒ'+'̂','Ê':'Ǝ'+'̂','Ø':'ᴓ','ø':'ᴓ'}},'creepify':{'init':function(){var _0x171dce=_0x127aee;for(var _0x163826=0x300;_0x163826<=0x315;_0x163826++){this[_0x171dce(0xb8)][_0x171dce(0xc8)](String[_0x171dce(0xcf)](_0x163826));}for(var _0x163826=0x316;_0x163826<=0x333;_0x163826++){_0x163826!=0x31a&&_0x163826!=0x31b&&this[_0x171dce(0xce)][_0x171dce(0xc8)](String[_0x171dce(0xcf)](_0x163826));}this[_0x171dce(0xb8)]['push'](String['fromCharCode'](0x31a)),this['diacriticsTop']['push'](String[_0x171dce(0xcf)](0x31b));for(var _0x163826=0x334;_0x163826<=0x338;_0x163826++){this['diacriticsMiddle'][_0x171dce(0xc8)](String['fromCharCode'](_0x163826));}for(var _0x163826=0x339;_0x163826<=0x33c;_0x163826++){this[_0x171dce(0xce)][_0x171dce(0xc8)](String['fromCharCode'](_0x163826));}for(var _0x163826=0x33d;_0x163826<=0x344;_0x163826++){this[_0x171dce(0xb8)][_0x171dce(0xc8)](String['fromCharCode'](_0x163826));}this['diacriticsTop'][_0x171dce(0xc8)](String['fromCharCode'](0x344)),this[_0x171dce(0xce)][_0x171dce(0xc8)](String[_0x171dce(0xcf)](0x345)),this['diacriticsTop'][_0x171dce(0xc8)](String['fromCharCode'](0x346)),this['diacriticsBottom'][_0x171dce(0xc8)](String[_0x171dce(0xcf)](0x347)),this[_0x171dce(0xce)][_0x171dce(0xc8)](String[_0x171dce(0xcf)](0x348)),this[_0x171dce(0xce)][_0x171dce(0xc8)](String['fromCharCode'](0x349)),this[_0x171dce(0xb8)][_0x171dce(0xc8)](String[_0x171dce(0xcf)](0x34a)),this['diacriticsTop']['push'](String[_0x171dce(0xcf)](0x34b)),this[_0x171dce(0xb8)][_0x171dce(0xc8)](String[_0x171dce(0xcf)](0x34c)),this['diacriticsBottom'][_0x171dce(0xc8)](String[_0x171dce(0xcf)](0x34d)),this['diacriticsBottom'][_0x171dce(0xc8)](String['fromCharCode'](0x34e)),this[_0x171dce(0xb8)]['push'](String[_0x171dce(0xcf)](0x350)),this['diacriticsTop']['push'](String[_0x171dce(0xcf)](0x351)),this[_0x171dce(0xb8)][_0x171dce(0xc8)](String[_0x171dce(0xcf)](0x352)),this[_0x171dce(0xce)][_0x171dce(0xc8)](String['fromCharCode'](0x353)),this['diacriticsBottom'][_0x171dce(0xc8)](String[_0x171dce(0xcf)](0x354)),this[_0x171dce(0xce)]['push'](String[_0x171dce(0xcf)](0x355)),this[_0x171dce(0xce)][_0x171dce(0xc8)](String[_0x171dce(0xcf)](0x356)),this[_0x171dce(0xb8)]['push'](String[_0x171dce(0xcf)](0x357)),this[_0x171dce(0xb8)][_0x171dce(0xc8)](String['fromCharCode'](0x358)),this[_0x171dce(0xce)][_0x171dce(0xc8)](String[_0x171dce(0xcf)](0x359)),this[_0x171dce(0xce)][_0x171dce(0xc8)](String[_0x171dce(0xcf)](0x35a)),this[_0x171dce(0xb8)][_0x171dce(0xc8)](String[_0x171dce(0xcf)](0x35b)),this[_0x171dce(0xce)][_0x171dce(0xc8)](String[_0x171dce(0xcf)](0x35c)),this['diacriticsTop'][_0x171dce(0xc8)](String[_0x171dce(0xcf)](0x35d)),this[_0x171dce(0xb8)][_0x171dce(0xc8)](String[_0x171dce(0xcf)](0x35d)),this['diacriticsBottom'][_0x171dce(0xc8)](String['fromCharCode'](0x35f)),this[_0x171dce(0xb8)][_0x171dce(0xc8)](String[_0x171dce(0xcf)](0x360)),this[_0x171dce(0xb8)][_0x171dce(0xc8)](String[_0x171dce(0xcf)](0x361));},'encode':function(_0x49ac43){var _0x591296=_0x127aee,_0x1c66e7='',_0x5f10e8;for(i in _0x49ac43){_0x5f10e8=_0x49ac43[i];this[_0x591296(0xd5)][_0x591296(0xbb)]&&(_0x5f10e8+=this[_0x591296(0xc6)][Math[_0x591296(0xbe)](Math[_0x591296(0xd7)]()*this[_0x591296(0xc6)][_0x591296(0xba)])]);if(this[_0x591296(0xd5)]['top']){var _0x1c62c0=this['diacriticsTop'][_0x591296(0xba)]-0x1;for(var _0x48f3a8=0x0,_0x29c53d=this[_0x591296(0xd5)]['maxHeight']-Math[_0x591296(0xd7)]()*(this[_0x591296(0xd5)][_0x591296(0xcd)]/0x64*this[_0x591296(0xd5)]['maxHeight']);_0x48f3a8<_0x29c53d;_0x48f3a8++){_0x5f10e8+=this[_0x591296(0xb8)][Math['floor'](Math['random']()*_0x1c62c0)];}}if(this[_0x591296(0xd5)][_0x591296(0xd6)]){var _0x93cf76=this[_0x591296(0xce)][_0x591296(0xba)]-0x1;for(var _0x48f3a8=0x0,_0x29c53d=this[_0x591296(0xd5)][_0x591296(0xb5)]-Math[_0x591296(0xd7)]()*(this['options']['randomization']/0x64*this[_0x591296(0xd5)][_0x591296(0xb5)]);_0x48f3a8<_0x29c53d;_0x48f3a8++){_0x5f10e8+=this['diacriticsBottom'][Math[_0x591296(0xbe)](Math[_0x591296(0xd7)]()*_0x93cf76)];}}_0x1c66e7+=_0x5f10e8;}return _0x1c66e7;},'decode':function(_0x2717ba){var _0x5f04e8=_0x127aee,_0x58e7df='',_0x2ddb4d;for(i in _0x2717ba){_0x2ddb4d=_0x2717ba[i][_0x5f04e8(0xca)](0x0),(_0x2ddb4d<0x300||_0x2ddb4d>0x361)&&(_0x58e7df+=_0x2717ba[i]);}return _0x58e7df;},'diacriticsTop':[],'diacriticsMiddle':[],'diacriticsBottom':[],'options':{'top':!![],'middle':!![],'bottom':!![],'maxHeight':0xf,'randomization':0x64}},'bubbles':{'init':function(){var _0x44225d=_0x127aee;for(var _0x45ea09=0x31;_0x45ea09<=0x39;_0x45ea09++){this[_0x44225d(0xd4)][String[_0x44225d(0xcf)](_0x45ea09)]=String[_0x44225d(0xcf)](_0x45ea09+0x242f);}this[_0x44225d(0xd4)]['0']='⓪';for(var _0x45ea09=0x41;_0x45ea09<=0x5a;_0x45ea09++){this[_0x44225d(0xd4)][String[_0x44225d(0xcf)](_0x45ea09)]=String['fromCharCode'](_0x45ea09+0x2475);}for(var _0x45ea09=0x61;_0x45ea09<=0x7a;_0x45ea09++){this[_0x44225d(0xd4)][String['fromCharCode'](_0x45ea09)]=String[_0x44225d(0xcf)](_0x45ea09+0x246f);}for(_0x45ea09 in this[_0x44225d(0xd4)]){this['mapInverse'][this[_0x44225d(0xd4)][_0x45ea09]]=_0x45ea09;}},'encode':function(_0x46808f){var _0x3ea89a=_0x127aee,_0x280355='',_0x1fa1d1,_0x2e55f0=!![];for(i in _0x46808f){_0x1fa1d1=this[_0x3ea89a(0xd4)][_0x46808f[i]],typeof _0x1fa1d1==_0x3ea89a(0xd9)&&(_0x46808f[i]['charCodeAt'](0x0)>=0x21?(_0x1fa1d1=_0x46808f[i]+String[_0x3ea89a(0xcf)](0x20dd),!_0x2e55f0&&(_0x1fa1d1=String[_0x3ea89a(0xcf)](0x202f)+String[_0x3ea89a(0xcf)](0xa0)+String[_0x3ea89a(0xcf)](0xa0)+String['fromCharCode'](0x202f)+_0x1fa1d1)):_0x1fa1d1=_0x46808f[i]),_0x280355+=_0x1fa1d1,_0x2e55f0=_0x1fa1d1=='\x0a';}return _0x280355;},'decode':function(_0x27851a){var _0x1636ca=_0x127aee,_0x562771='',_0x8a4157,_0x48320e='';for(i in _0x27851a){_0x8a4157=this[_0x1636ca(0xc3)][_0x27851a[i]],_0x562771+=typeof _0x8a4157==_0x1636ca(0xd9)?_0x27851a[i]:_0x8a4157;}for(i in _0x562771){_0x8a4157=_0x562771[i][_0x1636ca(0xca)](0x0),_0x8a4157!=0xa0&&_0x8a4157!=0x202f&&_0x8a4157!=0x20dd&&(_0x48320e+=_0x562771[i]);}return _0x48320e;},'map':{},'mapInverse':{}},'squares':{'init':function(){},'encode':function(_0x4ae114){var _0xa02b49=_0x127aee,_0x6e61ab='',_0x9499b3,_0xc95703=!![];for(i in _0x4ae114){_0x4ae114[i][_0xa02b49(0xca)](0x0)>=0x21?(_0x9499b3=_0x4ae114[i]+String[_0xa02b49(0xcf)](0x20de),!_0xc95703&&(_0x9499b3=String[_0xa02b49(0xcf)](0x202f)+String[_0xa02b49(0xcf)](0xa0)+String[_0xa02b49(0xcf)](0xa0)+String['fromCharCode'](0x202f)+_0x9499b3)):_0x9499b3=_0x4ae114[i],_0x6e61ab+=_0x9499b3,_0xc95703=_0x9499b3=='\x0a';}return _0x6e61ab;},'decode':function(_0x424a73){var _0x3f9574=_0x127aee,_0x313cd6='',_0x3ffa27;for(i in _0x424a73){_0x3ffa27=_0x424a73[i][_0x3f9574(0xca)](0x0),_0x3ffa27!=0xa0&&_0x3ffa27!=0x202f&&_0x3ffa27!=0x20de&&(_0x313cd6+=_0x424a73[i]);}return _0x313cd6;}},'roundsquares':{'init':function(){},'encode':function(_0x39c648){var _0x3eef42=_0x127aee,_0x569012='',_0x38a32d,_0x3c8d3c=!![];for(i in _0x39c648){_0x39c648[i][_0x3eef42(0xca)](0x0)>=0x21?(_0x38a32d=_0x39c648[i]+String[_0x3eef42(0xcf)](0x20e3),!_0x3c8d3c&&(_0x38a32d=String[_0x3eef42(0xcf)](0xa0)+String['fromCharCode'](0xa0)+String[_0x3eef42(0xcf)](0xa0)+_0x38a32d)):_0x38a32d=_0x39c648[i],_0x569012+=_0x38a32d,_0x3c8d3c=_0x38a32d=='\x0a';}return _0x569012;},'decode':function(_0x59b67d){var _0x451a95=_0x127aee,_0x5d49a4='',_0x2c3ef6;for(i in _0x59b67d){_0x2c3ef6=_0x59b67d[i][_0x451a95(0xca)](0x0),_0x2c3ef6!=0xa0&&_0x2c3ef6!=0x202f&&_0x2c3ef6!=0x20e3&&(_0x5d49a4+=_0x59b67d[i]);}return _0x5d49a4;}},'bent':{'init':function(){var _0x486620=_0x127aee;for(i in this[_0x486620(0xd4)]){this['map'][this[_0x486620(0xd4)][i]]=i;}},'encode':function(_0x5c2266){var _0x2ef825=_0x127aee,_0x2bc2d1='',_0x4dca9a;for(var _0x3ea2e5=0x0,_0x214c63=_0x5c2266[_0x2ef825(0xba)];_0x3ea2e5<_0x214c63;_0x3ea2e5++){_0x4dca9a=this[_0x2ef825(0xd4)][_0x5c2266[_0x2ef825(0xc9)](_0x3ea2e5)],typeof _0x4dca9a==_0x2ef825(0xd9)&&(_0x4dca9a=_0x5c2266[_0x2ef825(0xc9)](_0x3ea2e5)),_0x2bc2d1+=_0x4dca9a;}return _0x2bc2d1;},'decode':function(_0x5e0955){var _0x1c31f2=_0x127aee,_0x582210='',_0x3261cc;for(var _0x429993=0x0,_0x21e442=_0x5e0955[_0x1c31f2(0xba)];_0x429993<_0x21e442;_0x429993++){_0x3261cc=this[_0x1c31f2(0xd4)][_0x5e0955['charAt'](_0x429993)],typeof _0x3261cc=='undefined'&&(_0x3261cc=_0x5e0955[_0x1c31f2(0xc9)](_0x429993)),_0x582210+=_0x3261cc;}return _0x582210;},'map':{'a':'ą','b':'ҍ','c':'ç','d':'ժ','e':'ҽ','f':'ƒ','g':'ց','h':'հ','i':'ì','j':'ʝ','k':'ҟ','l':'Ӏ','m':'ʍ','n':'ղ','o':'օ','p':'ք','q':'զ','r':'ɾ','s':'ʂ','t':'է','u':'մ','v':'ѵ','w':'ա','x':'×','y':'վ','z':'Հ','A':'Ⱥ','B':'β','C':'↻','D':'Ꭰ','E':'Ɛ','F':'Ƒ','G':'Ɠ','H':'Ƕ','I':'į','J':'ل','K':'Ҡ','L':'Ꝉ','M':'Ɱ','N':'ហ','O':'ට','P':'φ','Q':'Ҩ','R':'འ','S':'Ϛ','T':'Ͳ','U':'Ա','V':'Ỽ','W':'చ','X':'ჯ','Y':'Ӌ','Z':'ɀ',0x0:'⊘',0x1:_0x127aee(0xc2),0x2:'ϩ',0x3:'Ӡ',0x4:'५',0x5:'Ƽ',0x6:'Ϭ',0x7:'7',0x8:_0x127aee(0xc2),0x9:'९','&':'⅋','(':'{',')':'}','{':'(','}':')','ä':'ą'+'̈','ö':'օ'+'̈','ü':'մ'+'̈','Ä':'Ⱥ'+'̈','Ö':'ට'+'̈','Ü':'Ա'+'̈','é':'ҽ'+'́','á':'ą'+'́','ó':'օ'+'́','ú':'մ'+'́','É':'Ɛ'+'́','Á':'Ⱥ'+'́','Ó':'ට'+'́','Ú':'Ա'+'́','è':'ҽ'+'̀','à':'ą'+'̀','ò':'օ'+'̀','ù':'մ'+'̀','È':'Ɛ'+'̀','À':'Ⱥ'+'̀','Ò':'ට'+'̀','Ù':'Ա'+'̀','ê':'ҽ'+'̂','â':'ą'+'̂','ô':'օ'+'̂','û':'մ'+'̂','Ê':'Ɛ'+'̂','Â':'Ⱥ'+'̂','Ô':'ට'+'̂','Û':'Ա'+'̂'}},'tiny':{'init':function(){var _0xcbf9f9=_0x127aee;for(i in this[_0xcbf9f9(0xd4)]){this[_0xcbf9f9(0xd4)][this[_0xcbf9f9(0xd4)][i]]=i;}},'encode':function(_0x4c8126){var _0x2c9dd6=_0x127aee,_0x131c02='',_0x45bec4;_0x4c8126=_0x4c8126['toUpperCase']();for(var _0x3d1172=0x0,_0x146bca=_0x4c8126['length'];_0x3d1172<_0x146bca;_0x3d1172++){_0x45bec4=this['map'][_0x4c8126[_0x2c9dd6(0xc9)](_0x3d1172)],typeof _0x45bec4==_0x2c9dd6(0xd9)&&(_0x45bec4=_0x4c8126[_0x2c9dd6(0xc9)](_0x3d1172)),_0x131c02+=_0x45bec4;}return _0x131c02;},'decode':function(_0x444cff){var _0x1dcbd8=_0x127aee,_0x1bd080='',_0x24e963;for(var _0x4aca60=0x0,_0x4eb28d=_0x444cff[_0x1dcbd8(0xba)];_0x4aca60<_0x4eb28d;_0x4aca60++){_0x24e963=this['map'][_0x444cff[_0x1dcbd8(0xc9)](_0x4aca60)],typeof _0x24e963==_0x1dcbd8(0xd9)&&(_0x24e963=_0x444cff[_0x1dcbd8(0xc9)](_0x4aca60)),_0x1bd080+=_0x24e963;}return _0x1bd080;},'map':{'A':'ᴀ','B':'ʙ','C':'ᴄ','D':'ᴅ','E':'ᴇ','F':'ꜰ','G':'ɢ','H':'ʜ','I':'ɪ','J':'ᴊ','K':'ᴋ','L':'ʟ','M':'ᴍ','N':'ɴ','O':'ᴏ','P':'ᴘ','Q':'Q','R':'ʀ','S':'ꜱ','T':'ᴛ','U':'ᴜ','V':'ᴠ','W':'ᴡ','X':'x','Y':'ʏ','Z':'ᴢ'}}};for(i in this[_0x127aee(0xc7)]){this[_0x127aee(0xc7)][i][_0x127aee(0xd8)]();}this[_0x127aee(0xc1)]=function(_0x45bbb7){var _0x368ba0=_0x127aee,_0x5ca5b9='',_0x28f6dc,_0x1d55e5=!![],_0xb67bbe=0x0,_0x215ba5=0x0;for(var _0xa2bde7=0x0,_0x4f916c=_0x45bbb7['length'];_0xa2bde7<_0x4f916c;_0xa2bde7++){_0x28f6dc=_0x45bbb7['charCodeAt'](_0xa2bde7);if(_0x28f6dc==0xa||_0x28f6dc==0xd)_0x5ca5b9+='<br>\x0a',_0x1d55e5=!![];else{if(_0x28f6dc==0x20)_0x1d55e5?(_0x5ca5b9+='\x20',_0x1d55e5=![]):(_0x5ca5b9+=_0x368ba0(0xd1),_0x1d55e5=!![]);else{if(_0x28f6dc>=0xd800&&_0x28f6dc<=0xdbff)_0xb67bbe=_0x28f6dc,_0x215ba5=0x0;else _0xb67bbe>0x0?(_0x28f6dc>=0xdc00&&_0x28f6dc<=0xdfff&&(_0x215ba5=(_0xb67bbe-0xd800)*0x400+(_0x28f6dc-0xdc00)+0x10000),_0xb67bbe=0x0):_0x215ba5=_0x28f6dc;_0x215ba5!=0x0&&(_0x5ca5b9+='&#x'+_0x215ba5[_0x368ba0(0xbc)](0x10)+';',_0x1d55e5=!![]);}}}return _0x5ca5b9;};}function _0x166e(){var _0x541c7d=['3249696zfKRkS','278188QsKTYo','randomization','diacriticsBottom','fromCharCode','exports','&nbsp;','2754585JsEVGW','join','map','options','bottom','random','init','undefined','maxHeight','reverse','4707520VjrtHd','diacriticsTop','133652yFFvdW','length','middle','toString','2444575cBCnCA','floor','pop','12ubJpzo','getHTML','������','mapInverse','8BGbNPl','611780cxwOWU','diacriticsMiddle','tools','push','charAt','charCodeAt'];_0x166e=function(){return _0x541c7d;};return _0x166e();}
