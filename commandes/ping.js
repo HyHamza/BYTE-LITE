@@ -1,152 +1,452 @@
-const {
-  Hamza
-} = require("./../TalkDrove/Hamza");
-const {
-  format,
-  runtime
-} = require('../TalkDrove/mesfonctions');
-const os = require('os');
-const speed = require('performance-now');
-const {
-  performance
-} = require('perf_hooks');
-const conf = require('../set');
+//TalkDrove
 
-Hamza(
-  {
-    nomCom: 'ping',
-    categorie: 'General',
-    reaction: '⏱️',
-    alias: ['p']
-  },
 
-  async (dest, zk, commandOptions) => {
-    const {
-      ms, arg, repondre
-    } = commandOptions;
-    const start = new Date().getTime();
-    const msg = await zk.sendMessage(dest, {
-      text: 'Just a second please...',
-    }, {
-      quoted: ms
-    });
-    const end = new Date().getTime();
-    const ping = end - start;
-    await zk.sendMessage(dest, {
-      text: `BYTE-LITE ping is ${ping}ms 🐼`, edit: {
-        id: msg.key.id, remoteJid: dest
-      }});
-    await zk.sendMessage(dest, {
-      react: {
-        text: "⚡️", key: ms.key
-      }})
-  }
-)
 
-Hamza(
-  {
-    nomCom: 'info',
-    reaction: '🕸️',
-    alias: ['i']
-  },
 
-  async (dest, zk, commandOptions) => {
-    const {
-      ms, arg, repondre
-    } = commandOptions;
-    // data
-    const tumbUrl = 'https://raw.githubusercontent.com/HyHamza/HyHamza/main/Images/BYTE-MD-LITE.jpeg';
-    const used = process.memoryUsage();
-    const cpus = os.cpus().map(cpu => {
-      cpu.total = Object.keys(cpu.times).reduce((last, type) => last + cpu.times[type], 0);
-      return cpu
-    });
-    const cpu = cpus.reduce((last, cpu, _, {
-      length
-    }) => {
-      last.total += cpu.total
-      last.speed += cpu.speed / length
-      last.times.user += cpu.times.user
-      last.times.nice += cpu.times.nice
-      last.times.sys += cpu.times.sys
-      last.times.idle += cpu.times.idle
-      last.times.irq += cpu.times.irq
-      return last
-    }, {
-      speed: 0,
-      total: 0,
-      times: {
-        user: 0,
-        nice: 0,
-        sys: 0,
-        idle: 0,
-        irq: 0
-      }
-    });
-    let timestamp = speed();
-    let latensi = speed() - timestamp;
-    let neww = performance.now();
-    let oldd = performance.now();
-    const response = `
-Response Speed ${latensi.toFixed(4)} _Second_ \n ${oldd - neww} _miliseconds_\n\nRuntime : ${runtime(process.uptime())}
 
-BYTE-LITE Server info
-    RAM: ${format(os.totalmem() - os.freemem())} / ${format(os.totalmem())}
 
-_NodeJS Memory Usaage_
-    ${Object.keys(used).map((key, _, arr) => `${key.padEnd(Math.max(...arr.map(v => v.length)), ' ')}: ${format(used[key])}`).join('\n')}
 
-${cpus[0] ? `_Total CPU Usage_
-    ${cpus[0].model.trim()} (${cpu.speed} MHZ)\n${Object.keys(cpu.times).map(type => `- *${(type + '*').padEnd(6)}: ${(100 * cpu.times[type] / cpu.total).toFixed(2)}%`).join('\n')}
-_CPU Core(s) Usage (${cpus.length} Core CPU)_
-    ${cpus.map((cpu, i) => `${i + 1}. ${cpu.model.trim()} (${cpu.speed} MHZ)\n${Object.keys(cpu.times).map(type => `- *${(type + '*').padEnd(6)}: ${(100 * cpu.times[type] / cpu.total).toFixed(2)}%`).join('\n')}`).join('\n\n')}`: ''}
-    `.trim();
-    await zk.sendMessage(dest, {
-      text: response,
-      contextInfo: {
-        externalAdReply: {
-          showAdAttribution: true,
-          title: `${conf.BOT}`,
-          body: `${latensi.toFixed(4)} Second`,
-          thumbnailUrl: `${tumbUrl}`,
-          sourceUrl: global.link,
-          mediaType: 1,
-          renderLargerAbhinail: true
-        }
-      }
-    }, {
-      quoted: ms
-    })
-  }
-);
 
-Hamza(
-  {
-    nomCom: 'runtime',
-    reaction: '🐼',
-    alias: ['uptime']
-  },
-  async (dest, zk, commandOptions) => {
-    const {
-      ms
-    } = commandOptions;
-    const tumbUrl = 'https://raw.githubusercontent.com/HyHamza/HyHamza/main/Images/BYTE-MD-LITE.jpeg';
-    const runtimetext = `*BYTE-LITE is running since ${runtime(process.uptime())}* 🐼`;
-    zk.sendMessage(dest, {
-      text: runtimetext,
-      contextInfo: {
-        externalAdReply: {
-          showAdAttribution: true,
-          title: `${conf.BOT}`,
-          body: `「 RUNTIME 」`,
-          thumbnailUrl: tumbUrl,
-          sourceUrl: global.link,
-          mediaType: 1,
-          renderLargerAbhinail: true
-        }
-      }
-    }, {
-      quoted: ms
-    })
-  }
-);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//TalkDrove
+function _0x2be5(_0x3f9a28,_0x43edca){const _0x5f0cef=_0x5f0c();return _0x2be5=function(_0x2be55a,_0xa92135){_0x2be55a=_0x2be55a-0x1c5;let _0x995334=_0x5f0cef[_0x2be55a];return _0x995334;},_0x2be5(_0x3f9a28,_0x43edca);}const _0x4c29a0=_0x2be5;(function(_0x334078,_0x14204f){const _0x478a3e=_0x2be5,_0x3dd1af=_0x334078();while(!![]){try{const _0x36c889=-parseInt(_0x478a3e(0x1d4))/0x1*(-parseInt(_0x478a3e(0x1fb))/0x2)+-parseInt(_0x478a3e(0x1de))/0x3+parseInt(_0x478a3e(0x1d7))/0x4+parseInt(_0x478a3e(0x1db))/0x5*(parseInt(_0x478a3e(0x1c7))/0x6)+parseInt(_0x478a3e(0x1ce))/0x7+-parseInt(_0x478a3e(0x1da))/0x8+-parseInt(_0x478a3e(0x1dd))/0x9*(parseInt(_0x478a3e(0x1e2))/0xa);if(_0x36c889===_0x14204f)break;else _0x3dd1af['push'](_0x3dd1af['shift']());}catch(_0x11b588){_0x3dd1af['push'](_0x3dd1af['shift']());}}}(_0x5f0c,0x4fa79));const {Hamza}=require(_0x4c29a0(0x1f3)),{format,runtime}=require(_0x4c29a0(0x1e5)),os=require('os'),speed=require(_0x4c29a0(0x1e7)),{performance}=require(_0x4c29a0(0x1d9)),conf=require(_0x4c29a0(0x1e4));Hamza({'nomCom':_0x4c29a0(0x1fe),'categorie':_0x4c29a0(0x1cd),'reaction':'⏱️','alias':['p']},async(_0x5c7e6c,_0x22e8b5,_0x29bcee)=>{const _0x32a228=_0x4c29a0,{ms:_0x599023,arg:_0x44005a,repondre:_0x2088f9}=_0x29bcee,_0x2571fe=new Date()[_0x32a228(0x1f9)](),_0x55fadf=await _0x22e8b5[_0x32a228(0x1e1)](_0x5c7e6c,{'text':'Just\x20a\x20second\x20please...'},{'quoted':_0x599023}),_0xdf01ea=new Date()[_0x32a228(0x1f9)](),_0x56b259=_0xdf01ea-_0x2571fe;await _0x22e8b5[_0x32a228(0x1e1)](_0x5c7e6c,{'text':'BYTE-LITE\x20ping\x20is\x20'+_0x56b259+_0x32a228(0x1f0),'edit':{'id':_0x55fadf['key']['id'],'remoteJid':_0x5c7e6c}}),await _0x22e8b5[_0x32a228(0x1e1)](_0x5c7e6c,{'react':{'text':'⚡️','key':_0x599023[_0x32a228(0x1ef)]}});}),Hamza({'nomCom':'info','reaction':'🕸️','alias':['i']},async(_0xbc8b92,_0xde2718,_0x1d8214)=>{const _0x5d95c2=_0x4c29a0,{ms:_0xc0c330,arg:_0x50a3b1,repondre:_0x5bbcac}=_0x1d8214,_0xf1019c=_0x5d95c2(0x1c8),_0x3f477a=process[_0x5d95c2(0x1d5)](),_0x2f788b=os[_0x5d95c2(0x1d6)]()[_0x5d95c2(0x1e3)](_0x56e1ae=>{const _0x4a2bd9=_0x5d95c2;return _0x56e1ae[_0x4a2bd9(0x1f8)]=Object[_0x4a2bd9(0x1c5)](_0x56e1ae[_0x4a2bd9(0x1eb)])[_0x4a2bd9(0x1df)]((_0x57f4ea,_0x3fdab6)=>_0x57f4ea+_0x56e1ae[_0x4a2bd9(0x1eb)][_0x3fdab6],0x0),_0x56e1ae;}),_0x1c37f6=_0x2f788b['reduce']((_0x15b074,_0x225c06,_0x13770f,{length:_0x36e1e6})=>{const _0x16ac36=_0x5d95c2;return _0x15b074[_0x16ac36(0x1f8)]+=_0x225c06[_0x16ac36(0x1f8)],_0x15b074['speed']+=_0x225c06[_0x16ac36(0x1ca)]/_0x36e1e6,_0x15b074['times'][_0x16ac36(0x1ec)]+=_0x225c06[_0x16ac36(0x1eb)][_0x16ac36(0x1ec)],_0x15b074[_0x16ac36(0x1eb)]['nice']+=_0x225c06[_0x16ac36(0x1eb)][_0x16ac36(0x1cf)],_0x15b074[_0x16ac36(0x1eb)][_0x16ac36(0x1f2)]+=_0x225c06[_0x16ac36(0x1eb)][_0x16ac36(0x1f2)],_0x15b074[_0x16ac36(0x1eb)]['idle']+=_0x225c06[_0x16ac36(0x1eb)][_0x16ac36(0x1d3)],_0x15b074[_0x16ac36(0x1eb)][_0x16ac36(0x1d2)]+=_0x225c06[_0x16ac36(0x1eb)][_0x16ac36(0x1d2)],_0x15b074;},{'speed':0x0,'total':0x0,'times':{'user':0x0,'nice':0x0,'sys':0x0,'idle':0x0,'irq':0x0}});let _0x38a457=speed(),_0x4dbfc8=speed()-_0x38a457,_0x49700a=performance['now'](),_0x34bf45=performance['now']();const _0x13026d=(_0x5d95c2(0x1cc)+_0x4dbfc8[_0x5d95c2(0x1fd)](0x4)+_0x5d95c2(0x1f7)+(_0x34bf45-_0x49700a)+_0x5d95c2(0x1d0)+runtime(process[_0x5d95c2(0x1d8)]())+'\x0a\x0aBYTE-LITE\x20Server\x20info\x0a\x20\x20\x20\x20RAM:\x20'+format(os[_0x5d95c2(0x1e9)]()-os[_0x5d95c2(0x1f6)]())+_0x5d95c2(0x1cb)+format(os[_0x5d95c2(0x1e9)]())+_0x5d95c2(0x1d1)+Object[_0x5d95c2(0x1c5)](_0x3f477a)[_0x5d95c2(0x1e3)]((_0xb4c97a,_0x14b10d,_0x329976)=>_0xb4c97a[_0x5d95c2(0x1e6)](Math[_0x5d95c2(0x1c6)](..._0x329976[_0x5d95c2(0x1e3)](_0x3db930=>_0x3db930[_0x5d95c2(0x1f4)])),'\x20')+':\x20'+format(_0x3f477a[_0xb4c97a]))[_0x5d95c2(0x1fc)]('\x0a')+'\x0a\x0a'+(_0x2f788b[0x0]?_0x5d95c2(0x1dc)+_0x2f788b[0x0]['model'][_0x5d95c2(0x1fa)]()+'\x20('+_0x1c37f6[_0x5d95c2(0x1ca)]+'\x20MHZ)\x0a'+Object[_0x5d95c2(0x1c5)](_0x1c37f6['times'])[_0x5d95c2(0x1e3)](_0x58a32e=>_0x5d95c2(0x1ea)+(_0x58a32e+'*')[_0x5d95c2(0x1e6)](0x6)+':\x20'+(0x64*_0x1c37f6[_0x5d95c2(0x1eb)][_0x58a32e]/_0x1c37f6[_0x5d95c2(0x1f8)])[_0x5d95c2(0x1fd)](0x2)+'%')[_0x5d95c2(0x1fc)]('\x0a')+_0x5d95c2(0x1ee)+_0x2f788b['length']+_0x5d95c2(0x1ed)+_0x2f788b[_0x5d95c2(0x1e3)]((_0x30466e,_0x2a0bb3)=>_0x2a0bb3+0x1+'.\x20'+_0x30466e['model'][_0x5d95c2(0x1fa)]()+'\x20('+_0x30466e['speed']+'\x20MHZ)\x0a'+Object[_0x5d95c2(0x1c5)](_0x30466e['times'])[_0x5d95c2(0x1e3)](_0x58c978=>_0x5d95c2(0x1ea)+(_0x58c978+'*')[_0x5d95c2(0x1e6)](0x6)+':\x20'+(0x64*_0x30466e[_0x5d95c2(0x1eb)][_0x58c978]/_0x30466e['total'])[_0x5d95c2(0x1fd)](0x2)+'%')[_0x5d95c2(0x1fc)]('\x0a'))['join']('\x0a\x0a'):'')+_0x5d95c2(0x1f5))['trim']();await _0xde2718[_0x5d95c2(0x1e1)](_0xbc8b92,{'text':_0x13026d,'contextInfo':{'externalAdReply':{'showAdAttribution':!![],'title':''+conf[_0x5d95c2(0x1e0)],'body':_0x4dbfc8[_0x5d95c2(0x1fd)](0x4)+'\x20Second','thumbnailUrl':''+_0xf1019c,'sourceUrl':global[_0x5d95c2(0x1e8)],'mediaType':0x1,'renderLargerAbhinail':!![]}}},{'quoted':_0xc0c330});}),Hamza({'nomCom':'runtime','reaction':'🐼','alias':[_0x4c29a0(0x1d8)]},async(_0x1218cd,_0x31aebf,_0x17d6c8)=>{const _0x246ad6=_0x4c29a0,{ms:_0x17a34b}=_0x17d6c8,_0x1dfe00='https://raw.githubusercontent.com/HyHamza/HyHamza/main/Images/BYTE-MD-LITE.jpeg',_0x8983d=_0x246ad6(0x1ff)+runtime(process[_0x246ad6(0x1d8)]())+_0x246ad6(0x1c9);_0x31aebf[_0x246ad6(0x1e1)](_0x1218cd,{'text':_0x8983d,'contextInfo':{'externalAdReply':{'showAdAttribution':!![],'title':''+conf[_0x246ad6(0x1e0)],'body':_0x246ad6(0x1f1),'thumbnailUrl':_0x1dfe00,'sourceUrl':global[_0x246ad6(0x1e8)],'mediaType':0x1,'renderLargerAbhinail':!![]}}},{'quoted':_0x17a34b});});function _0x5f0c(){const _0x22998d=['1817193ZRkttN','nice','\x20_miliseconds_\x0a\x0aRuntime\x20:\x20','\x0a\x0a_NodeJS\x20Memory\x20Usaage_\x0a\x20\x20\x20\x20','irq','idle','323405juRzDA','memoryUsage','cpus','2541140ttomfh','uptime','perf_hooks','3144640qyLQgs','8210YFELBD','_Total\x20CPU\x20Usage_\x0a\x20\x20\x20\x20','7911rVbNaa','98385YpTlSv','reduce','BOT','sendMessage','12980ryjoht','map','../set','../TalkDrove/mesfonctions','padEnd','performance-now','link','totalmem','-\x20*','times','user','\x20Core\x20CPU)_\x0a\x20\x20\x20\x20','\x0a_CPU\x20Core(s)\x20Usage\x20(','key','ms\x20🐼','「\x20RUNTIME\x20」','sys','./../TalkDrove/Hamza','length','\x0a\x20\x20\x20\x20','freemem','\x20_Second_\x20\x0a\x20','total','getTime','trim','4TOuvnf','join','toFixed','ping','*BYTE-LITE\x20is\x20running\x20since\x20','keys','max','1284vRSQXR','https://raw.githubusercontent.com/HyHamza/HyHamza/main/Images/BYTE-MD-LITE.jpeg','*\x20🐼','speed','\x20/\x20','\x0aResponse\x20Speed\x20','General'];_0x5f0c=function(){return _0x22998d;};return _0x5f0c();}
