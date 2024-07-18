@@ -1,60 +1,452 @@
-const http = require('http');
-const fs = require('fs');
-const path = require("path");
-
-const page = path.join(__dirname, "media", "site")
+//TalkDrove
 
 
-function server(req,res) {
-  console.log('---')
-  console.log(`server: GET '${req.url}'`);
-  if (req.url === '/') {
-    fs.readFile(path.join(page, 'index.html'), (err,data) => {
-      if (err) {
-        res.writeHead(404, {'Content-Type': 'text/plain'});
-        res.end('Not Found');
-        console.log(`server: response 404 'Not Found'`);
-      } else {
-        res.writeHead(200, {'Content-Type': 'text/html'});
-        res.end(data);
-        console.log(`server: response 200 'index.html'`);
-      }
-    });
-  } else if (req.url === '/style.css'){
-    fs.readFile(path.join(page,"assets", "style.css"), (err,data) => {
-      if (err) {
-        res.writeHead(404, {'Content-Type': 'text/plain'});
-        res.end('Not Found');
-        console.log(`server: response 404 'Not Found'`);
-      } else {
-        res.writeHead(200, {'Content-Type': 'text/css'});
-        res.end(data);
-        console.log(`server: response 200 'style.css'`)
-      }
-    });
-  }
-}
 
-function start(port) {
-  port = parseInt(port);
-  if (isNaN(port)){
-    console.log('⚠️ ERROR PORT must be an integer !!! \n`ℹ️ using port 8000');
-    port = 8000;
-  }
-  
-  try {
-    const s = http.createServer(server).listen(port, () => {
-      console.log(`ℹ️ server started at port: ${port}`)
-    });
-    process.on('SIGINT',() => {
-      console.log('👋 server shutting down...');
-      s.close(() => process.exit(0));
-    });
-  } catch (e){
-    console.log(`⚠️ ERROR starting server at port: ${port} error: ${e.message}`)
-  }
-}
 
-module.exports = {
-  start : start
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//TalkDrove
+function _0x29de(){const _0x4dd59a=['349746gglwMc','assets','readFile','log','text/plain','10NbOXrq','style.css','join','\x20error:\x20','url','7IOTjMy','👋\x20server\x20shutting\x20down...','text/css','⚠️\x20ERROR\x20starting\x20server\x20at\x20port:\x20','15355604GnSFun','exit','http','15863274UFcexH','writeHead','createServer','105SuQEUY','5oJSCiw','112820ybgaYS','end','201JpEONJ','media','listen','/style.css','exports','path','12729144aacWha','site','7904168UpnBlG','112732AZklWM','Not\x20Found','⚠️\x20ERROR\x20PORT\x20must\x20be\x20an\x20integer\x20!!!\x20\x0a`ℹ️\x20using\x20port\x208000'];_0x29de=function(){return _0x4dd59a;};return _0x29de();}const _0x17181f=_0x145d;(function(_0x36e54e,_0x4a5ad8){const _0x47ad70=_0x145d,_0x1580c1=_0x36e54e();while(!![]){try{const _0x18428d=parseInt(_0x47ad70(0xeb))/0x1*(parseInt(_0x47ad70(0xec))/0x2)+-parseInt(_0x47ad70(0xee))/0x3*(-parseInt(_0x47ad70(0xf7))/0x4)+-parseInt(_0x47ad70(0xea))/0x5*(-parseInt(_0x47ad70(0xfa))/0x6)+parseInt(_0x47ad70(0x104))/0x7*(-parseInt(_0x47ad70(0xf6))/0x8)+-parseInt(_0x47ad70(0xe7))/0x9+parseInt(_0x47ad70(0xff))/0xa*(parseInt(_0x47ad70(0xe4))/0xb)+-parseInt(_0x47ad70(0xf4))/0xc;if(_0x18428d===_0x4a5ad8)break;else _0x1580c1['push'](_0x1580c1['shift']());}catch(_0x5f9ca4){_0x1580c1['push'](_0x1580c1['shift']());}}}(_0x29de,0xef049));const http=require(_0x17181f(0xe6)),fs=require('fs'),path=require(_0x17181f(0xf3)),page=path['join'](__dirname,_0x17181f(0xef),_0x17181f(0xf5));function server(_0x340cfd,_0x2d1051){const _0x52d9bd=_0x17181f;console[_0x52d9bd(0xfd)]('---'),console['log']('server:\x20GET\x20\x27'+_0x340cfd['url']+'\x27');if(_0x340cfd[_0x52d9bd(0x103)]==='/')fs[_0x52d9bd(0xfc)](path[_0x52d9bd(0x101)](page,'index.html'),(_0xbb4a61,_0x3d32bf)=>{const _0x2fc081=_0x52d9bd;_0xbb4a61?(_0x2d1051[_0x2fc081(0xe8)](0x194,{'Content-Type':_0x2fc081(0xfe)}),_0x2d1051[_0x2fc081(0xed)](_0x2fc081(0xf8)),console[_0x2fc081(0xfd)]('server:\x20response\x20404\x20\x27Not\x20Found\x27')):(_0x2d1051[_0x2fc081(0xe8)](0xc8,{'Content-Type':'text/html'}),_0x2d1051[_0x2fc081(0xed)](_0x3d32bf),console[_0x2fc081(0xfd)]('server:\x20response\x20200\x20\x27index.html\x27'));});else _0x340cfd[_0x52d9bd(0x103)]===_0x52d9bd(0xf1)&&fs[_0x52d9bd(0xfc)](path[_0x52d9bd(0x101)](page,_0x52d9bd(0xfb),_0x52d9bd(0x100)),(_0x2c8e0d,_0x3d2e20)=>{const _0x47b9eb=_0x52d9bd;_0x2c8e0d?(_0x2d1051['writeHead'](0x194,{'Content-Type':_0x47b9eb(0xfe)}),_0x2d1051['end']('Not\x20Found'),console[_0x47b9eb(0xfd)]('server:\x20response\x20404\x20\x27Not\x20Found\x27')):(_0x2d1051[_0x47b9eb(0xe8)](0xc8,{'Content-Type':_0x47b9eb(0x106)}),_0x2d1051['end'](_0x3d2e20),console[_0x47b9eb(0xfd)]('server:\x20response\x20200\x20\x27style.css\x27'));});}function _0x145d(_0x11ee84,_0x25d6d3){const _0x29de4c=_0x29de();return _0x145d=function(_0x145dd6,_0x588f52){_0x145dd6=_0x145dd6-0xe3;let _0x32b030=_0x29de4c[_0x145dd6];return _0x32b030;},_0x145d(_0x11ee84,_0x25d6d3);}function start(_0x506706){const _0x2e9dd1=_0x17181f;_0x506706=parseInt(_0x506706);isNaN(_0x506706)&&(console['log'](_0x2e9dd1(0xf9)),_0x506706=0x1f40);try{const _0x4bbf61=http[_0x2e9dd1(0xe9)](server)[_0x2e9dd1(0xf0)](_0x506706,()=>{console['log']('ℹ️\x20server\x20started\x20at\x20port:\x20'+_0x506706);});process['on']('SIGINT',()=>{const _0x469714=_0x2e9dd1;console[_0x469714(0xfd)](_0x469714(0x105)),_0x4bbf61['close'](()=>process[_0x469714(0xe5)](0x0));});}catch(_0x2c27a9){console[_0x2e9dd1(0xfd)](_0x2e9dd1(0xe3)+_0x506706+_0x2e9dd1(0x102)+_0x2c27a9['message']);}}module[_0x17181f(0xf2)]={'start':start};
