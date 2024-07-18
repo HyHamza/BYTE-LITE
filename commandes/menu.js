@@ -32,8 +32,8 @@ const temps = moment().format('HH:mm:ss');
 const date = moment().format('DD/MM/YYYY');
 let infoMsg =  `
 ╭────〖 *BYTE-LITE* 〗────╮
-│﹄ *Préfix* : ${s.PREFIXE}
-│﹄ *User* : ${s.OWNER_NAME}
+│﹄ *Prefix* : ${s.PREFIXE}
+│﹄ *Owner* : ${s.OWNER_NAME}
 │﹄ *Mode* : ${mode}
 │﹄ *Commands* : ${cm.length} 
 │﹄ *Ram* : ${format(os.totalmem() - os.freemem())}/${format(os.totalmem())}
@@ -51,7 +51,7 @@ let infoMsg =  `
         menuMsg += `*o:* *${cat}* *o:*`;
         for (const cmd of coms[cat]) {
             menuMsg += `
- *| *${s.PREFIXE} ${cmd}`;
+ *|* ${s.PREFIXE} ${cmd}`;
         }
         menuMsg += `
 *╰═════════════⊷* \n`
@@ -59,7 +59,7 @@ let infoMsg =  `
 
     menuMsg += `
 
-*——————— Channel link: ———————*
+*—— Channel link: ——*
 
 https://whatsapp.com/channel/0029VaNRcHSJP2199iMQ4W0l
   
