@@ -1,280 +1,452 @@
-const {Hamza} = require('../TalkDrove/Hamza');
-const fs = require("fs");
-const { exec } = require("child_process");
+//TalkDrove
 
 
-const filename = `${Math.random().toString(36)}`;
 
-Hamza (
-    {
-        nomCom : 'deep',
-        categorie : 'Audio-Edit',
 
-    }, async (dest , zk, commandeOptions) => {
-        const {ms , repondre,msgRepondu} = commandeOptions;
 
-        if (msgRepondu) {
-            if(msgRepondu.audioMessage) {
 
-                const media = await zk.downloadAndSaveMediaMessage(msgRepondu.audioMessage)
 
-                let set = "-af atempo=4/4,asetrate=44500*2/3";
-                let ran = `${filename}.mp3`;
-            
-                try {
-                  exec(`ffmpeg -i ${media} ${set} ${ran}`, (err, stderr, stdout) => {
-                    fs.unlinkSync(media);
-                    if (err) return repondre("error during the procedure " + err );
-                   
-                    let buff1 = fs.readFileSync(ran);
-                   
-                    zk.sendMessage(
-                      dest,
-                      { audio: buff1, mimetype: "audio/mpeg" },
-                      { quoted: ms }
-                    );
-                    fs.unlinkSync(ran);
-                  });
-                } catch (e) {
-                 
-                  repondre("error");
-                }
 
-            } else {
-                repondre('the command only works with audio messages')
-            }
 
-        } else {
-            repondre('Please mention an audio')
-        }
-    }
-);
 
-Hamza (
-    {
-        nomCom : 'bass',
-        categorie : 'Audio-Edit'
 
-    }, async (dest , zk, commandeOptions) => {
-        const {ms , repondre,msgRepondu} = commandeOptions;
 
-        if (msgRepondu) {
-            if(msgRepondu.audioMessage) {
 
-                const media2 = await zk.downloadAndSaveMediaMessage(msgRepondu.audioMessage)
 
-                let set2 = "-af equalizer=f=18:width_type=o:width=2:g=14";
-                let ran2 = `${filename}.mp3`;
-            
-                try {
-                  exec(`ffmpeg -i ${media2} ${set2} ${ran2}`, (err, stderr, stdout) => {
-                    fs.unlinkSync(media2);
-                    if (err) return repondre("error during the procedure " + err );
-                   
-                    let buff2 = fs.readFileSync(ran2);
-                   
-                    zk.sendMessage(
-                      dest,
-                      { audio: buff2, mimetype: "audio/mpeg" },
-                      { quoted: ms }
-                    );
-                    fs.unlinkSync(ran2);
-                  });
-                } catch (e) {
-                 
-                  repondre("error");
-                }
 
-            } else {
-                repondre('the command only works with audio messages')
-            }
 
-        } else {
-            repondre('Please mention an audio')
-        }
-    }
-);
 
-Hamza(
-    {
-      nomCom: 'reverse',
-      categorie: 'Audio-Edit',
-    },
-    async (dest, zk, commandeOptions) => {
-      const { ms, repondre, msgRepondu } = commandeOptions;
-  
-      if (msgRepondu) {
-        if (msgRepondu.audioMessage) {
-          const media3 = await zk.downloadAndSaveMediaMessage(msgRepondu.audioMessage);
-          let set3 = '-filter_complex "areverse"';
-          let ran3 = `${filename}.mp3`;
-  
-          try {
-            exec(`ffmpeg -i ${media3} ${set3} ${ran3}`, (err, stderr, stdout) => {
-              fs.unlinkSync(media3);
-              if (err) return repondre("error during the procedure" + err);
-  
-              let buff3 = fs.readFileSync(ran3);
-  
-              zk.sendMessage(dest, { audio: buff3, mimetype: "audio/mpeg" }, { quoted: ms });
-              fs.unlinkSync(ran3);
-            });
-          } catch (e) {
-            repondre("Error : " + e);
-          }
-        } else {
-          repondre("The command only works with audio messages");
-        }
-      } else {
-        repondre("Please mention an audio");
-      }
-    }
-  );
-  
-  Hamza(
-    {
-      nomCom: 'slow',
-      categorie: 'Audio-Edit',
-    },
-    async (dest, zk, commandeOptions) => {
-      const { ms, repondre, msgRepondu } = commandeOptions;
-  
-      if (msgRepondu) {
-        if (msgRepondu.audioMessage) {
-          const media5 = await zk.downloadAndSaveMediaMessage(msgRepondu.audioMessage);
-          let set5 = '-filter:a "atempo=0.8,asetrate=44100"';
-          let ran5 = `${filename}.mp3`;
-  
-          try {
-            exec(`ffmpeg -i ${media5} ${set5} ${ran5}`, (err, stderr, stdout) => {
-              fs.unlinkSync(media5);
-              if (err) return repondre("error during the procedure" + err);
-  
-              let buff5 = fs.readFileSync(ran5);
-  
-              zk.sendMessage(dest, { audio: buff5, mimetype: "audio/mpeg" }, { quoted: ms });
-              fs.unlinkSync(ran5);
-            });
-          } catch (e) {
-            repondre("Error : " + e);
-          }
-        } else {
-          repondre("The command only works with audio messages");
-        }
-      } else {
-        repondre("Please mention an audio");
-      }
-    }
-  );
 
-// Cas pour l'effet "smooth"
-Hamza(
-    {
-      nomCom: 'smooth',
-      categorie: 'Audio-Edit',
-    },
-    async (dest, zk, commandeOptions) => {
-      const { ms, repondre, msgRepondu } = commandeOptions;
-  
-      if (msgRepondu) {
-        if (msgRepondu.audioMessage) {
-          const mediaSmooth = await zk.downloadAndSaveMediaMessage(msgRepondu.audioMessage);
-          let setSmooth = '-filter:v "minterpolate=\'mi_mode=mci:mc_mode=aobmc:vsbmc=1:fps=120\'"';
-          let ranSmooth = `${filename}.mp3`;
-  
-          try {
-            exec(`ffmpeg -i ${mediaSmooth} ${setSmooth} ${ranSmooth}`, (err, stderr, stdout) => {
-              fs.unlinkSync(mediaSmooth);
-              if (err) return repondre("error during the procedure" + err);
-  
-              let buff6 = fs.readFileSync(ranSmooth);
-  
-              zk.sendMessage(dest, { audio: buff6, mimetype: "audio/mpeg" }, { quoted: ms });
-              fs.unlinkSync(ranSmooth);
-            });
-          } catch (e) {
-            repondre("Error : " + e);
-          }
-        } else {
-          repondre("The command only works with audio messages");
-        }
-      } else {
-        repondre("Please mention an audio");
-      }
-    }
-  );
-  
-  // Cas pour l'effet "tempo"
-  Hamza(
-    {
-      nomCom: 'tempo',
-      categorie: 'Audio-Edit',
-    },
-    async (dest, zk, commandeOptions) => {
-      const { ms, repondre, msgRepondu } = commandeOptions;
-  
-      if (msgRepondu) {
-        if (msgRepondu.audioMessage) {
-          const mediaTempo = await zk.downloadAndSaveMediaMessage(msgRepondu.audioMessage);
-          let setTempo = '-filter:a "atempo=0.9,asetrate=65100"';
-          let ranTempo = `${filename}.mp3`;
-  
-          try {
-            exec(`ffmpeg -i ${mediaTempo} ${setTempo} ${ranTempo}`, (err, stderr, stdout) => {
-              fs.unlinkSync(mediaTempo);
-              if (err) return repondre("error during the procedure " + err);
-  
-              let buff7 = fs.readFileSync(ranTempo);
-  
-              zk.sendMessage(dest, { audio: buff7, mimetype: "audio/mpeg" }, { quoted: ms });
-              fs.unlinkSync(ranTempo);
-            });
-          } catch (e) {
-            repondre("Error : " + e);
-          }
-        } else {
-          repondre("The command only works with audio messages");
-        }
-      } else {
-        repondre("Please mention an audio");
-      }
-    }
-  );
-  
-  // Cas pour l'effet "nightcore"
-  Hamza(
-    {
-      nomCom: 'nightcore',
-      categorie: 'Audio-Edit',
-    },
-    async (dest, zk, commandeOptions) => {
-      const { ms, repondre, msgRepondu } = commandeOptions;
-  
-      if (msgRepondu) {
-        if (msgRepondu.audioMessage) {
-          const mediaNightcore = await zk.downloadAndSaveMediaMessage(msgRepondu.audioMessage);
-          let setNightcore = '-filter:a "atempo=1.07,asetrate=44100*1.20"';
-          let ranNightcore = `${filename}.mp3`;
-  
-          try {
-            exec(`ffmpeg -i ${mediaNightcore} ${setNightcore} ${ranNightcore}`, (err, stderr, stdout) => {
-              fs.unlinkSync(mediaNightcore);
-              if (err) return repondre("error during the procedure " + err);
-  
-              let buff8 = fs.readFileSync(ranNightcore);
-  
-              zk.sendMessage(dest, { audio: buff8, mimetype: "audio/mpeg" }, { quoted: ms });
-              fs.unlinkSync(ranNightcore);
-            });
-          } catch (e) {
-            repondre("Erreur : " + e);
-          }
-        } else {
-          repondre("The command only works with audio messages");
-        }
-      } else {
-        repondre("Please mention an audio");
-      }
-    }
-  );
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//TalkDrove
+const _0x19d8f3=_0xc9f4;(function(_0xaaf974,_0x2df56b){const _0xf4ceaa=_0xc9f4,_0x870e4c=_0xaaf974();while(!![]){try{const _0x7e2e3a=parseInt(_0xf4ceaa(0xc6))/0x1*(parseInt(_0xf4ceaa(0xd2))/0x2)+-parseInt(_0xf4ceaa(0xd6))/0x3*(parseInt(_0xf4ceaa(0xd0))/0x4)+parseInt(_0xf4ceaa(0xb2))/0x5+parseInt(_0xf4ceaa(0xd9))/0x6*(parseInt(_0xf4ceaa(0xbb))/0x7)+-parseInt(_0xf4ceaa(0xb4))/0x8+-parseInt(_0xf4ceaa(0xbf))/0x9+parseInt(_0xf4ceaa(0xc0))/0xa*(parseInt(_0xf4ceaa(0xce))/0xb);if(_0x7e2e3a===_0x2df56b)break;else _0x870e4c['push'](_0x870e4c['shift']());}catch(_0x3d4fb9){_0x870e4c['push'](_0x870e4c['shift']());}}}(_0x33ac,0xa456b));function _0x33ac(){const _0x3b35b3=['audio/mpeg','1610aaknZg','Error\x20:\x20','readFileSync','toString','6640542Ozkzzk','10YgrQmF','-filter_complex\x20\x22areverse\x22','error','error\x20during\x20the\x20procedure\x20','child_process','downloadAndSaveMediaMessage','2kokUWm','.mp3','sendMessage','error\x20during\x20the\x20procedure','audioMessage','deep','-filter:a\x20\x22atempo=1.07,asetrate=44100*1.20\x22','../TalkDrove/Hamza','12315391wTIyuJ','-filter:v\x20\x22minterpolate=\x27mi_mode=mci:mc_mode=aobmc:vsbmc=1:fps=120\x27\x22','4ARdkxt','Erreur\x20:\x20','1194946iomkNs','the\x20command\x20only\x20works\x20with\x20audio\x20messages','reverse','-filter:a\x20\x22atempo=0.9,asetrate=65100\x22','2638911kckZHM','random','Audio-Edit','15240ylgOgy','1528080lIDbWG','-filter:a\x20\x22atempo=0.8,asetrate=44100\x22','7309896fOWtyT','The\x20command\x20only\x20works\x20with\x20audio\x20messages','ffmpeg\x20-i\x20','Please\x20mention\x20an\x20audio','-af\x20equalizer=f=18:width_type=o:width=2:g=14','unlinkSync'];_0x33ac=function(){return _0x3b35b3;};return _0x33ac();}const {Hamza}=require(_0x19d8f3(0xcd)),fs=require('fs'),{exec}=require(_0x19d8f3(0xc4)),filename=''+Math[_0x19d8f3(0xd7)]()[_0x19d8f3(0xbe)](0x24);function _0xc9f4(_0x3f5f6a,_0x25310c){const _0x33ac2d=_0x33ac();return _0xc9f4=function(_0xc9f4aa,_0x1f3b38){_0xc9f4aa=_0xc9f4aa-0xb2;let _0x5a0604=_0x33ac2d[_0xc9f4aa];return _0x5a0604;},_0xc9f4(_0x3f5f6a,_0x25310c);}Hamza({'nomCom':_0x19d8f3(0xcb),'categorie':_0x19d8f3(0xd8)},async(_0x111575,_0x2b8c50,_0xa1be6d)=>{const _0x594157=_0x19d8f3,{ms:_0x187f6b,repondre:_0x49dc32,msgRepondu:_0x38ec4a}=_0xa1be6d;if(_0x38ec4a){if(_0x38ec4a[_0x594157(0xca)]){const _0x4637f7=await _0x2b8c50['downloadAndSaveMediaMessage'](_0x38ec4a[_0x594157(0xca)]);let _0x419009='-af\x20atempo=4/4,asetrate=44500*2/3',_0x2a08cf=filename+'.mp3';try{exec(_0x594157(0xb6)+_0x4637f7+'\x20'+_0x419009+'\x20'+_0x2a08cf,(_0x2bc5dc,_0x1d477f,_0xba94a3)=>{const _0x48ae92=_0x594157;fs[_0x48ae92(0xb9)](_0x4637f7);if(_0x2bc5dc)return _0x49dc32(_0x48ae92(0xc3)+_0x2bc5dc);let _0x1b1b9f=fs['readFileSync'](_0x2a08cf);_0x2b8c50[_0x48ae92(0xc8)](_0x111575,{'audio':_0x1b1b9f,'mimetype':_0x48ae92(0xba)},{'quoted':_0x187f6b}),fs['unlinkSync'](_0x2a08cf);});}catch(_0x3bfbd8){_0x49dc32('error');}}else _0x49dc32(_0x594157(0xd3));}else _0x49dc32('Please\x20mention\x20an\x20audio');}),Hamza({'nomCom':'bass','categorie':'Audio-Edit'},async(_0x189c75,_0x5123b5,_0x368fb6)=>{const _0x5cb342=_0x19d8f3,{ms:_0x170689,repondre:_0x4900bb,msgRepondu:_0x232c4f}=_0x368fb6;if(_0x232c4f){if(_0x232c4f['audioMessage']){const _0x5b37a2=await _0x5123b5[_0x5cb342(0xc5)](_0x232c4f[_0x5cb342(0xca)]);let _0x5eee3e=_0x5cb342(0xb8),_0x4d02c4=filename+_0x5cb342(0xc7);try{exec(_0x5cb342(0xb6)+_0x5b37a2+'\x20'+_0x5eee3e+'\x20'+_0x4d02c4,(_0x579b2f,_0x374800,_0x24ce5d)=>{const _0x943610=_0x5cb342;fs[_0x943610(0xb9)](_0x5b37a2);if(_0x579b2f)return _0x4900bb(_0x943610(0xc3)+_0x579b2f);let _0x133555=fs[_0x943610(0xbd)](_0x4d02c4);_0x5123b5[_0x943610(0xc8)](_0x189c75,{'audio':_0x133555,'mimetype':_0x943610(0xba)},{'quoted':_0x170689}),fs[_0x943610(0xb9)](_0x4d02c4);});}catch(_0x8d0f4c){_0x4900bb(_0x5cb342(0xc2));}}else _0x4900bb('the\x20command\x20only\x20works\x20with\x20audio\x20messages');}else _0x4900bb(_0x5cb342(0xb7));}),Hamza({'nomCom':_0x19d8f3(0xd4),'categorie':_0x19d8f3(0xd8)},async(_0x38e3ce,_0x264e10,_0x441f00)=>{const _0x5bd903=_0x19d8f3,{ms:_0x493ccd,repondre:_0x1aea0f,msgRepondu:_0x50b88e}=_0x441f00;if(_0x50b88e){if(_0x50b88e['audioMessage']){const _0x4c2857=await _0x264e10['downloadAndSaveMediaMessage'](_0x50b88e[_0x5bd903(0xca)]);let _0x10e73d=_0x5bd903(0xc1),_0x31329c=filename+'.mp3';try{exec(_0x5bd903(0xb6)+_0x4c2857+'\x20'+_0x10e73d+'\x20'+_0x31329c,(_0x32df9c,_0x4a6744,_0x67b43d)=>{const _0x49ecf1=_0x5bd903;fs['unlinkSync'](_0x4c2857);if(_0x32df9c)return _0x1aea0f(_0x49ecf1(0xc9)+_0x32df9c);let _0x5ab692=fs[_0x49ecf1(0xbd)](_0x31329c);_0x264e10[_0x49ecf1(0xc8)](_0x38e3ce,{'audio':_0x5ab692,'mimetype':'audio/mpeg'},{'quoted':_0x493ccd}),fs[_0x49ecf1(0xb9)](_0x31329c);});}catch(_0x2b8aa2){_0x1aea0f(_0x5bd903(0xbc)+_0x2b8aa2);}}else _0x1aea0f('The\x20command\x20only\x20works\x20with\x20audio\x20messages');}else _0x1aea0f('Please\x20mention\x20an\x20audio');}),Hamza({'nomCom':'slow','categorie':_0x19d8f3(0xd8)},async(_0x5cffc8,_0x3fd29f,_0xb70992)=>{const _0x44b4a4=_0x19d8f3,{ms:_0x41cc8c,repondre:_0x58c7eb,msgRepondu:_0x2dfab2}=_0xb70992;if(_0x2dfab2){if(_0x2dfab2[_0x44b4a4(0xca)]){const _0x20046c=await _0x3fd29f[_0x44b4a4(0xc5)](_0x2dfab2[_0x44b4a4(0xca)]);let _0x364904=_0x44b4a4(0xb3),_0x31dbb1=filename+_0x44b4a4(0xc7);try{exec(_0x44b4a4(0xb6)+_0x20046c+'\x20'+_0x364904+'\x20'+_0x31dbb1,(_0x5bf857,_0x20e4bc,_0x34f77c)=>{const _0xd5873b=_0x44b4a4;fs[_0xd5873b(0xb9)](_0x20046c);if(_0x5bf857)return _0x58c7eb(_0xd5873b(0xc9)+_0x5bf857);let _0x1b59c0=fs[_0xd5873b(0xbd)](_0x31dbb1);_0x3fd29f['sendMessage'](_0x5cffc8,{'audio':_0x1b59c0,'mimetype':'audio/mpeg'},{'quoted':_0x41cc8c}),fs['unlinkSync'](_0x31dbb1);});}catch(_0x31b522){_0x58c7eb(_0x44b4a4(0xbc)+_0x31b522);}}else _0x58c7eb(_0x44b4a4(0xb5));}else _0x58c7eb(_0x44b4a4(0xb7));}),Hamza({'nomCom':'smooth','categorie':_0x19d8f3(0xd8)},async(_0x3cc367,_0x127814,_0x2d5c50)=>{const _0x506261=_0x19d8f3,{ms:_0x2d7c91,repondre:_0x37bc5c,msgRepondu:_0x3e9fd9}=_0x2d5c50;if(_0x3e9fd9){if(_0x3e9fd9[_0x506261(0xca)]){const _0x33ec7e=await _0x127814[_0x506261(0xc5)](_0x3e9fd9[_0x506261(0xca)]);let _0x3a9f31=_0x506261(0xcf),_0x118fa6=filename+_0x506261(0xc7);try{exec(_0x506261(0xb6)+_0x33ec7e+'\x20'+_0x3a9f31+'\x20'+_0x118fa6,(_0x493d58,_0x213670,_0x1a6ce7)=>{const _0x3d3568=_0x506261;fs[_0x3d3568(0xb9)](_0x33ec7e);if(_0x493d58)return _0x37bc5c(_0x3d3568(0xc9)+_0x493d58);let _0x4d8821=fs[_0x3d3568(0xbd)](_0x118fa6);_0x127814[_0x3d3568(0xc8)](_0x3cc367,{'audio':_0x4d8821,'mimetype':_0x3d3568(0xba)},{'quoted':_0x2d7c91}),fs[_0x3d3568(0xb9)](_0x118fa6);});}catch(_0xd37f19){_0x37bc5c(_0x506261(0xbc)+_0xd37f19);}}else _0x37bc5c(_0x506261(0xb5));}else _0x37bc5c(_0x506261(0xb7));}),Hamza({'nomCom':'tempo','categorie':_0x19d8f3(0xd8)},async(_0x4e9afe,_0x10efdd,_0xa0dec7)=>{const _0x50d65d=_0x19d8f3,{ms:_0xf83841,repondre:_0x28c907,msgRepondu:_0x38ab35}=_0xa0dec7;if(_0x38ab35){if(_0x38ab35[_0x50d65d(0xca)]){const _0x153769=await _0x10efdd[_0x50d65d(0xc5)](_0x38ab35[_0x50d65d(0xca)]);let _0x217573=_0x50d65d(0xd5),_0x4c609e=filename+_0x50d65d(0xc7);try{exec(_0x50d65d(0xb6)+_0x153769+'\x20'+_0x217573+'\x20'+_0x4c609e,(_0x20fde0,_0x34ffac,_0x566b4b)=>{const _0x367c14=_0x50d65d;fs[_0x367c14(0xb9)](_0x153769);if(_0x20fde0)return _0x28c907('error\x20during\x20the\x20procedure\x20'+_0x20fde0);let _0x5b27e4=fs['readFileSync'](_0x4c609e);_0x10efdd[_0x367c14(0xc8)](_0x4e9afe,{'audio':_0x5b27e4,'mimetype':_0x367c14(0xba)},{'quoted':_0xf83841}),fs[_0x367c14(0xb9)](_0x4c609e);});}catch(_0x3a7bfc){_0x28c907('Error\x20:\x20'+_0x3a7bfc);}}else _0x28c907(_0x50d65d(0xb5));}else _0x28c907(_0x50d65d(0xb7));}),Hamza({'nomCom':'nightcore','categorie':_0x19d8f3(0xd8)},async(_0x16dd27,_0x36ef13,_0x50519c)=>{const _0x1a5eb1=_0x19d8f3,{ms:_0x2f9f13,repondre:_0x1dc46c,msgRepondu:_0x5075d1}=_0x50519c;if(_0x5075d1){if(_0x5075d1[_0x1a5eb1(0xca)]){const _0x5a4d60=await _0x36ef13['downloadAndSaveMediaMessage'](_0x5075d1[_0x1a5eb1(0xca)]);let _0x24b4f4=_0x1a5eb1(0xcc),_0x4ac7d5=filename+'.mp3';try{exec('ffmpeg\x20-i\x20'+_0x5a4d60+'\x20'+_0x24b4f4+'\x20'+_0x4ac7d5,(_0x19f3db,_0x3f6741,_0x424014)=>{const _0x4f9766=_0x1a5eb1;fs[_0x4f9766(0xb9)](_0x5a4d60);if(_0x19f3db)return _0x1dc46c('error\x20during\x20the\x20procedure\x20'+_0x19f3db);let _0xeae7eb=fs['readFileSync'](_0x4ac7d5);_0x36ef13['sendMessage'](_0x16dd27,{'audio':_0xeae7eb,'mimetype':_0x4f9766(0xba)},{'quoted':_0x2f9f13}),fs[_0x4f9766(0xb9)](_0x4ac7d5);});}catch(_0x2cf1cd){_0x1dc46c(_0x1a5eb1(0xd1)+_0x2cf1cd);}}else _0x1dc46c(_0x1a5eb1(0xb5));}else _0x1dc46c(_0x1a5eb1(0xb7));});
