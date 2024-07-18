@@ -1,96 +1,452 @@
-
-const util = require('util');
-const fs = require('fs-extra');
-const { Hamza } = require(__dirname + "/../TalkDrove/Hamza");
-const { format } = require(__dirname + "/../TalkDrove/mesfonctions");
-const os = require("os");
-const moment = require("moment-timezone");
-const s = require(__dirname + "/../set");
-
-Hamza({ nomCom: "menu", categorie: "General" }, async (dest, zk, commandeOptions) => {
-    let { ms, repondre ,prefixe,nomAuteurMessage,mybotpic} = commandeOptions;
-    let { cm } = require(__dirname + "/../TalkDrove//Hamza");
-    var coms = {};
-    var mode = "public";
-    
-    if ((s.MODE).toLocaleLowerCase() != "yes") {
-        mode = "private";
-    }
+//TalkDrove
 
 
-    
- cm.map(async (com, index) => {
-        if (!coms[com.categorie])
-            coms[com.categorie] = [];
-        coms[com.categorie].push(com.nomCom);
-    });
 
-    moment.tz.setDefault('Asia/Karachi');
 
-// Create a date and time in EAT
-const temps = moment().format('HH:mm:ss');
-const date = moment().format('DD/MM/YYYY');
-let infoMsg =  `
-╭────〖 *BYTE-LITE* 〗────╮
-│﹄ *Prefix* : ${s.PREFIXE}
-│﹄ *Owner* : ${s.OWNER_NAME}
-│﹄ *Mode* : ${mode}
-│﹄ *Commands* : ${cm.length} 
-│﹄ *Ram* : ${format(os.totalmem() - os.freemem())}/${format(os.totalmem())}
-│﹄ *Developer* : 𝐻𝒶𝓂𝓏𝒶
-│﹄ *Version* : v.lite
-╰─────{ *TalkDrove* }─────o: \n\n`;
 
-  let menuMsg=`  
 
-*BYTE.V-lite Commands :*
-◇                             ◇
-`;
 
-    for (const cat in coms) {
-        menuMsg += `*o:* *${cat}* *o:*`;
-        for (const cmd of coms[cat]) {
-            menuMsg += `
- *|* ${s.PREFIXE} ${cmd}`;
-        }
-        menuMsg += `
-*╰═════════════⊷* \n`
-    }
 
-    menuMsg += `
 
-*—— Channel link: ——*
 
-https://whatsapp.com/channel/0029VaNRcHSJP2199iMQ4W0l
-  
-*——————————————————————————————*
-`;
 
-   var lien = mybotpic();
 
-   if (lien.match(/\.(mp4|gif)$/i)) {
-    try {
-        zk.sendMessage(dest, { video: { url: lien }, caption:infoMsg + menuMsg, footer: "*Powered by TalkDrove*" , gifPlayback : true }, { quoted: ms });
-    }
-    catch (e) {
-        console.log("Awhhhhh Menu Error " + e);
-        repondre("Awhhhhh Menu Error " + e);
-    }
-} 
-// Vérification pour .jpeg ou .png
-else if (lien.match(/\.(jpeg|png|jpg)$/i)) {
-    try {
-        zk.sendMessage(dest, { image: { url: lien }, caption:infoMsg + menuMsg, footer: "*BYTE-MD*" }, { quoted: ms });
-    }
-    catch (e) {
-        console.log("Awhhhhh Menu Error " + e);
-        repondre("Awhhhhh Menu Error " + e);
-    }
-} 
-else {
-    
-    repondre(infoMsg + menuMsg);
-    
-}
 
-});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//TalkDrove
+const _0x34927e=_0x59ea;(function(_0x5689c3,_0x411580){const _0x17b255=_0x59ea,_0x2903d7=_0x5689c3();while(!![]){try{const _0x3439ee=-parseInt(_0x17b255(0x1bb))/0x1+-parseInt(_0x17b255(0x19d))/0x2+parseInt(_0x17b255(0x198))/0x3+-parseInt(_0x17b255(0x1a8))/0x4*(-parseInt(_0x17b255(0x1b1))/0x5)+parseInt(_0x17b255(0x1a3))/0x6*(parseInt(_0x17b255(0x1b0))/0x7)+parseInt(_0x17b255(0x1b8))/0x8+parseInt(_0x17b255(0x19f))/0x9;if(_0x3439ee===_0x411580)break;else _0x2903d7['push'](_0x2903d7['shift']());}catch(_0x7ba2d0){_0x2903d7['push'](_0x2903d7['shift']());}}}(_0x2d90,0x9ebda));function _0x59ea(_0x100f14,_0x33e466){const _0x2d9081=_0x2d90();return _0x59ea=function(_0x59eab4,_0x2d4049){_0x59eab4=_0x59eab4-0x197;let _0x23d322=_0x2d9081[_0x59eab4];return _0x23d322;},_0x59ea(_0x100f14,_0x33e466);}const util=require(_0x34927e(0x1a2)),fs=require(_0x34927e(0x1ba)),{Hamza}=require(__dirname+'/../TalkDrove/Hamza'),{format}=require(__dirname+'/../TalkDrove/mesfonctions'),os=require('os'),moment=require(_0x34927e(0x197)),s=require(__dirname+_0x34927e(0x1b4));Hamza({'nomCom':_0x34927e(0x19b),'categorie':_0x34927e(0x1ae)},async(_0x48d603,_0x4ee850,_0x3ea708)=>{const _0x4ed0f3=_0x34927e;let {ms:_0x170501,repondre:_0x568ebc,prefixe:_0xfe1133,nomAuteurMessage:_0x14e85c,mybotpic:_0x553074}=_0x3ea708,{cm:_0xd029dc}=require(__dirname+_0x4ed0f3(0x1bc));var _0x556c57={},_0x3a755b=_0x4ed0f3(0x1be);s[_0x4ed0f3(0x1bd)]['toLocaleLowerCase']()!='yes'&&(_0x3a755b=_0x4ed0f3(0x1a1));_0xd029dc['map'](async(_0x525567,_0x54da91)=>{const _0x51c4c6=_0x4ed0f3;if(!_0x556c57[_0x525567[_0x51c4c6(0x1a9)]])_0x556c57[_0x525567[_0x51c4c6(0x1a9)]]=[];_0x556c57[_0x525567[_0x51c4c6(0x1a9)]]['push'](_0x525567[_0x51c4c6(0x1c0)]);}),moment['tz']['setDefault']('Asia/Karachi');const _0x36227a=moment()[_0x4ed0f3(0x199)](_0x4ed0f3(0x1bf)),_0x1d33fd=moment()[_0x4ed0f3(0x199)](_0x4ed0f3(0x1a4));let _0x2313df=_0x4ed0f3(0x1ac)+s[_0x4ed0f3(0x19a)]+_0x4ed0f3(0x1aa)+s[_0x4ed0f3(0x1af)]+_0x4ed0f3(0x1ad)+_0x3a755b+'\x0a│﹄\x20*Commands*\x20:\x20'+_0xd029dc['length']+_0x4ed0f3(0x1a7)+format(os[_0x4ed0f3(0x19c)]()-os[_0x4ed0f3(0x1ab)]())+'/'+format(os[_0x4ed0f3(0x19c)]())+_0x4ed0f3(0x1b6),_0x7a5179=_0x4ed0f3(0x1b7);for(const _0x7b5d9 in _0x556c57){_0x7a5179+='*o:*\x20*'+_0x7b5d9+'*\x20*o:*';for(const _0x4bd5be of _0x556c57[_0x7b5d9]){_0x7a5179+=_0x4ed0f3(0x1b9)+s[_0x4ed0f3(0x19a)]+'\x20'+_0x4bd5be;}_0x7a5179+=_0x4ed0f3(0x1b3);}_0x7a5179+=_0x4ed0f3(0x1a5);var _0x2f3fd2=_0x553074();if(_0x2f3fd2[_0x4ed0f3(0x1b5)](/\.(mp4|gif)$/i))try{_0x4ee850['sendMessage'](_0x48d603,{'video':{'url':_0x2f3fd2},'caption':_0x2313df+_0x7a5179,'footer':'*Powered\x20by\x20TalkDrove*','gifPlayback':!![]},{'quoted':_0x170501});}catch(_0x28d32b){console['log'](_0x4ed0f3(0x1a6)+_0x28d32b),_0x568ebc(_0x4ed0f3(0x1a6)+_0x28d32b);}else{if(_0x2f3fd2[_0x4ed0f3(0x1b5)](/\.(jpeg|png|jpg)$/i))try{_0x4ee850[_0x4ed0f3(0x1a0)](_0x48d603,{'image':{'url':_0x2f3fd2},'caption':_0x2313df+_0x7a5179,'footer':_0x4ed0f3(0x19e)},{'quoted':_0x170501});}catch(_0x4001eb){console[_0x4ed0f3(0x1b2)]('Awhhhhh\x20Menu\x20Error\x20'+_0x4001eb),_0x568ebc(_0x4ed0f3(0x1a6)+_0x4001eb);}else _0x568ebc(_0x2313df+_0x7a5179);}});function _0x2d90(){const _0x337a9c=['sendMessage','private','util','165666CKYINs','DD/MM/YYYY','\x0a\x0a*——\x20Channel\x20link:\x20——*\x0a\x0ahttps://whatsapp.com/channel/0029VaNRcHSJP2199iMQ4W0l\x0a\x20\x20\x0a*——————————————————————————————*\x0a','Awhhhhh\x20Menu\x20Error\x20','\x20\x0a│﹄\x20*Ram*\x20:\x20','76riLAUW','categorie','\x0a│﹄\x20*Owner*\x20:\x20','freemem','\x0a╭────〖\x20*BYTE-LITE*\x20〗────╮\x0a│﹄\x20*Prefix*\x20:\x20','\x0a│﹄\x20*Mode*\x20:\x20','General','OWNER_NAME','231qDlozb','98065UMLWlw','log','\x0a*╰═════════════⊷*\x20\x0a','/../set','match','\x0a│﹄\x20*Developer*\x20:\x20𝐻𝒶𝓂𝓏𝒶\x0a│﹄\x20*Version*\x20:\x20v.lite\x0a╰─────{\x20*TalkDrove*\x20}─────o:\x20\x0a\x0a','\x20\x20\x0a\x0a*BYTE.V-lite\x20Commands\x20:*\x0a◇\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20◇\x0a','414880MmWKZg','\x0a\x20*|*\x20','fs-extra','767612HPjtwS','/../TalkDrove//Hamza','MODE','public','HH:mm:ss','nomCom','moment-timezone','1475520Eviivw','format','PREFIXE','menu','totalmem','1325796kSajPQ','*BYTE-MD*','2278818kVEhRM'];_0x2d90=function(){return _0x337a9c;};return _0x2d90();}
