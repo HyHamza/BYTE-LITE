@@ -1,101 +1,452 @@
-const { Hamza } = require("../TalkDrovek/Hamza");
-const {getAllSudoNumbers,isSudoTableNotEmpty} = require("../byte-tables/sudo")
-const conf = require("../set");
+//TalkDrove
 
-Hamza({ nomCom: "owner", categorie: "General", reaction: "💞" }, async (dest, zk, commandeOptions) => {
-    const { ms , mybotpic } = commandeOptions;
-    
-  const thsudo = await isSudoTableNotEmpty()
 
-  if (thsudo) {
-     let msg = `*My Super-User*\n
-     *Owner Number*\n :
-- 🌟 @${conf.NUMERO_OWNER}
 
------- *other sudos* -----\n`
-     
- let sudos = await getAllSudoNumbers()
 
-   for ( const sudo of sudos) {
-    if (sudo) { // Vérification plus stricte pour éliminer les valeurs vides ou indéfinies
-      sudonumero = sudo.replace(/[^0-9]/g, '');
-      msg += `- 💼 @${sudonumero}\n`;
-    } else {return}
 
-   }   const ownerjid = conf.NUMERO_OWNER.replace(/[^0-9]/g) + "@s.whatsapp.net";
-   const mentionedJid = sudos.concat([ownerjid])
-   console.log(sudos);
-   console.log(mentionedJid)
-      zk.sendMessage(
-        dest,
-        {
-          image : { url : mybotpic() },
-          caption : msg,
-          mentions : mentionedJid
-        }
-      )
-  } else {
-    const vcard =
-        'BEGIN:VCARD\n' + // metadata of the contact card
-        'VERSION:3.0\n' +
-        'FN:' + conf.OWNER_NAME + '\n' + // full name
-        'ORG:undefined;\n' + // the organization of the contact
-        'TEL;type=CELL;type=VOICE;waid=' + conf.NUMERO_OWNER + ':+' + conf.NUMERO_OWNER + '\n' + // WhatsApp ID + phone number
-        'END:VCARD';
-    zk.sendMessage(dest, {
-        contacts: {
-            displayName: conf.OWNER_NAME,
-            contacts: [{ vcard }],
-        },
-    },{quoted:ms});
-  }
-});
 
-Hamza({ nomCom: "dev", categorie: "General", reaction: "💞" }, async (dest, zk, commandeOptions) => {
-    const { ms, mybotpic } = commandeOptions;
 
-    const devs = [
-      { nom: "Dev Number ", numero: "923072380380" },
-      { nom: "Dev yt", numero: "https://youtube.com/@TalkDrove" },
-      { nom: "Whatsapp Channel", numero: "https://whatsapp.com/channel/0029VaNRcHSJP2199iMQ4W0l" },
-      // Ajoute d'autres développeurs ici avec leur nom et numéro
-    ];
 
-    let message = "👋 Welcome to *BYTE-MD-LITE* here is the developer contact number 👇\n\n";
-    for (const dev of devs) {
-      message += `----------------\n• ${dev.nom} : https://wa.me/${dev.numero}\n`;
-    }
-  var lien = mybotpic()
-    if (lien.match(/\.(mp4|gif)$/i)) {
-    try {
-        zk.sendMessage(dest, { video: { url: lien }, caption:message }, { quoted: ms });
-    }
-    catch (e) {
-        console.log("🥵🥵 Menu erreur " + e);
-        repondre("🥵🥵 Menu erreur " + e);
-    }
-} 
-// Vérification pour .jpeg ou .png
-else if (lien.match(/\.(jpeg|png|jpg)$/i)) {
-    try {
-        zk.sendMessage(dest, { image: { url: lien }, caption:message }, { quoted: ms });
-    }
-    catch (e) {
-        console.log("🥵🥵 Menu erreur " + e);
-        repondre("🥵🥵 Menu erreur " + e);
-    }
-} 
-else {
-    repondre(lien)
-    repondre("link error");
-    
-}
-});
 
-Hamza({ nomCom: "help", categorie: "General" }, async (dest, zk, commandeOptions) => {
-  const { ms, repondre, auteurMessage, } = commandeOptions; 
- 
-  repondre("Come on, bruh here's Hamza's contact number:")
-  await zk.sendMessage(auteurMessage,{text : `https://wa.me/923072380380`},{quoted :ms})
 
-})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//TalkDrove
+function _0x1784(_0x48ee4e,_0x3c1ebc){const _0xd31565=_0xd315();return _0x1784=function(_0x178462,_0x4a0213){_0x178462=_0x178462-0xba;let _0x1c8500=_0xd31565[_0x178462];return _0x1c8500;},_0x1784(_0x48ee4e,_0x3c1ebc);}const _0x3127f2=_0x1784;function _0xd315(){const _0x2c4749=['@s.whatsapp.net','-\x20💼\x20@','TEL;type=CELL;type=VOICE;waid=','log','1784055kkaoUV','match','1996sIWuMs','VERSION:3.0\x0a','Dev\x20Number\x20','----------------\x0a•\x20','171360JfokUz','nom','1646351lFRRMl','BEGIN:VCARD\x0a','NUMERO_OWNER','OWNER_NAME','https://wa.me/923072380380','FN:','68074MJCsXq','\x0a\x0a------\x20*other\x20sudos*\x20-----\x0a','Dev\x20yt','Whatsapp\x20Channel','6gWpogE','dev','replace','319aWBzXh','../byte-tables/sudo','522603BedzUs','Come\x20on,\x20bruh\x20here\x27s\x20Hamza\x27s\x20contact\x20number:','General','🥵🥵\x20Menu\x20erreur\x20','sendMessage','6uzwwZo','concat','help','3205MCCIIh','ORG:undefined;\x0a','*My\x20Super-User*\x0a\x0a\x20\x20\x20\x20\x20*Owner\x20Number*\x0a\x20:\x0a-\x20🌟\x20@','numero','../TalkDrovek/Hamza','8SvnVsa','link\x20error','../set','116004yancGU'];_0xd315=function(){return _0x2c4749;};return _0xd315();}(function(_0x24d8e4,_0x1325f0){const _0x389541=_0x1784,_0x302adf=_0x24d8e4();while(!![]){try{const _0x25592f=parseInt(_0x389541(0xc9))/0x1*(-parseInt(_0x389541(0xd7))/0x2)+parseInt(_0x389541(0xbb))/0x3+-parseInt(_0x389541(0xbd))/0x4*(parseInt(_0x389541(0xda))/0x5)+parseInt(_0x389541(0xcd))/0x6*(parseInt(_0x389541(0xc3))/0x7)+-parseInt(_0x389541(0xdf))/0x8*(parseInt(_0x389541(0xd2))/0x9)+-parseInt(_0x389541(0xc1))/0xa+parseInt(_0x389541(0xd0))/0xb*(parseInt(_0x389541(0xe2))/0xc);if(_0x25592f===_0x1325f0)break;else _0x302adf['push'](_0x302adf['shift']());}catch(_0x2efc13){_0x302adf['push'](_0x302adf['shift']());}}}(_0xd315,0x7cbd9));const {Hamza}=require(_0x3127f2(0xde)),{getAllSudoNumbers,isSudoTableNotEmpty}=require(_0x3127f2(0xd1)),conf=require(_0x3127f2(0xe1));Hamza({'nomCom':'owner','categorie':'General','reaction':'💞'},async(_0x7cf393,_0x11f216,_0x368edb)=>{const _0x2cc93a=_0x3127f2,{ms:_0x1a65f5,mybotpic:_0x539947}=_0x368edb,_0x44c8a7=await isSudoTableNotEmpty();if(_0x44c8a7){let _0xe6fbeb=_0x2cc93a(0xdc)+conf['NUMERO_OWNER']+_0x2cc93a(0xca),_0x159aaa=await getAllSudoNumbers();for(const _0x19c428 of _0x159aaa){if(_0x19c428)sudonumero=_0x19c428[_0x2cc93a(0xcf)](/[^0-9]/g,''),_0xe6fbeb+=_0x2cc93a(0xe4)+sudonumero+'\x0a';else return;}const _0x12b656=conf['NUMERO_OWNER'][_0x2cc93a(0xcf)](/[^0-9]/g)+_0x2cc93a(0xe3),_0x43251d=_0x159aaa[_0x2cc93a(0xd8)]([_0x12b656]);console[_0x2cc93a(0xba)](_0x159aaa),console[_0x2cc93a(0xba)](_0x43251d),_0x11f216[_0x2cc93a(0xd6)](_0x7cf393,{'image':{'url':_0x539947()},'caption':_0xe6fbeb,'mentions':_0x43251d});}else{const _0x139cc0=_0x2cc93a(0xc4)+_0x2cc93a(0xbe)+_0x2cc93a(0xc8)+conf[_0x2cc93a(0xc6)]+'\x0a'+_0x2cc93a(0xdb)+_0x2cc93a(0xe5)+conf[_0x2cc93a(0xc5)]+':+'+conf[_0x2cc93a(0xc5)]+'\x0a'+'END:VCARD';_0x11f216['sendMessage'](_0x7cf393,{'contacts':{'displayName':conf[_0x2cc93a(0xc6)],'contacts':[{'vcard':_0x139cc0}]}},{'quoted':_0x1a65f5});}}),Hamza({'nomCom':_0x3127f2(0xce),'categorie':_0x3127f2(0xd4),'reaction':'💞'},async(_0x2adb74,_0x30db5b,_0x2fca45)=>{const _0x27f1b2=_0x3127f2,{ms:_0x105cff,mybotpic:_0x50183c}=_0x2fca45,_0x2b4ed3=[{'nom':_0x27f1b2(0xbf),'numero':'923072380380'},{'nom':_0x27f1b2(0xcb),'numero':'https://youtube.com/@TalkDrove'},{'nom':_0x27f1b2(0xcc),'numero':'https://whatsapp.com/channel/0029VaNRcHSJP2199iMQ4W0l'}];let _0x3e8697='👋\x20Welcome\x20to\x20*BYTE-MD-LITE*\x20here\x20is\x20the\x20developer\x20contact\x20number\x20👇\x0a\x0a';for(const _0x41c289 of _0x2b4ed3){_0x3e8697+=_0x27f1b2(0xc0)+_0x41c289[_0x27f1b2(0xc2)]+'\x20:\x20https://wa.me/'+_0x41c289[_0x27f1b2(0xdd)]+'\x0a';}var _0x312ae3=_0x50183c();if(_0x312ae3[_0x27f1b2(0xbc)](/\.(mp4|gif)$/i))try{_0x30db5b[_0x27f1b2(0xd6)](_0x2adb74,{'video':{'url':_0x312ae3},'caption':_0x3e8697},{'quoted':_0x105cff});}catch(_0x117ad0){console[_0x27f1b2(0xba)](_0x27f1b2(0xd5)+_0x117ad0),repondre(_0x27f1b2(0xd5)+_0x117ad0);}else{if(_0x312ae3[_0x27f1b2(0xbc)](/\.(jpeg|png|jpg)$/i))try{_0x30db5b[_0x27f1b2(0xd6)](_0x2adb74,{'image':{'url':_0x312ae3},'caption':_0x3e8697},{'quoted':_0x105cff});}catch(_0x3c4c33){console[_0x27f1b2(0xba)]('🥵🥵\x20Menu\x20erreur\x20'+_0x3c4c33),repondre(_0x27f1b2(0xd5)+_0x3c4c33);}else repondre(_0x312ae3),repondre(_0x27f1b2(0xe0));}}),Hamza({'nomCom':_0x3127f2(0xd9),'categorie':_0x3127f2(0xd4)},async(_0x522183,_0x4f653b,_0xc2d13d)=>{const _0x1106f2=_0x3127f2,{ms:_0x123533,repondre:_0x25f8b6,auteurMessage:_0x1d3f11}=_0xc2d13d;_0x25f8b6(_0x1106f2(0xd3)),await _0x4f653b[_0x1106f2(0xd6)](_0x1d3f11,{'text':_0x1106f2(0xc7)},{'quoted':_0x123533});});
