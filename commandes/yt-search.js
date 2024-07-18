@@ -1,134 +1,452 @@
-const { Hamza } = require("../TalkDrove/Hamza");
-const { getytlink, ytdwn } = require("../TalkDrove/ytdl-core");
-const yts = require("yt-search");
-const ytdl = require('ytdl-core');
-const fs = require('fs');
+//TalkDrove
 
-Hamza({ nomCom: "yts", categorie: "Search", reaction: "✋" }, async (dest, zk, commandeOptions) => {
-  const { ms, repondre, arg } = commandeOptions;
-  const query = arg.join(" ");
 
-  if (!query[0]) {
-    repondre("what do you want");
-    return;
-  }
 
-  try {
-    const info = await yts(query);
-    const resultat = info.videos;
 
-    let captions = "";
-    for (let i = 0; i < 10; i++) {
-      captions += `----------------\nTitle: ${resultat[i].title}\nTime : ${resultat[i].timestamp}\nUrl: ${resultat[i].url}\n`;
-    }
-    captions += "\n======\n┃BYTE┃";
 
-    // repondre(captions)
-    zk.sendMessage(dest, { image: { url: resultat[0].thumbnail }, caption: captions }, { quoted: ms });
-  } catch (error) {
-    repondre("Erreur lors de la procédure : " + error);
-  }
-});
 
-zokou({
-  nomCom: "ytmp4",
-  categorie: "Download",
-  reaction: "🎥"
-}, async (origineMessage, zk, commandeOptions) => {
-  const { arg, ms, repondre } = commandeOptions;
 
-  if (!arg[0]) {
-    repondre("insert a youtube link");
-    return;
-  }
 
-  const topo = arg.join(" ");
-  try {
-    /* const search = await yts(topo);
-    const videos = search.videos;
 
-    if (videos && videos.length > 0 && videos[0]) {
-      const Element = videos[0];
 
-      let InfoMess = {
-        image: { url: videos[0].thumbnail },
-        caption: `*nom de la vidéo :* _${Element.title}_
-*Durée :* _${Element.timestamp}_
-*Lien :* _${Element.url}_
-_*En cours de téléchargement...*_\n\n`
-      };
 
-      zk.sendMessage(origineMessage, InfoMess, { quoted: ms });
-    */
 
-    // Obtenir les informations de la vidéo à partir du lien YouTube
-    const videoInfo = await ytdl.getInfo(topo);
-    // Format vidéo avec la meilleure qualité disponible
-    const format = ytdl.chooseFormat(videoInfo.formats, { quality: '18' });
-    // Télécharger la vidéo
-    const videoStream = ytdl.downloadFromInfo(videoInfo, { format });
 
-    // Nom du fichier local pour sauvegarder la vidéo
-    const filename = 'video.mp4';
 
-    // Écrire le flux vidéo dans un fichier local
-    const fileStream = fs.createWriteStream(filename);
-    videoStream.pipe(fileStream);
 
-    fileStream.on('finish', () => {
-      // Envoi du fichier vidéo en utilisant l'URL du fichier local
-      zk.sendMessage(origineMessage, { video: { url: `./${filename}` }, caption: "┃TKM bot┃", gifPlayback: false }, { quoted: ms });
 
-    });
 
-    fileStream.on('error', (error) => {
-      console.error('Erreur lors de l\'écriture du fichier vidéo :', error);
-      repondre('Une erreur est survenue lors de l\'écriture du fichier vidéo.');
-    });
 
-  } catch (error) {
-    console.error('Erreur lors de la recherche ou du téléchargement de la vidéo :', error);
-    repondre('Une erreur est survenue lors de la recherche ou du téléchargement de la vidéo.' + error);
-  }
-});
 
-zokou({
-  nomCom: "ytmp3",
-  categorie: "Download",
-  reaction: "💿"
-}, async (origineMessage, zk, commandeOptions) => {
-  const { ms, repondre, arg } = commandeOptions;
 
-  if (!arg[0]) {
-    repondre("Insert a youtube link");
-    return;
-  }
 
-  try {
-    let topo = arg.join(" ");
 
-    const audioStream = ytdl(topo, { filter: 'audioonly', quality: 'highestaudio' });
 
-    // Nom du fichier local pour sauvegarder le fichier audio
-    const filename = 'audio.mp3';
 
-    // Écrire le flux audio dans un fichier local
-    const fileStream = fs.createWriteStream(filename);
-    audioStream.pipe(fileStream);
 
-    fileStream.on('finish', () => {
-      // Envoi du fichier audio en utilisant l'URL du fichier local
-      zk.sendMessage(origineMessage, { audio: { url: `./${filename}` }, mimetype: 'audio/mp4' }, { quoted: ms, ptt: false });
-      console.log("Envoi du fichier audio terminé !");
-    });
 
-    fileStream.on('error', (error) => {
-      console.error('Erreur lors de l\'écriture du fichier audio :', error);
-      repondre('Une erreur est survenue lors de l\'écriture du fichier audio.');
-    });
 
-  } catch (error) {
-    console.error('Erreur lors de la recherche ou du téléchargement de la vidéo :', error);
-    repondre('Une erreur est survenue lors de la recherche ou du téléchargement de la vidéo.');
-  }
-});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//TalkDrove
+function _0xa046(_0x29b47d,_0x4889d6){const _0xbef4a3=_0xbef4();return _0xa046=function(_0xa04671,_0x5f3cb8){_0xa04671=_0xa04671-0xc0;let _0x53d899=_0xbef4a3[_0xa04671];return _0x53d899;},_0xa046(_0x29b47d,_0x4889d6);}const _0x297072=_0xa046;function _0xbef4(){const _0xa12907=['yt-search','91YdGbQf','audioonly','audio.mp3','downloadFromInfo','Une\x20erreur\x20est\x20survenue\x20lors\x20de\x20la\x20recherche\x20ou\x20du\x20téléchargement\x20de\x20la\x20vidéo.','4789795NsnKRK','Insert\x20a\x20youtube\x20link','error','ytmp3','\x0aTime\x20:\x20','Download','18613050OGeWIB','highestaudio','yts','timestamp','pipe','getInfo','Erreur\x20lors\x20de\x20la\x20recherche\x20ou\x20du\x20téléchargement\x20de\x20la\x20vidéo\x20:','\x0aUrl:\x20','thumbnail','4054383wSuCQh','6172748jWuGbn','5814432BFSJVL','finish','Erreur\x20lors\x20de\x20l\x27écriture\x20du\x20fichier\x20vidéo\x20:','sendMessage','Erreur\x20lors\x20de\x20l\x27écriture\x20du\x20fichier\x20audio\x20:','../TalkDrove/Hamza','Erreur\x20lors\x20de\x20la\x20procédure\x20:\x20','log','insert\x20a\x20youtube\x20link','3elxKWV','Une\x20erreur\x20est\x20survenue\x20lors\x20de\x20l\x27écriture\x20du\x20fichier\x20audio.','7kliIXK','\x0a======\x0a┃BYTE┃','video.mp4','383058wYhUhW','961256rkZthO','Search','ytdl-core','createWriteStream','join','ytmp4','Envoi\x20du\x20fichier\x20audio\x20terminé\x20!','what\x20do\x20you\x20want'];_0xbef4=function(){return _0xa12907;};return _0xbef4();}(function(_0x1e6308,_0x1658b8){const _0x2dbf2a=_0xa046,_0x4d6d5a=_0x1e6308();while(!![]){try{const _0xadc08=-parseInt(_0x2dbf2a(0xdb))/0x1*(-parseInt(_0x2dbf2a(0xde))/0x2)+-parseInt(_0x2dbf2a(0xd9))/0x3*(-parseInt(_0x2dbf2a(0xcf))/0x4)+-parseInt(_0x2dbf2a(0xed))/0x5+-parseInt(_0x2dbf2a(0xd0))/0x6+parseInt(_0x2dbf2a(0xe8))/0x7*(-parseInt(_0x2dbf2a(0xdf))/0x8)+-parseInt(_0x2dbf2a(0xce))/0x9+parseInt(_0x2dbf2a(0xc5))/0xa;if(_0xadc08===_0x1658b8)break;else _0x4d6d5a['push'](_0x4d6d5a['shift']());}catch(_0x43d1d9){_0x4d6d5a['push'](_0x4d6d5a['shift']());}}}(_0xbef4,0xc4b04));const {Hamza}=require(_0x297072(0xd5)),{getytlink,ytdwn}=require('../TalkDrove/ytdl-core'),yts=require(_0x297072(0xe7)),ytdl=require(_0x297072(0xe1)),fs=require('fs');Hamza({'nomCom':_0x297072(0xc7),'categorie':_0x297072(0xe0),'reaction':'✋'},async(_0x30e85d,_0x4283de,_0x2f259e)=>{const _0x5564e3=_0x297072,{ms:_0x2223d2,repondre:_0x2cd801,arg:_0x1e33c5}=_0x2f259e,_0x356975=_0x1e33c5[_0x5564e3(0xe3)]('\x20');if(!_0x356975[0x0]){_0x2cd801(_0x5564e3(0xe6));return;}try{const _0x4b9567=await yts(_0x356975),_0x2e6248=_0x4b9567['videos'];let _0x57246c='';for(let _0x4e7fa2=0x0;_0x4e7fa2<0xa;_0x4e7fa2++){_0x57246c+='----------------\x0aTitle:\x20'+_0x2e6248[_0x4e7fa2]['title']+_0x5564e3(0xc3)+_0x2e6248[_0x4e7fa2][_0x5564e3(0xc8)]+_0x5564e3(0xcc)+_0x2e6248[_0x4e7fa2]['url']+'\x0a';}_0x57246c+=_0x5564e3(0xdc),_0x4283de[_0x5564e3(0xd3)](_0x30e85d,{'image':{'url':_0x2e6248[0x0][_0x5564e3(0xcd)]},'caption':_0x57246c},{'quoted':_0x2223d2});}catch(_0x2ab745){_0x2cd801(_0x5564e3(0xd6)+_0x2ab745);}}),zokou({'nomCom':_0x297072(0xe4),'categorie':_0x297072(0xc4),'reaction':'🎥'},async(_0x59cb70,_0x476136,_0x3c7ef9)=>{const _0x438f86=_0x297072,{arg:_0x4b916c,ms:_0x3025df,repondre:_0x3f7de2}=_0x3c7ef9;if(!_0x4b916c[0x0]){_0x3f7de2(_0x438f86(0xd8));return;}const _0x2953c7=_0x4b916c['join']('\x20');try{const _0x1460dd=await ytdl[_0x438f86(0xca)](_0x2953c7),_0x263c2d=ytdl['chooseFormat'](_0x1460dd['formats'],{'quality':'18'}),_0x3952b9=ytdl[_0x438f86(0xeb)](_0x1460dd,{'format':_0x263c2d}),_0xf4f6ad=_0x438f86(0xdd),_0x453f6c=fs[_0x438f86(0xe2)](_0xf4f6ad);_0x3952b9[_0x438f86(0xc9)](_0x453f6c),_0x453f6c['on'](_0x438f86(0xd1),()=>{_0x476136['sendMessage'](_0x59cb70,{'video':{'url':'./'+_0xf4f6ad},'caption':'┃TKM\x20bot┃','gifPlayback':![]},{'quoted':_0x3025df});}),_0x453f6c['on']('error',_0x2994bc=>{const _0x483557=_0x438f86;console['error'](_0x483557(0xd2),_0x2994bc),_0x3f7de2('Une\x20erreur\x20est\x20survenue\x20lors\x20de\x20l\x27écriture\x20du\x20fichier\x20vidéo.');});}catch(_0x475552){console[_0x438f86(0xc1)](_0x438f86(0xcb),_0x475552),_0x3f7de2(_0x438f86(0xec)+_0x475552);}}),zokou({'nomCom':_0x297072(0xc2),'categorie':_0x297072(0xc4),'reaction':'💿'},async(_0x2ac943,_0x3ae04c,_0x34bd86)=>{const _0x2daa5e=_0x297072,{ms:_0x495f08,repondre:_0x5cce73,arg:_0x156a07}=_0x34bd86;if(!_0x156a07[0x0]){_0x5cce73(_0x2daa5e(0xc0));return;}try{let _0x1cc67c=_0x156a07['join']('\x20');const _0x3871f7=ytdl(_0x1cc67c,{'filter':_0x2daa5e(0xe9),'quality':_0x2daa5e(0xc6)}),_0x3372a0=_0x2daa5e(0xea),_0x33509f=fs[_0x2daa5e(0xe2)](_0x3372a0);_0x3871f7[_0x2daa5e(0xc9)](_0x33509f),_0x33509f['on']('finish',()=>{const _0x86ebac=_0x2daa5e;_0x3ae04c['sendMessage'](_0x2ac943,{'audio':{'url':'./'+_0x3372a0},'mimetype':'audio/mp4'},{'quoted':_0x495f08,'ptt':![]}),console[_0x86ebac(0xd7)](_0x86ebac(0xe5));}),_0x33509f['on']('error',_0x104279=>{const _0x444639=_0x2daa5e;console[_0x444639(0xc1)](_0x444639(0xd4),_0x104279),_0x5cce73(_0x444639(0xda));});}catch(_0xdf12c6){console['error']('Erreur\x20lors\x20de\x20la\x20recherche\x20ou\x20du\x20téléchargement\x20de\x20la\x20vidéo\x20:',_0xdf12c6),_0x5cce73(_0x2daa5e(0xec));}});
