@@ -1,94 +1,452 @@
-const { Hamza } = require('../TalkDrove/Hamza');
-const {addOrUpdateDataInAlive , getDataFromAlive} = require('../byte-tables/alive')
-const moment = require("moment-timezone");
-const s = require(__dirname + "/../set");
-
-Hamza(
-    {
-        nomCom : 'alive',
-        categorie : 'General'
-        
-    },async (dest,zk,commandeOptions) => {
-
- const {ms , arg, repondre,superUser} = commandeOptions;
-
- const data = await getDataFromAlive();
-
- if (!arg || !arg[0] || arg.join('') === '') {
-
-    if(data) {
-       
-        const {message , lien} = data;
+//TalkDrove
 
 
-        var mode = "public";
-        if ((s.MODE).toLocaleLowerCase() != "yes") {
-            mode = "private";
-        }
-      
-    
-     
-    moment.tz.setDefault('EAT');
-
-// Créer une date et une heure en EAT
-const temps = moment().format('HH:mm:ss');
-const date = moment().format('DD/MM/YYYY');
-
-    const alivemsg = `
-*Owner* : ${s.OWNER_NAME}
-*Mode* : ${mode}
-*Date* : ${date}
-*Time* : ${temps}
-
- ${message}
- 
- 
- *BYTE-MD BY TALKDROVE*`
-
- if (lien.match(/\.(mp4|gif)$/i)) {
-    try {
-        zk.sendMessage(dest, { video: { url: lien }, caption: alivemsg }, { quoted: ms });
-    }
-    catch (e) {
-        console.log("🥵🥵 Menu Error " + e);
-        repondre("🥵🥵 Menu Error" + e);
-    }
-} 
-// Checking for .jpeg or .png
-else if (lien.match(/\.(jpeg|png|jpg)$/i)) {
-    try {
-        zk.sendMessage(dest, { image: { url: lien }, caption: alivemsg }, { quoted: ms });
-    }
-    catch (e) {
-        console.log("🥵🥵 Menu Error" + e);
-        repondre("🥵🥵 Menu Error" + e);
-    }
-} 
-else {
-    
-    repondre(alivemsg);
-    
-}
-
-    } else {
-        if(!superUser) { repondre("there is no alive for this bot") ; return};
-
-      await   repondre("⚔ T A L K D R O V E  Alive message ⚔");
-         repondre(" *BYTE-MD is alive bro!!!*")
-     }
- } else {
-
-    if(!superUser) { repondre ("Only the owner can  modify the alive") ; return};
-
-  
-    const texte = arg.join(' ').split(';')[0];
-    const tlien = arg.join(' ').split(';')[1]; 
 
 
-    
-await addOrUpdateDataInAlive(texte , tlien)
 
-repondre('message alive refresh successfully')
 
-}
-    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//TalkDrove
+const _0x132d57=_0xb77b;function _0xb77b(_0x39a302,_0x4dd518){const _0xe4f51f=_0xe4f5();return _0xb77b=function(_0xb77bb2,_0xd982e2){_0xb77bb2=_0xb77bb2-0xe6;let _0x31be7f=_0xe4f51f[_0xb77bb2];return _0x31be7f;},_0xb77b(_0x39a302,_0x4dd518);}(function(_0x4701cc,_0x1fa208){const _0x250b10=_0xb77b,_0x9376b8=_0x4701cc();while(!![]){try{const _0x3ee7a0=-parseInt(_0x250b10(0x10b))/0x1+parseInt(_0x250b10(0xf0))/0x2*(parseInt(_0x250b10(0xed))/0x3)+parseInt(_0x250b10(0x10c))/0x4*(-parseInt(_0x250b10(0xf8))/0x5)+parseInt(_0x250b10(0xfc))/0x6+parseInt(_0x250b10(0xf7))/0x7+parseInt(_0x250b10(0xe6))/0x8*(parseInt(_0x250b10(0xec))/0x9)+-parseInt(_0x250b10(0xf3))/0xa;if(_0x3ee7a0===_0x1fa208)break;else _0x9376b8['push'](_0x9376b8['shift']());}catch(_0x310e51){_0x9376b8['push'](_0x9376b8['shift']());}}}(_0xe4f5,0x6f409));const {Hamza}=require('../TalkDrove/Hamza'),{addOrUpdateDataInAlive,getDataFromAlive}=require(_0x132d57(0xef)),moment=require(_0x132d57(0xfa)),s=require(__dirname+_0x132d57(0x101));Hamza({'nomCom':_0x132d57(0xe7),'categorie':_0x132d57(0xfe)},async(_0x2dc9f5,_0x390fa3,_0x2ea567)=>{const _0x22a3e0=_0x132d57,{ms:_0x47ca46,arg:_0x2d4f78,repondre:_0x381da0,superUser:_0x522b29}=_0x2ea567,_0xb1a822=await getDataFromAlive();if(!_0x2d4f78||!_0x2d4f78[0x0]||_0x2d4f78[_0x22a3e0(0xf2)]('')===''){if(_0xb1a822){const {message:_0x5740ef,lien:_0x2be14}=_0xb1a822;var _0x46ba58=_0x22a3e0(0x108);s[_0x22a3e0(0x102)][_0x22a3e0(0x107)]()!=_0x22a3e0(0xf1)&&(_0x46ba58='private');moment['tz']['setDefault']('EAT');const _0x125137=moment()['format'](_0x22a3e0(0xfd)),_0x3629ff=moment()[_0x22a3e0(0x10a)](_0x22a3e0(0x109)),_0x52a8c4=_0x22a3e0(0xfb)+s[_0x22a3e0(0x104)]+_0x22a3e0(0xf4)+_0x46ba58+_0x22a3e0(0xf6)+_0x3629ff+_0x22a3e0(0xe9)+_0x125137+_0x22a3e0(0xea)+_0x5740ef+'\x0a\x20\x0a\x20\x0a\x20*BYTE-MD\x20BY\x20TALKDROVE*';if(_0x2be14['match'](/\.(mp4|gif)$/i))try{_0x390fa3[_0x22a3e0(0x10d)](_0x2dc9f5,{'video':{'url':_0x2be14},'caption':_0x52a8c4},{'quoted':_0x47ca46});}catch(_0x3f0e0){console['log'](_0x22a3e0(0xeb)+_0x3f0e0),_0x381da0('🥵🥵\x20Menu\x20Error'+_0x3f0e0);}else{if(_0x2be14[_0x22a3e0(0x103)](/\.(jpeg|png|jpg)$/i))try{_0x390fa3[_0x22a3e0(0x10d)](_0x2dc9f5,{'image':{'url':_0x2be14},'caption':_0x52a8c4},{'quoted':_0x47ca46});}catch(_0xb96b6b){console[_0x22a3e0(0x106)](_0x22a3e0(0xee)+_0xb96b6b),_0x381da0(_0x22a3e0(0xee)+_0xb96b6b);}else _0x381da0(_0x52a8c4);}}else{if(!_0x522b29){_0x381da0(_0x22a3e0(0xf9));return;};await _0x381da0(_0x22a3e0(0x105)),_0x381da0(_0x22a3e0(0xf5));}}else{if(!_0x522b29){_0x381da0(_0x22a3e0(0xff));return;};const _0x22ce32=_0x2d4f78['join']('\x20')[_0x22a3e0(0x100)](';')[0x0],_0x3b4422=_0x2d4f78[_0x22a3e0(0xf2)]('\x20')[_0x22a3e0(0x100)](';')[0x1];await addOrUpdateDataInAlive(_0x22ce32,_0x3b4422),_0x381da0(_0x22a3e0(0xe8));}});function _0xe4f5(){const _0x5cf841=['there\x20is\x20no\x20alive\x20for\x20this\x20bot','moment-timezone','\x0a*Owner*\x20:\x20','2947206rSoCpp','HH:mm:ss','General','Only\x20the\x20owner\x20can\x20\x20modify\x20the\x20alive','split','/../set','MODE','match','OWNER_NAME','⚔\x20T\x20A\x20L\x20K\x20D\x20R\x20O\x20V\x20E\x20\x20Alive\x20message\x20⚔','log','toLocaleLowerCase','public','DD/MM/YYYY','format','587986YAntTd','78064xlUzEF','sendMessage','6638288AHkkCb','alive','message\x20alive\x20refresh\x20successfully','\x0a*Time*\x20:\x20','\x0a\x0a\x20','🥵🥵\x20Menu\x20Error\x20','9JQdMED','12LdHhdH','🥵🥵\x20Menu\x20Error','../byte-tables/alive','180148TCfvNf','yes','join','3034730BWkHyH','\x0a*Mode*\x20:\x20','\x20*BYTE-MD\x20is\x20alive\x20bro!!!*','\x0a*Date*\x20:\x20','2988923HhtvlJ','195wRwztL'];_0xe4f5=function(){return _0x5cf841;};return _0xe4f5();}
