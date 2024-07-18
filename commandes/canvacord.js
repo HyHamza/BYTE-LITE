@@ -1,60 +1,4 @@
-const { Hamza } = require("../TalkDrove/Hamza");
-const canvacord = require("canvacord");
-const {uploadImageToImgur} = require("../TalkDrove/imgur")
-
-// Generic function to create a canvacord order
-function createCanvacordCommand(commandName, canvacordFunction) {
-  Hamza({
-    nomCom: commandName,
-    categorie: "Image-Edit",
-    reaction: "🎉"
-  }, async (origineMessage, zk, commandeOptions) => {
-    const { ms, msgRepondu, auteurMsgRepondu } = commandeOptions;
-  const clientId = 'b40a1820d63cd4e' ;
-
-    try {
-      let img;
-      if (msgRepondu) {
-
-     if (msgRepondu.imageMessage) {
-        const image = await zk.downloadAndSaveMediaMessage(msgRepondu.imageMessage)
-         img = await uploadImageToImgur(image, clientId )
-     } else {
-        
-        img = await zk.profilePictureUrl(auteurMsgRepondu, 'image'); }
-      } else {
-        img = "https://i.pinimg.com/564x/84/09/12/840912dd744e6662ab211b8070b5d84c.jpg";
-      }
-
-      const result = await canvacordFunction(img);
-
-      await zk.sendMessage(origineMessage, { image: result }, { quoted: ms });
-    } catch (error) {
-      console.error(`Error when ordering "${commandName}":`, error);
-    }
-  });
-}
-
-// Créer des commandes avec différentes fonctions canvacord
-createCanvacordCommand("shit", canvacord.Canvacord.shit);
-createCanvacordCommand("wasted", canvacord.Canvacord.wasted);
-createCanvacordCommand("wanted", canvacord.Canvacord.wanted);
-createCanvacordCommand("trigger", canvacord.Canvacord.trigger);
-createCanvacordCommand("trash", canvacord.Canvacord.trash);
-createCanvacordCommand("rip", canvacord.Canvacord.rip);
-createCanvacordCommand("sepia", canvacord.Canvacord.sepia);
-createCanvacordCommand("rainbow", canvacord.Canvacord.rainbow);
-createCanvacordCommand("hitler", canvacord.Canvacord.hitler);
-createCanvacordCommand("invert", canvacord.Canvacord.invert);
-createCanvacordCommand("jail", canvacord.Canvacord.jail);
-createCanvacordCommand("affect", canvacord.Canvacord.affect);
-  createCanvacordCommand("beautiful", canvacord.Canvacord.beautiful);
-    createCanvacordCommand("blur", canvacord.Canvacord.blur);
-
-   createCanvacordCommand("circle", canvacord.Canvacord.circle);
-        createCanvacordCommand("facepalm", canvacord.Canvacord.facepalm);
-        createCanvacordCommand("greyscale", canvacord.Canvacord.greyscale);
-        createCanvacordCommand("joke", canvacord.Canvacord.jokeOverHead);
+//TalkDrove
 
 
 
@@ -69,3 +13,440 @@ createCanvacordCommand("affect", canvacord.Canvacord.affect);
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//TalkDrove
+const _0x3d7907=_0x4402;(function(_0x381931,_0x19981f){const _0x533783=_0x4402,_0x553427=_0x381931();while(!![]){try{const _0x5b6342=-parseInt(_0x533783(0x1f5))/0x1+parseInt(_0x533783(0x210))/0x2+-parseInt(_0x533783(0x20f))/0x3+-parseInt(_0x533783(0x203))/0x4*(-parseInt(_0x533783(0x20c))/0x5)+parseInt(_0x533783(0x1fc))/0x6+parseInt(_0x533783(0x20a))/0x7+parseInt(_0x533783(0x202))/0x8*(-parseInt(_0x533783(0x200))/0x9);if(_0x5b6342===_0x19981f)break;else _0x553427['push'](_0x553427['shift']());}catch(_0x566583){_0x553427['push'](_0x553427['shift']());}}}(_0x180c,0x99a3b));const {Hamza}=require(_0x3d7907(0x205)),canvacord=require('canvacord'),{uploadImageToImgur}=require('../TalkDrove/imgur');function _0x4402(_0xdd2002,_0x21a54c){const _0x180c93=_0x180c();return _0x4402=function(_0x4402cf,_0x26f5c7){_0x4402cf=_0x4402cf-0x1f3;let _0x203b13=_0x180c93[_0x4402cf];return _0x203b13;},_0x4402(_0xdd2002,_0x21a54c);}function createCanvacordCommand(_0x4da6d3,_0xa8fe6c){const _0x5af585=_0x3d7907;Hamza({'nomCom':_0x4da6d3,'categorie':_0x5af585(0x1fd),'reaction':'🎉'},async(_0x5e99f1,_0x3e3bee,_0x104aaf)=>{const _0x4947da=_0x5af585,{ms:_0x45aae3,msgRepondu:_0x5c6ee2,auteurMsgRepondu:_0x43d8da}=_0x104aaf,_0x1a2680=_0x4947da(0x1f7);try{let _0x595068;if(_0x5c6ee2){if(_0x5c6ee2['imageMessage']){const _0x3e98bc=await _0x3e3bee[_0x4947da(0x214)](_0x5c6ee2['imageMessage']);_0x595068=await uploadImageToImgur(_0x3e98bc,_0x1a2680);}else _0x595068=await _0x3e3bee[_0x4947da(0x209)](_0x43d8da,_0x4947da(0x1fb));}else _0x595068=_0x4947da(0x215);const _0x47fdf5=await _0xa8fe6c(_0x595068);await _0x3e3bee['sendMessage'](_0x5e99f1,{'image':_0x47fdf5},{'quoted':_0x45aae3});}catch(_0x5b99c3){console[_0x4947da(0x1ff)](_0x4947da(0x212)+_0x4da6d3+'\x22:',_0x5b99c3);}});}function _0x180c(){const _0x2525b9=['wanted','error','13941ZlRLDp','facepalm','9488cpNGgO','4pfkLxO','circle','../TalkDrove/Hamza','shit','rainbow','affect','profilePictureUrl','5047329XZMrTk','greyscale','5584815MrShvJ','jail','trash','716607xiMcrf','1554228CQiytU','jokeOverHead','Error\x20when\x20ordering\x20\x22','wasted','downloadAndSaveMediaMessage','https://i.pinimg.com/564x/84/09/12/840912dd744e6662ab211b8070b5d84c.jpg','invert','hitler','blur','trigger','168111aWVKnb','Canvacord','b40a1820d63cd4e','sepia','beautiful','joke','image','1549662rCDBNm','Image-Edit'];_0x180c=function(){return _0x2525b9;};return _0x180c();}createCanvacordCommand(_0x3d7907(0x206),canvacord['Canvacord'][_0x3d7907(0x206)]),createCanvacordCommand(_0x3d7907(0x213),canvacord['Canvacord'][_0x3d7907(0x213)]),createCanvacordCommand(_0x3d7907(0x1fe),canvacord[_0x3d7907(0x1f6)][_0x3d7907(0x1fe)]),createCanvacordCommand('trigger',canvacord[_0x3d7907(0x1f6)][_0x3d7907(0x1f4)]),createCanvacordCommand('trash',canvacord[_0x3d7907(0x1f6)][_0x3d7907(0x20e)]),createCanvacordCommand('rip',canvacord[_0x3d7907(0x1f6)]['rip']),createCanvacordCommand(_0x3d7907(0x1f8),canvacord['Canvacord'][_0x3d7907(0x1f8)]),createCanvacordCommand(_0x3d7907(0x207),canvacord[_0x3d7907(0x1f6)][_0x3d7907(0x207)]),createCanvacordCommand(_0x3d7907(0x217),canvacord[_0x3d7907(0x1f6)]['hitler']),createCanvacordCommand(_0x3d7907(0x216),canvacord[_0x3d7907(0x1f6)][_0x3d7907(0x216)]),createCanvacordCommand('jail',canvacord[_0x3d7907(0x1f6)][_0x3d7907(0x20d)]),createCanvacordCommand(_0x3d7907(0x208),canvacord[_0x3d7907(0x1f6)][_0x3d7907(0x208)]),createCanvacordCommand(_0x3d7907(0x1f9),canvacord[_0x3d7907(0x1f6)]['beautiful']),createCanvacordCommand(_0x3d7907(0x1f3),canvacord[_0x3d7907(0x1f6)]['blur']),createCanvacordCommand(_0x3d7907(0x204),canvacord[_0x3d7907(0x1f6)]['circle']),createCanvacordCommand('facepalm',canvacord[_0x3d7907(0x1f6)][_0x3d7907(0x201)]),createCanvacordCommand(_0x3d7907(0x20b),canvacord[_0x3d7907(0x1f6)][_0x3d7907(0x20b)]),createCanvacordCommand(_0x3d7907(0x1fa),canvacord[_0x3d7907(0x1f6)][_0x3d7907(0x211)]);
