@@ -2,10 +2,10 @@
   "name": "byte-md",
   "version": "2.0.0",
   "description": "",
-  "main": "media/byte.js",
+  "main": "talkdrove.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
+    "start": "node talkdrove.js",
     "bytemd": "pm2 start index.js --attach --max-memory-restart 490M",
     "c": "tsc"
   },
