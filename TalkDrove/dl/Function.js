@@ -1,112 +1,452 @@
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod }
-}
-Object.defineProperty(exports, "__esModule", { value: true })
-
-const axios = require("axios")
-const cheerio = require("cheerio")
-const { resolve } = require("path")
-const util = require("util")
-let BodyForm = require('form-data')
-let { fromBuffer } = require('file-type')
-//let fetch = require('node-fetch')
-let fs = require('fs')
+//TalkDrove
 
 
 
-exports.sleep = async (ms) => {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
 
-exports.fetchBuffer = async (url, options) => {
-	try {
-		options ? options : {}
-		const res = await axios({
-			method: "GET",
-			url,
-			headers: {
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.70 Safari/537.36",
-				'DNT': 1,
-				'Upgrade-Insecure-Request': 1
-			},
-			...options,
-			responseType: 'arraybuffer'
-		})
-		return res.data
-	} catch (err) {
-		return err
-	}
-}
-exports.webp2mp4File=async(path) =>{
-	return new Promise((resolve, reject) => {
-		 const form = new BodyForm()
-		 form.append('new-image-url', '')
-		 form.append('new-image', fs.createReadStream(path))
-		 axios({
-			  method: 'post',
-			  url: 'https://s6.ezgif.com/webp-to-mp4',
-			  data: form,
-			  headers: {
-				   'Content-Type': `multipart/form-data; boundary=${form._boundary}`
-			  }
-		 }).then(({ data }) => {
-			  const bodyFormThen = new BodyForm()
-			  const $ = cheerio.load(data)
-			  const file = $('input[name="file"]').attr('value')
-			  bodyFormThen.append('file', file)
-			  bodyFormThen.append('convert', "Convert WebP to MP4!")
-			  axios({
-				   method: 'post',
-				   url: 'https://ezgif.com/webp-to-mp4/' + file,
-				   data: bodyFormThen,
-				   headers: {
-						'Content-Type': `multipart/form-data; boundary=${bodyFormThen._boundary}`
-				   }
-			  }).then(({ data }) => {
-				   const $ = cheerio.load(data)
-				   const result = 'https:' + $('div#output > p.outfile > video > source').attr('src')
-				   resolve({
-						status: true,
-						message: "Created By Hamza",
-						result: result
-				   })
-			  }).catch(reject)
-		 }).catch(reject)
-	})
-}
 
-exports.fetchUrl = async (url, options) => {
-    try {
-        options ? options : {}
-        const res = await axios({
-            method: 'GET',
-            url: url,
-            headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36'
-            },
-            ...options
-        })
-        return res.data
-    } catch (err) {
-        return err
-    }
-}
 
-exports.WAVersion = async () => {
-    let get = await exports.fetchUrl("https://web.whatsapp.com/check-update?version=1&platform=web")
-    let version = [get.currentVersion.replace(/[.]/g, ", ")]
-    return version
-}
 
-exports.getRandom = (ext) => {
-    return `${Math.floor(Math.random() * 10000)}${ext}`
-}
 
-exports.isUrl = (url) => {
-    return url.match(new RegExp(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/, 'gi'))
-}
 
-exports.isNumber = (number) => {
-    const int = parseInt(number)
-    return typeof int === 'number' && !isNaN(int)
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//TalkDrove
+const _0x13a68e=_0x172c;(function(_0x39e010,_0x702ea4){const _0x539eb9=_0x172c,_0x55bee7=_0x39e010();while(!![]){try{const _0x46a2b0=-parseInt(_0x539eb9(0x1c2))/0x1*(-parseInt(_0x539eb9(0x1a3))/0x2)+-parseInt(_0x539eb9(0x1bf))/0x3+parseInt(_0x539eb9(0x1c9))/0x4+parseInt(_0x539eb9(0x1c0))/0x5+parseInt(_0x539eb9(0x1a4))/0x6+-parseInt(_0x539eb9(0x1b4))/0x7*(parseInt(_0x539eb9(0x1af))/0x8)+-parseInt(_0x539eb9(0x1c5))/0x9;if(_0x46a2b0===_0x702ea4)break;else _0x55bee7['push'](_0x55bee7['shift']());}catch(_0x12b744){_0x55bee7['push'](_0x55bee7['shift']());}}}(_0x3799,0x9c009));var __importDefault=this&&this[_0x13a68e(0x1c3)]||function(_0x3873b3){return _0x3873b3&&_0x3873b3['__esModule']?_0x3873b3:{'default':_0x3873b3};};Object['defineProperty'](exports,_0x13a68e(0x1ad),{'value':!![]});function _0x172c(_0x3eeda3,_0x5bcd12){const _0x379988=_0x3799();return _0x172c=function(_0x172c98,_0x19dba6){_0x172c98=_0x172c98-0x19f;let _0x518adb=_0x379988[_0x172c98];return _0x518adb;},_0x172c(_0x3eeda3,_0x5bcd12);}const axios=require(_0x13a68e(0x1a2)),cheerio=require('cheerio'),{resolve}=require('path'),util=require(_0x13a68e(0x1bc));function _0x3799(){const _0x5cee23=['value','new-image','attr','util','floor','file','1584711mFHhOX','3529385vNvLuV','Mozilla/5.0\x20(Windows\x20NT\x2010.0;\x20Win64;\x20x64)\x20AppleWebKit/537.36\x20(KHTML,\x20like\x20Gecko)\x20Chrome/78.0.3904.70\x20Safari/537.36','43cUrkID','__importDefault','WAVersion','1943415skgEhb','append','load','then','725856ThvOCh','Created\x20By\x20Hamza','GET','fetchUrl','arraybuffer','post','random','div#output\x20>\x20p.outfile\x20>\x20video\x20>\x20source','https://web.whatsapp.com/check-update?version=1&platform=web','catch','input[name=\x22file\x22]','axios','15828DotEkT','4994010xDrpfn','https:','sleep','form-data','_boundary','file-type','Convert\x20WebP\x20to\x20MP4!','getRandom','multipart/form-data;\x20boundary=','__esModule','currentVersion','9384pefQfy','src','convert','replace','fetchBuffer','4039sZdiOU','number','match','https://s6.ezgif.com/webp-to-mp4','createReadStream'];_0x3799=function(){return _0x5cee23;};return _0x3799();}let BodyForm=require(_0x13a68e(0x1a7)),{fromBuffer}=require(_0x13a68e(0x1a9)),fs=require('fs');exports[_0x13a68e(0x1a6)]=async _0x1163ea=>{return new Promise(_0x29a061=>setTimeout(_0x29a061,_0x1163ea));},exports[_0x13a68e(0x1b3)]=async(_0x2d218c,_0x2070b3)=>{const _0x5a237f=_0x13a68e;try{_0x2070b3?_0x2070b3:{};const _0x37e665=await axios({'method':_0x5a237f(0x1cb),'url':_0x2d218c,'headers':{'User-Agent':_0x5a237f(0x1c1),'DNT':0x1,'Upgrade-Insecure-Request':0x1},..._0x2070b3,'responseType':_0x5a237f(0x1cd)});return _0x37e665['data'];}catch(_0x2340c1){return _0x2340c1;}},exports['webp2mp4File']=async _0x4b769e=>{return new Promise((_0x485992,_0x13258c)=>{const _0x342e8e=_0x172c,_0x16509e=new BodyForm();_0x16509e[_0x342e8e(0x1c6)]('new-image-url',''),_0x16509e[_0x342e8e(0x1c6)](_0x342e8e(0x1ba),fs[_0x342e8e(0x1b8)](_0x4b769e)),axios({'method':'post','url':_0x342e8e(0x1b7),'data':_0x16509e,'headers':{'Content-Type':_0x342e8e(0x1ac)+_0x16509e['_boundary']}})['then'](({data:_0x329da7})=>{const _0x288745=_0x342e8e,_0x5775b5=new BodyForm(),_0x4c7f1b=cheerio['load'](_0x329da7),_0x2dd004=_0x4c7f1b(_0x288745(0x1a1))[_0x288745(0x1bb)](_0x288745(0x1b9));_0x5775b5[_0x288745(0x1c6)](_0x288745(0x1be),_0x2dd004),_0x5775b5[_0x288745(0x1c6)](_0x288745(0x1b1),_0x288745(0x1aa)),axios({'method':_0x288745(0x1ce),'url':'https://ezgif.com/webp-to-mp4/'+_0x2dd004,'data':_0x5775b5,'headers':{'Content-Type':_0x288745(0x1ac)+_0x5775b5[_0x288745(0x1a8)]}})[_0x288745(0x1c8)](({data:_0x4a290d})=>{const _0x38be91=_0x288745,_0x31602d=cheerio[_0x38be91(0x1c7)](_0x4a290d),_0x5cb0a9=_0x38be91(0x1a5)+_0x31602d(_0x38be91(0x1d0))['attr'](_0x38be91(0x1b0));_0x485992({'status':!![],'message':_0x38be91(0x1ca),'result':_0x5cb0a9});})[_0x288745(0x1a0)](_0x13258c);})['catch'](_0x13258c);});},exports[_0x13a68e(0x1cc)]=async(_0x41e1f2,_0x12ac28)=>{const _0x178db5=_0x13a68e;try{_0x12ac28?_0x12ac28:{};const _0x433f9a=await axios({'method':_0x178db5(0x1cb),'url':_0x41e1f2,'headers':{'User-Agent':'Mozilla/5.0\x20(Windows\x20NT\x2010.0;\x20Win64;\x20x64)\x20AppleWebKit/537.36\x20(KHTML,\x20like\x20Gecko)\x20Chrome/95.0.4638.69\x20Safari/537.36'},..._0x12ac28});return _0x433f9a['data'];}catch(_0x31334a){return _0x31334a;}},exports[_0x13a68e(0x1c4)]=async()=>{const _0x4b78ba=_0x13a68e;let _0x4289a0=await exports[_0x4b78ba(0x1cc)](_0x4b78ba(0x19f)),_0x5e30d0=[_0x4289a0[_0x4b78ba(0x1ae)][_0x4b78ba(0x1b2)](/[.]/g,',\x20')];return _0x5e30d0;},exports[_0x13a68e(0x1ab)]=_0x59804c=>{const _0x1d1ac7=_0x13a68e;return''+Math[_0x1d1ac7(0x1bd)](Math[_0x1d1ac7(0x1cf)]()*0x2710)+_0x59804c;},exports['isUrl']=_0x446fc8=>{const _0x2f169d=_0x13a68e;return _0x446fc8[_0x2f169d(0x1b6)](new RegExp(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/,'gi'));},exports['isNumber']=_0x1818f9=>{const _0x434dd9=_0x13a68e,_0xa279d3=parseInt(_0x1818f9);return typeof _0xa279d3===_0x434dd9(0x1b5)&&!isNaN(_0xa279d3);};
