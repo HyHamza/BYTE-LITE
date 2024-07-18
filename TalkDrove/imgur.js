@@ -1,28 +1,237 @@
-async function uploadImageToImgur(imagePath, clientId) {
-  try {
-    const data = new FormData();
-    data.append('image', fs.createReadStream(imagePath));
 
-    const headers = {
-      'Authorization': `Client-ID ${clientId}`,
-      ...data.getHeaders()
-    };
 
-    const config = {
-      method: 'post',
-      maxBodyLength: Infinity,
-      url: 'https://api.imgur.com/3/image',
-      headers: headers,
-      data: data
-    };
 
-    const response = await axios(config);
-    const imageUrl = response.data.data.link;
-    return imageUrl;
-  } catch (error) {
-    console.error('Error uploading to Imgur:', error);
-    throw new Error('An error occurred while uploading to Imgur.');
-  }
-}
 
-module.exports = { uploadImageToImgur };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//TalkDrove
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//TalkDrove
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'use strict';var _0x2c7bbc=_0x2492;(function(_0xbefa7,_0x5a5770){var _0x261727=_0x2492,_0x110bbd=_0xbefa7();while(!![]){try{var _0x388244=-parseInt(_0x261727(0x131))/0x1*(-parseInt(_0x261727(0x129))/0x2)+parseInt(_0x261727(0x128))/0x3+parseInt(_0x261727(0x12b))/0x4*(-parseInt(_0x261727(0x134))/0x5)+parseInt(_0x261727(0x12c))/0x6*(parseInt(_0x261727(0x12f))/0x7)+-parseInt(_0x261727(0x12d))/0x8+parseInt(_0x261727(0x132))/0x9+-parseInt(_0x261727(0x126))/0xa*(parseInt(_0x261727(0x133))/0xb);if(_0x388244===_0x5a5770)break;else _0x110bbd['push'](_0x110bbd['shift']());}catch(_0x3d7c1){_0x110bbd['push'](_0x110bbd['shift']());}}}(_0x5050,0x6cbaa));Object[_0x2c7bbc(0x12a)](exports,_0x2c7bbc(0x12e),{'value':!![]}),exports[_0x2c7bbc(0x130)]=void 0x0;async function reagir(_0xa68597,_0x268d25,_0x2b02ac,_0xa47ae7){var _0x20ee4f=_0x2c7bbc;await _0x268d25[_0x20ee4f(0x135)](_0xa68597,{'react':{'text':_0xa47ae7,'key':_0x2b02ac[_0x20ee4f(0x127)]}});}function _0x2492(_0x24a21b,_0x22e617){var _0x5050f2=_0x5050();return _0x2492=function(_0x24926a,_0x9d7306){_0x24926a=_0x24926a-0x126;var _0x8c231d=_0x5050f2[_0x24926a];return _0x8c231d;},_0x2492(_0x24a21b,_0x22e617);}exports[_0x2c7bbc(0x130)]=reagir;function _0x5050(){var _0x10c7bd=['20yJCLJK','sendMessage','1681270SxOeXe','key','1394775DeBZJU','7066OegzhT','defineProperty','584352PfSRle','821706MKoHqo','7023672XcAuMH','__esModule','35grnCap','reagir','163AWnhsF','6178383iaspst','33EGRWWy'];_0x5050=function(){return _0x10c7bd;};return _0x5050();}
