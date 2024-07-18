@@ -51,4 +51,6 @@ Enjoy the diverse features of the BYTE-MD-LITE  to enhance your conversations an
 
 ## Developer:
 - [**WhatsApp**](https://wa.me/923072380380)
+- ## Thanks to:
+- [**Allah**]
 
