@@ -1,12 +1,12 @@
 {
-  "name": "byte-md",
+  "name": "byte-lite",
   "version": "2.0.0",
   "description": "",
   "main": "talkdrove.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node talkdrove.js",
-    "bytemd": "pm2 start index.js --attach --max-memory-restart 490M",
+    "bytemd": "pm2 start talkdrove.js --attach --max-memory-restart 490M",
     "c": "tsc"
   },
   "keywords": [
