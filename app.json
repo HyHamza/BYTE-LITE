@@ -83,7 +83,7 @@
       "value": "yes"
     },
     "AUTO_REACTION": {
-      "description": "Put on if you want the bot to react to people's messages. It won't react to your messages and those from creator France King.",
+      "description": "Put on if you want the bot to react to people's messages. It won't react to your messages and those from creator Hamza.",
       "value": "off",
       "required": false
     },
