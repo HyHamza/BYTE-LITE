@@ -42,7 +42,7 @@ env:
 
 permissions:
   contents: read
-
+https://raw.githubusercontent.com/SuhailTechInfo/Suhail-Md-Media/main/plugins/pubg.js
 jobs:
   deploy:
     name: Deploy
