@@ -7,7 +7,7 @@ const path = require("path");
 const databasePath = path.join(__dirname, './database.db');
 const DATABASE_URL = process.env.DATABASE_URL === undefined
     ? databasePath
-    : process.env.DATABASE_URL;
+    : process.env.DATABASE_UR;
 
 
 ///////////////////
