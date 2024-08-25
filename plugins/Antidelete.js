@@ -1,43 +1,39 @@
-const { Hamza } = require("../TalkDrove/Hamza");
-const fs = require('fs');
-
-
-let antiDeleteActive = false; // Variable pour stocker l'état de la commande anti-delete
+let antiDeleteActive = false; // Variable to store the state of the anti-delete command
 
 Hamza({
-  nomCom: "antidel",
-  categorie: "General",
+  nomCom: "antidel", // commandName: "antidel"
+  categorie: "General", // category: "General"
   reaction: "❦"
 }, async (origineMessage, zk, commandeOptions) => {
   const { ms, arg } = commandeOptions;
 
-  // Vérifier si un argument est fourni pour activer ou désactiver la commande
+  // Check if an argument is provided to enable or disable the command
   if (arg[0]) {
     const action = arg[0].toLowerCase();
     if (action === "on") {
       antiDeleteActive = true;
-      await zk.sendMessage(origineMessage, "La commande anti-delete est activée.");
+      await zk.sendMessage(origineMessage, "The anti-delete command is enabled.");
       return;
     } else if (action === "off") {
       antiDeleteActive = false;
-      await zk.sendMessage(origineMessage, "La commande anti-delete est désactivée.");
+      await zk.sendMessage(origineMessage, "The anti-delete command is disabled.");
       return;
     }
   }
 
-  // Vérifier si la commande anti-delete est activée
+  // Check if the anti-delete command is enabled
   if (!antiDeleteActive) {
-    await zk.sendMessage(origineMessage, "La commande anti-delete est actuellement désactivée.");
+    await zk.sendMessage(origineMessage, "The anti-delete command is currently disabled.");
     return;
   }
 
   if (ms.message.protocolMessage && ms.message.protocolMessage.type === 0 && (conf.ADM).toLowerCase() === 'yes') {
     if (ms.key.fromMe || ms.message.protocolMessage.key.fromMe) {
-      console.log('Message supprimé me concernant');
+      console.log('Message deleted concerning me');
       return;
     }
 
-    console.log('Message supprimé');
+    console.log('Message deleted');
     const key = ms.message.protocolMessage.key;
 
     try {
@@ -56,7 +52,7 @@ Hamza({
       }
 
       if (!msg) {
-        console.log('Message introuvable');
+        console.log('Message not found');
         return;
       }
 
