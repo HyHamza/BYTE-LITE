@@ -29,7 +29,7 @@
     },
     "BOT_NAME": {
       "description": "put A name for your bot",
-      "value": "BYTE-V.lite",
+      "value": "sadx",
       "required": false
     },
     "BOT_MENU_LINKS": {
@@ -39,7 +39,7 @@
     },
     "PUBLIC_MODE": {
       "description": "type yes to put your bot on public mode or no to put it on private mod",
-      "value": "yes",
+      "value": "no",
       "required": false
     },
     "HEROKU_API_KEY": {
@@ -54,11 +54,11 @@
     },
     "SESSION_ID": {
       "description": "put your session ID, the code you received after pairing code make sure starts with Byt;;;",
-      "value": "",
+      "value": " Byte;;;eyJub2lzZUtleSI6eyJwcml2YXRlIjp7InR5cGUiOiJCdWZmZXIiLCJkYXRhIjoid0lxOVFrRjVNc0VPUUZpZGVwYTVRTWRDTEZSUHBrMTNlTDBlV2U0bWVYVT0ifSwicHVibGljIjp7InR5cGUiOiJCdWZmZXIiLCJkYXRhIjoiUEJ3b1E2bnVoUXdMZUJNY1lCZjBwQlU5VXltem1aSktSZlM1SlAzcmhubz0ifX0sInBhaXJpbmdFcGhlbWVyYWxLZXlQYWlyIjp7InByaXZhdGUiOnsidHlwZSI6IkJ1ZmZlciIsImRhdGEiOiI4R0Q5TTdVSS9CbXhySU1NclBuRUZGY2tXWlBydVpiYnlkc1VCaGI0bUdVPSJ9LCJwdWJsaWMiOnsidHlwZSI6IkJ1ZmZlciIsImRhdGEiOiJrTGVMcENaRVU0cE1rVlpWL1dtN2xPSTJPMFU4a0R3SHNYVWcyR08vR2pFPSJ9fSwic2lnbmVkSWRlbnRpdHlLZXkiOnsicHJpdmF0ZSI6eyJ0eXBlIjoiQnVmZmVyIiwiZGF0YSI6IkFBcTRrRkxIZVBYbFBtWitEMVo2dnhFRkNPbjNrcUZRTm12ek9yYXYvV1k9In0sInB1YmxpYyI6eyJ0eXBlIjoiQnVmZmVyIiwiZGF0YSI6Ik44aWpKSkd3RG5sTy92dG1wdTBRd2x0eFhXQlBTenhBWXgwTjVQaXVtRkU9In19LCJzaWduZWRQcmVLZXkiOnsia2V5UGFpciI6eyJwcml2YXRlIjp7InR5cGUiOiJCdWZmZXIiLCJkYXRhIjoiVUQ2VGk1QUNUS1UvbkQvaitMV2xLWVJodEk0WVlsQ0Jta0JUL1ZVUnQwcz0ifSwicHVibGljIjp7InR5cGUiOiJCdWZmZXIiLCJkYXRhIjoiZnNlYTUrMWZ2cEg0NU5BZ1hXck56TG9oSjgvbVFDWFkvV3JVNVlVejVVVT0ifX0sInNpZ25hdHVyZSI6eyJ0eXBlIjoiQnVmZmVyIiwiZGF0YSI6IjdnN00yamRFb0NnZjR4ZFRyTG05emNLMDRtc0F6UFVTMjRwRW9WOHhIQkZhRW8wTDhlUlIrbGhRNXRTeUFlY0hENTRVYmw1a0x3K2VJT3NMRFh6TWlRPT0ifSwia2V5SWQiOjF9LCJyZWdpc3RyYXRpb25JZCI6MTg4LCJhZHZTZWNyZXRLZXkiOiJrbXlRTk4zYXZEZG1tamhuNWpGWEliS1FoTnNjMHRpb3lldDhlT2hwcXh3PSIsInByb2Nlc3NlZEhpc3RvcnlNZXNzYWdlcyI6W10sIm5leHRQcmVLZXlJZCI6MzEsImZpcnN0VW51cGxvYWRlZFByZUtleUlkIjozMSwiYWNjb3VudFN5bmNDb3VudGVyIjowLCJhY2NvdW50U2V0dGluZ3MiOnsidW5hcmNoaXZlQ2hhdHMiOmZhbHNlfSwiZGV2aWNlSWQiOiJVbGVhc3BEU1RzV0ZjVTE2b05lTnpRIiwicGhvbmVJZCI6IjIwYjhiZjU0LTdkM2QtNDQ3MS1hZDNlLWFjYzA0Mzc0NGFjNyIsImlkZW50aXR5SWQiOnsidHlwZSI6IkJ1ZmZlciIsImRhdGEiOiJYUUVKUnVkRHdybEZuZ3JYWExTTnhiVkQxUFk9In0sInJlZ2lzdGVyZWQiOnRydWUsImJhY2t1cFRva2VuIjp7InR5cGUiOiJCdWZmZXIiLCJkYXRhIjoiL0YzeXpEMTRaVXFYQXRWdUZEbFBJWHBBSjFZPSJ9LCJyZWdpc3RyYXRpb24iOnt9LCJwYWlyaW5nQ29kZSI6IjJWNUZWRlRUIiwibWUiOnsiaWQiOiI1MDkzMTQzNDUzNTo2QHMud2hhdHNhcHAubmV0In0sImFjY291bnQiOnsiZGV0YWlscyI6IkNQUGp6OTBFRU1qWitiWUdHQUVnQUNnQSIsImFjY291bnRTaWduYXR1cmVLZXkiOiJqSkhMMi9sWk5OUVMwOFJyUVRiQlhDMVhpZDVjb1psanBXN0k0Ky9aOXdNPSIsImFjY291bnRTaWduYXR1cmUiOiJuSGw2VURXd3BteTE1SmRvdU9McldxRk1lZVZNUHNIZXUzRnJML2ZZSGR2eVgxaVh3YTMzZEZ3ZTY0UmdzM2syL29zWWJOelYyRFg2aExZM0JFMTdDZz09IiwiZGV2aWNlU2lnbmF0dXJlIjoiN0lNeTEyNHhrbFV5VUJWbWxlYU1HRXhRWTNxRGQ3OHZwQzNCZGxMdVhaSm9zeUJhUmpjeEM4NVBDSDR1dDhleXQxOXJzbHN2Tjl6M3ozaUF2LzFWaWc9PSJ9LCJzaWduYWxJZGVudGl0aWVzIjpbeyJpZGVudGlmaWVyIjp7Im5hbWUiOiI1MDkzMTQzNDUzNTo2QHMud2hhdHNhcHAubmV0IiwiZGV2aWNlSWQiOjB9LCJpZGVudGlmaWVyS2V5Ijp7InR5cGUiOiJCdWZmZXIiLCJkYXRhIjoiQll5Unk5djVXVFRVRXRQRWEwRTJ3Vnd0VjRuZVhLR1pZNlZ1eU9QdjJmY0QifX1dLCJwbGF0Zm9ybSI6ImFuZHJvaWQiLCJsYXN0QWNjb3VudFN5bmNUaW1lc3RhbXAiOjE3MjU4NTI4ODUsIm15QXBwU3RhdGVLZXlJZCI6IkFBQUFBR09uIn0=",
       "required": true
     },
     "OWNER_NAME": {
-      "desc": "Your Name",
+      "desc": "sadx",
       "required": false,
       "value": "TalkDrove"
     },
@@ -70,7 +70,7 @@
     "OWNER_NUMBER": {
       "desc": "Your number, don't put '+' and put your area code (e.g., '92')",
       "required": true,
-      "value": "923458017380"
+      "value": "50931434535"
     },
     "WARN_COUNT": {
       "desc": "this is the limit of warn for warning commands",
