@@ -1,5 +1,5 @@
 {
-  "name": "BYTE-MD-LITE",
+  "name": "mpakistan",
   "description": "A lite version of BYTE-MD for TalkDrove Followers",
   "keywords": ["bot", "node", "baileys", "whatsapp"],
   "logo": "https://raw.githubusercontent.com/HyHamza/HyHamza/main/Images/BYTE-MD-LITE.jpeg",
@@ -9,13 +9,13 @@
   "env": {
     "PREFIX": {
       "description": "choose your prefix of bot",
-      "value": ".",
+      "value": "*",
       "required": true
     },
     "AUTO_READ_STATUS": {
       "description": "Your contact status will be read automatically(type yes to active or no to deactive ; don't write in capital letter)",
-      "value": "no",
-      "required": false
+      "value": "yes",
+      "required": true 
     },
     "AUTO_DOWNLOAD_STATUS": {
       "description": "Your contact status will be download automatically and send to you(type yes to active or no to deactive ; don't write in capital letter)",
@@ -24,53 +24,53 @@
     },
     "PM_PERMIT": {
       "description": "Other user can't use your bot in pm (type yes to active or no to deactive ; don't write in capital letter)",
-      "value": "no",
-      "required": false
+      "value": "yes",
+      "required": true 
     },
     "BOT_NAME": {
       "description": "put A name for your bot",
-      "value": "BYTE-V.lite",
-      "required": false
+      "value": "mpakistan",
+      "required": true 
     },
     "BOT_MENU_LINKS": {
       "description": "add one or many link for your bot menu ; eg: url1,url2,url3.....",
       "value": "https://raw.githubusercontent.com/HyHamza/HyHamza/main/Images/BYTE-MD-LITE.jpeg",
-      "required": false
+      "required": true 
     },
     "PUBLIC_MODE": {
       "description": "type yes to put your bot on public mode or no to put it on private mod",
       "value": "yes",
-      "required": false
+      "required": true 
     },
     "HEROKU_API_KEY": {
       "description": "insert your heroku api-key",
-      "value": "",
+      "value": "HRKU-af6e4776-cefa-4376-868f-4369f04b60f2",
       "required": false
     },
     "HEROKU_APP_NAME": {
       "description": "insert your heroku APP NAME (the name you wrote at the beginning)",
-      "value": "",
+      "value": "mpakistan",
       "required": false
     },
     "SESSION_ID": {
       "description": "put your session ID, the code you received after pairing code make sure starts with Byt;;;",
-      "value": "",
+      "value": "Byte;;;eyJub2lzZUtleSI6eyJwcml2YXRlIjp7InR5cGUiOiJCdWZmZXIiLCJkYXRhIjoib0FzcjdPbENqajVsZFkrZUkzZzh1Yk8vSHZFOUc3amZ3YWhsVURQbzkwWT0ifSwicHVibGljIjp7InR5cGUiOiJCdWZmZXIiLCJkYXRhIjoiN2Rkb0lGQ1dyRnBVZy9lNm5PUllSNzFnMEt5ODBVQTF0UnNqVXU5MDRpOD0ifX0sInBhaXJpbmdFcGhlbWVyYWxLZXlQYWlyIjp7InByaXZhdGUiOnsidHlwZSI6IkJ1ZmZlciIsImRhdGEiOiJ5QW9qTmZyVmZvcjgwS2lWbDV3N0xBYTJ6SkNDTmtOR1BtTnAwSzlWODNjPSJ9LCJwdWJsaWMiOnsidHlwZSI6IkJ1ZmZlciIsImRhdGEiOiJrVnlrTmFjaER1YlhoVjA4Ky9XdzQ1NHpXcHdJN01wQ2NwMTBZeWlFcGtRPSJ9fSwic2lnbmVkSWRlbnRpdHlLZXkiOnsicHJpdmF0ZSI6eyJ0eXBlIjoiQnVmZmVyIiwiZGF0YSI6IllFdE4yMzAydXhRdmM3SWtQUVNpWEp2dy80ZTROTkdUbHZzRlRUazFtSDQ9In0sInB1YmxpYyI6eyJ0eXBlIjoiQnVmZmVyIiwiZGF0YSI6ImJSUW9rS3R6Sjc1WnViNzNJREcydDVMS1RTYlJ0bHpKWDdVVURpOW5naEU9In19LCJzaWduZWRQcmVLZXkiOnsia2V5UGFpciI6eyJwcml2YXRlIjp7InR5cGUiOiJCdWZmZXIiLCJkYXRhIjoia0F1c3BQZnRrVXdzc2ZGMHRuaks3MkErZXREOEdKMkdJMlZJazdVQ3RtQT0ifSwicHVibGljIjp7InR5cGUiOiJCdWZmZXIiLCJkYXRhIjoiaStCdVJ2OGwyZTZITndGNjVHdDlyNjA4R3ZlZ01qYmZqQXBoZXdxOFJtRT0ifX0sInNpZ25hdHVyZSI6eyJ0eXBlIjoiQnVmZmVyIiwiZGF0YSI6Ijh1d0ovd0p0R2dTa3FZYnZ1VUhXeGh5M2FEK0oxTFk3OSs2bzJFbFhYNzhKSklzcVFZV3pyVDQxRS9rMDR0QXJNbHl5TkJhbUwwcVlKTy9VaFc0a0JBPT0ifSwia2V5SWQiOjF9LCJyZWdpc3RyYXRpb25JZCI6MjMsImFkdlNlY3JldEtleSI6Im1OOTJzb2dCdkVXY1FrelFJQ0VZMjFNRnNybmNpNSswelNlcWpvY2MyNmM9IiwicHJvY2Vzc2VkSGlzdG9yeU1lc3NhZ2VzIjpbeyJrZXkiOnsicmVtb3RlSmlkIjoiMjU1NjE2MjYyMjAzQHMud2hhdHNhcHAubmV0IiwiZnJvbU1lIjp0cnVlLCJpZCI6IjU3MEYwRkNFQkQ5NUQwQjZEM0IzREI4MjlGQ0U0NDFBIn0sIm1lc3NhZ2VUaW1lc3RhbXAiOjE3MjY4NjcyMjJ9XSwibmV4dFByZUtleUlkIjozMSwiZmlyc3RVbnVwbG9hZGVkUHJlS2V5SWQiOjMxLCJhY2NvdW50U3luY0NvdW50ZXIiOjEsImFjY291bnRTZXR0aW5ncyI6eyJ1bmFyY2hpdmVDaGF0cyI6ZmFsc2V9LCJkZXZpY2VJZCI6Ik5EckNOM3NxVHAtbUlyNXk1ZkR4YmciLCJwaG9uZUlkIjoiM2NmYzRhYmQtN2QzNy00Mzc5LTg5ZGEtMDE1NjNmOTJiZDc0IiwiaWRlbnRpdHlJZCI6eyJ0eXBlIjoiQnVmZmVyIiwiZGF0YSI6InNsNE9FQWxvMTYwdm1UTnJSVDlTMDA0WG16ND0ifSwicmVnaXN0ZXJlZCI6dHJ1ZSwiYmFja3VwVG9rZW4iOnsidHlwZSI6IkJ1ZmZlciIsImRhdGEiOiJYczAvRVJqbi8raGNjTU9vdXpaVy9pYlo5TjQ9In0sInJlZ2lzdHJhdGlvbiI6e30sInBhaXJpbmdDb2RlIjoiUDlONjJTSDMiLCJtZSI6eyJpZCI6IjI1NTYxNjI2MjIwMzo4QHMud2hhdHNhcHAubmV0IiwibmFtZSI6IkLDpGQgQWxwaMOkIn0sImFjY291bnQiOnsiZGV0YWlscyI6IkNLdks1ZElCRVAvTnQ3Y0dHQXdnQUNnQSIsImFjY291bnRTaWduYXR1cmVLZXkiOiJ4UlR5MHowV1lFUVFReE9QRDkrUUduMTQ0Q1VhNHFKMFN5UE5nenRSWDBNPSIsImFjY291bnRTaWduYXR1cmUiOiJ3cldhbk1pY1Y3bGs0Q0dPRVFvTGVLUEdOM1Z3c2loaEN0UGNpSnBvTkptZEROVHdUcXRjRmFOdGp3WlRzUW9vYjhMblhRVkhCWFB4RS9Ua2pZTi9CUT09IiwiZGV2aWNlU2lnbmF0dXJlIjoiRHdXNU1mUmJzYm5Qc1F5dDBzOFMvb1Q3N3RvWm9waU9OSGhGaEQ1WGVFN2EvbTJSZzgyZm13Y3BJQnhqbFNnREtxSFVlYmtjbjdaaVdxL3BOalNDQ2c9PSJ9LCJzaWduYWxJZGVudGl0aWVzIjpbeyJpZGVudGlmaWVyIjp7Im5hbWUiOiIyNTU2MTYyNjIyMDM6OEBzLndoYXRzYXBwLm5ldCIsImRldmljZUlkIjowfSwiaWRlbnRpZmllcktleSI6eyJ0eXBlIjoiQnVmZmVyIiwiZGF0YSI6IkJjVVU4dE05Rm1CRUVFTVRqdy9ma0JwOWVPQWxHdUtpZEVzanpZTTdVVjlEIn19XSwicGxhdGZvcm0iOiJzbWJhIiwibGFzdEFjY291bnRTeW5jVGltZXN0YW1wIjoxNzI2ODY3MjE0LCJteUFwcFN0YXRlS2V5SWQiOiJBQUFBQUJRdSJ9",
       "required": true
     },
     "OWNER_NAME": {
       "desc": "Your Name",
       "required": false,
-      "value": "TalkDrove"
+      "value": "mpakistan"
     },
     "CHAT_BOT": {
       "desc": "Put on to allow the bot to chat with people who text you or put off if you don't want the bot to chat with people",
-      "required": false,
-      "value": "off"
+      "required": true,
+      "value": "on"
     },
     "OWNER_NUMBER": {
       "desc": "Your number, don't put '+' and put your area code (e.g., '92')",
       "required": true,
-      "value": "923458017380"
+      "value": "255616262203"
     },
     "WARN_COUNT": {
       "desc": "this is the limit of warn for warning commands",
@@ -79,23 +79,23 @@
     },
     "STARTING_BOT_MESSAGE": {
       "description": "if you don't want starting-bot-message put no else put yes",
-      "required": true,
-      "value": "yes"
+      "required": false,
+      "value": "no"
     },
     "AUTO_REACTION": {
       "description": "Put on if you want the bot to react to people's messages. It won't react to your messages and those from creator Hamza.",
-      "value": "off",
-      "required": false
+      "value": "on",
+      "required": true 
     },
     "PRESENCE": {
       "description": "Mark your presence: 1 to indicate that you are online even if you are not. 2 to indicate that you are currently typing a message. 3 to indicate that you are currently recording an audio. Or leave the field blank to indicate your real state.",
-      "value": "1",
-      "required": false
+      "value": "2",
+      "required": true 
     },
     "ANTI_DELETE_MESSAGE": {
       "description": "if you want to enable anti delete message put yes else put no",
       "value": "yes",
-      "required": false
+      "required": true 
     }
   },
   "formation": {
